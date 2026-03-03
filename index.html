@@ -1,0 +1,1720 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Portfolio — 作品集</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Noto+Serif+JP:wght@200;400;700&family=Inter:wght@300;400;500;600&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="/style.css" />
+    </head>
+    <body>
+        <!-- Ink splatter & paper texture overlay -->
+        <div class="paper-texture"></div>
+        <canvas id="ink-canvas"></canvas>
+
+        <!-- Floating navigation -->
+        <nav class="nav" id="main-nav">
+            <div class="nav-inner">
+                <a href="#hero" class="nav-logo" data-jp="ホーム">
+                    <svg
+                        class="logo-brush"
+                        viewBox="0 0 40 40"
+                        width="32"
+                        height="32"
+                    >
+                        <circle
+                            cx="20"
+                            cy="20"
+                            r="16"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-dasharray="4 3"
+                        />
+                        <text
+                            x="20"
+                            y="25"
+                            text-anchor="middle"
+                            font-size="14"
+                            font-family="Noto Serif JP"
+                            fill="currentColor"
+                        >
+                            匠
+                        </text>
+                    </svg>
+                </a>
+                <div class="nav-links">
+                    <a href="#about" class="nav-link" data-jp="私について"
+                        >About</a
+                    >
+                    <a href="#work" class="nav-link" data-jp="作品">Work</a>
+                    <a href="#skills" class="nav-link" data-jp="技能">Skills</a>
+                    <a href="#contact" class="nav-link" data-jp="連絡"
+                        >Contact</a
+                    >
+                </div>
+                <button
+                    class="nav-menu-btn"
+                    id="menu-toggle"
+                    aria-label="Toggle menu"
+                >
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Mobile menu -->
+        <div class="mobile-menu" id="mobile-menu">
+            <a href="#about" class="mobile-link"
+                >About <span class="jp">私について</span></a
+            >
+            <a href="#work" class="mobile-link"
+                >Work <span class="jp">作品</span></a
+            >
+            <a href="#skills" class="mobile-link"
+                >Skills <span class="jp">技能</span></a
+            >
+            <a href="#contact" class="mobile-link"
+                >Contact <span class="jp">連絡</span></a
+            >
+        </div>
+
+        <!-- Scroll progress indicator -->
+        <div class="scroll-progress" id="scroll-progress"></div>
+
+        <main>
+            <!-- ======== HERO ======== -->
+            <section class="section hero" id="hero">
+                <div class="hero-content">
+                    <div class="hero-sketch-left">
+                        <!-- SVG hand-drawn decorative elements -->
+                        <svg
+                            viewBox="0 0 200 300"
+                            class="sketch-deco sketch-plant"
+                        >
+                            <path
+                                d="M100 280 Q95 240 100 200 Q105 160 98 120"
+                                fill="none"
+                                stroke="var(--ink)"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                                class="draw-path"
+                            />
+                            <path
+                                d="M98 120 Q70 100 60 70 Q55 50 70 55 Q85 60 98 120"
+                                fill="none"
+                                stroke="var(--ink)"
+                                stroke-width="1.2"
+                                stroke-linecap="round"
+                                class="draw-path"
+                            />
+                            <path
+                                d="M98 150 Q120 120 140 100 Q155 85 145 95 Q130 110 98 150"
+                                fill="none"
+                                stroke="var(--ink)"
+                                stroke-width="1.2"
+                                stroke-linecap="round"
+                                class="draw-path"
+                            />
+                            <path
+                                d="M100 180 Q75 160 55 150 Q40 145 50 155 Q65 165 100 180"
+                                fill="none"
+                                stroke="var(--ink)"
+                                stroke-width="1.2"
+                                stroke-linecap="round"
+                                class="draw-path"
+                            />
+                        </svg>
+                    </div>
+
+                    <div class="hero-text">
+                        <p class="hero-greeting anim-fade-up">Hello, I'm</p>
+                        <h1 class="hero-name anim-fade-up">
+                            <span class="hero-name-main">Your Name</span>
+                            <span class="hero-name-jp">あなたの名前</span>
+                        </h1>
+                        <p class="hero-role anim-fade-up">
+                            <span class="typed-text" id="typed-text"></span
+                            ><span class="cursor">|</span>
+                        </p>
+                        <p class="hero-desc anim-fade-up">
+                            I craft digital experiences with the delicacy of ink
+                            on paper — minimal, intentional, and full of quiet
+                            beauty.
+                        </p>
+                        <div class="hero-actions anim-fade-up">
+                            <a href="#work" class="btn btn-primary">
+                                <span>View My Work</span>
+                                <svg
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <path d="M7 17L17 7M17 7H7M17 7V17" />
+                                </svg>
+                            </a>
+                            <a href="#contact" class="btn btn-ghost"
+                                >Get In Touch</a
+                            >
+                        </div>
+                    </div>
+
+                    <div class="hero-sketch-right">
+                        <svg
+                            viewBox="0 0 220 320"
+                            class="sketch-deco sketch-cat"
+                        >
+                            <!-- Minimal anime cat sitting -->
+                            <ellipse
+                                cx="110"
+                                cy="260"
+                                rx="50"
+                                ry="30"
+                                fill="none"
+                                stroke="var(--ink)"
+                                stroke-width="1.5"
+                                class="draw-path"
+                            />
+                            <circle
+                                cx="110"
+                                cy="190"
+                                r="35"
+                                fill="none"
+                                stroke="var(--ink)"
+                                stroke-width="1.5"
+                                class="draw-path"
+                            />
+                            <!-- Ears -->
+                            <path
+                                d="M85 165 L75 130 L100 155"
+                                fill="none"
+                                stroke="var(--ink)"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                                class="draw-path"
+                            />
+                            <path
+                                d="M135 165 L145 130 L120 155"
+                                fill="none"
+                                stroke="var(--ink)"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                                class="draw-path"
+                            />
+                            <!-- Eyes -->
+                            <ellipse
+                                cx="98"
+                                cy="188"
+                                rx="5"
+                                ry="6"
+                                fill="var(--ink)"
+                                class="cat-eye"
+                            />
+                            <ellipse
+                                cx="122"
+                                cy="188"
+                                rx="5"
+                                ry="6"
+                                fill="var(--ink)"
+                                class="cat-eye"
+                            />
+                            <!-- Tiny shine in eyes -->
+                            <circle
+                                cx="100"
+                                cy="186"
+                                r="2"
+                                fill="var(--paper)"
+                            />
+                            <circle
+                                cx="124"
+                                cy="186"
+                                r="2"
+                                fill="var(--paper)"
+                            />
+                            <!-- Mouth -->
+                            <path
+                                d="M105 198 Q110 204 115 198"
+                                fill="none"
+                                stroke="var(--ink)"
+                                stroke-width="1"
+                                stroke-linecap="round"
+                            />
+                            <path
+                                d="M110 200 L110 204"
+                                fill="none"
+                                stroke="var(--ink)"
+                                stroke-width="1"
+                            />
+                            <!-- Whiskers -->
+                            <line
+                                x1="70"
+                                y1="192"
+                                x2="92"
+                                y2="195"
+                                stroke="var(--ink)"
+                                stroke-width="0.8"
+                            />
+                            <line
+                                x1="72"
+                                y1="200"
+                                x2="93"
+                                y2="200"
+                                stroke="var(--ink)"
+                                stroke-width="0.8"
+                            />
+                            <line
+                                x1="128"
+                                y1="195"
+                                x2="150"
+                                y2="192"
+                                stroke="var(--ink)"
+                                stroke-width="0.8"
+                            />
+                            <line
+                                x1="127"
+                                y1="200"
+                                x2="148"
+                                y2="200"
+                                stroke="var(--ink)"
+                                stroke-width="0.8"
+                            />
+                            <!-- Tail -->
+                            <path
+                                d="M155 260 Q180 240 175 210 Q170 190 185 180"
+                                fill="none"
+                                stroke="var(--ink)"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                                class="draw-path"
+                            />
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="hero-scroll-hint">
+                    <span>Scroll</span>
+                    <div class="scroll-line"></div>
+                </div>
+            </section>
+
+            <!-- ======== ABOUT ======== -->
+            <section class="section about" id="about">
+                <div class="section-container">
+                    <div class="section-header">
+                        <h2 class="section-title anim-reveal">
+                            <span class="section-num">01.</span>
+                            About Me
+                            <span class="section-title-jp">私について</span>
+                        </h2>
+                        <div class="section-line anim-reveal"></div>
+                    </div>
+
+                    <div class="about-grid">
+                        <div class="about-portrait anim-fade-up">
+                            <div class="portrait-frame">
+                                <div class="portrait-placeholder">
+                                    <!-- Anime-style male portrait sketch -->
+                                    <svg
+                                        viewBox="0 0 280 380"
+                                        class="portrait-svg"
+                                    >
+                                        <!-- ====== FACE — angular masculine jaw ====== -->
+                                        <path
+                                            d="M78 130
+                                               Q76 100 85 82
+                                               Q100 58 140 55
+                                               Q180 58 195 82
+                                               Q204 100 202 130
+                                               Q200 158 192 178
+                                               Q182 198 168 210
+                                               Q155 220 140 222
+                                               Q125 220 112 210
+                                               Q98 198 88 178
+                                               Q80 158 78 130Z"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.6"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            class="draw-path"
+                                        />
+
+                                        <!-- ====== HAIR — short messy spiky style ====== -->
+                                        <!-- Main hair volume outline -->
+                                        <path
+                                            d="M65 120
+                                               Q62 85 78 58
+                                               Q98 32 140 28
+                                               Q182 32 202 58
+                                               Q218 85 215 120"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.8"
+                                            stroke-linecap="round"
+                                            class="draw-path"
+                                        />
+                                        <!-- Left side hair — short, hugs head -->
+                                        <path
+                                            d="M65 120 Q63 135 68 148"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.4"
+                                            stroke-linecap="round"
+                                            class="draw-path"
+                                        />
+                                        <!-- Right side hair — short, hugs head -->
+                                        <path
+                                            d="M215 120 Q217 135 212 148"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.4"
+                                            stroke-linecap="round"
+                                            class="draw-path"
+                                        />
+                                        <!-- Spiky top — left spikes -->
+                                        <path
+                                            d="M78 58 Q68 38 60 22"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.5"
+                                            stroke-linecap="round"
+                                            class="draw-path"
+                                        />
+                                        <path
+                                            d="M90 42 Q82 25 78 12"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.4"
+                                            stroke-linecap="round"
+                                            class="draw-path"
+                                        />
+                                        <path
+                                            d="M105 34 Q100 18 102 5"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.3"
+                                            stroke-linecap="round"
+                                            class="draw-path"
+                                        />
+                                        <!-- Spiky top — centre spikes -->
+                                        <path
+                                            d="M120 30 Q122 12 128 2"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.3"
+                                            stroke-linecap="round"
+                                            class="draw-path"
+                                        />
+                                        <path
+                                            d="M140 28 Q142 10 148 0"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.4"
+                                            stroke-linecap="round"
+                                            class="draw-path"
+                                        />
+                                        <path
+                                            d="M158 30 Q162 14 168 5"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.3"
+                                            stroke-linecap="round"
+                                            class="draw-path"
+                                        />
+                                        <!-- Spiky top — right spikes -->
+                                        <path
+                                            d="M175 34 Q182 18 185 8"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.3"
+                                            stroke-linecap="round"
+                                            class="draw-path"
+                                        />
+                                        <path
+                                            d="M192 42 Q200 26 206 15"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.4"
+                                            stroke-linecap="round"
+                                            class="draw-path"
+                                        />
+                                        <path
+                                            d="M202 58 Q215 42 222 28"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.5"
+                                            stroke-linecap="round"
+                                            class="draw-path"
+                                        />
+
+                                        <!-- ====== BANGS — messy jagged fringe ====== -->
+                                        <path
+                                            d="M80 68 Q88 95 82 120"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.3"
+                                            stroke-linecap="round"
+                                            class="draw-path"
+                                        />
+                                        <path
+                                            d="M95 55 Q102 85 98 115"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.3"
+                                            stroke-linecap="round"
+                                            class="draw-path"
+                                        />
+                                        <path
+                                            d="M112 45 Q118 78 115 108"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.2"
+                                            stroke-linecap="round"
+                                            class="draw-path"
+                                        />
+                                        <path
+                                            d="M130 38 Q134 70 132 100"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.1"
+                                            stroke-linecap="round"
+                                            class="draw-path"
+                                        />
+                                        <path
+                                            d="M148 38 Q150 68 152 95"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.1"
+                                            stroke-linecap="round"
+                                            class="draw-path"
+                                        />
+                                        <path
+                                            d="M165 45 Q168 75 172 105"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.2"
+                                            stroke-linecap="round"
+                                            class="draw-path"
+                                        />
+                                        <path
+                                            d="M182 55 Q186 82 190 112"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.3"
+                                            stroke-linecap="round"
+                                            class="draw-path"
+                                        />
+                                        <!-- Texture strands in hair -->
+                                        <path
+                                            d="M100 50 Q104 62 102 78"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="0.7"
+                                            stroke-linecap="round"
+                                            class="draw-path"
+                                        />
+                                        <path
+                                            d="M170 48 Q172 60 175 76"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="0.7"
+                                            stroke-linecap="round"
+                                            class="draw-path"accent)"
+                                            stroke-width="0.6"
+                                            stroke-linecap="round"
+                                            opacity="0.3"
+                                        />
+                                    </svg>
+                                </div>
+                                <!-- Corner decorations -->
+                                <span
+                                    class="frame-corner frame-corner-tl"
+                                ></span>
+                                <span
+                                    class="frame-corner frame-corner-tr"
+                                ></span>
+                                <span
+                                    class="frame-corner frame-corner-bl"
+                                ></span>
+                                <span
+                                    class="frame-corner frame-corner-br"
+                                ></span>
+                            </div>
+                        </div>
+
+                        <div class="about-text anim-fade-up">
+                            <p class="about-intro">
+                                I'm a <strong>creative developer</strong> who
+                                loves blending design and code. My work lives at
+                                the intersection of aesthetics and functionality
+                                — like a well-composed manga panel.
+                            </p>
+                            <p>
+                                With a background in both design and
+                                engineering, I build interfaces that feel alive.
+                                I care deeply about typography, whitespace, and
+                                those tiny interactions that make a user smile.
+                            </p>
+                            <p>
+                                When I'm not coding, you'll find me sketching,
+                                reading manga, or exploring quiet cafés with a
+                                notebook in hand.
+                            </p>
+                            <div class="about-stats">
+                                <div class="stat">
+                                    <span class="stat-number" data-count="3"
+                                        >0</span
+                                    >
+                                    <span class="stat-label"
+                                        >Years of Experience</span
+                                    >
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-number" data-count="25"
+                                        >0</span
+                                    >
+                                    <span class="stat-label"
+                                        >Projects Completed</span
+                                    >
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-number" data-count="10"
+                                        >0</span
+                                    >
+                                    <span class="stat-label"
+                                        >Happy Clients</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======== WORK ======== -->
+            <section class="section work" id="work">
+                <div class="section-container">
+                    <div class="section-header">
+                        <h2 class="section-title anim-reveal">
+                            <span class="section-num">02.</span>
+                            Selected Work
+                            <span class="section-title-jp">作品集</span>
+                        </h2>
+                        <div class="section-line anim-reveal"></div>
+                    </div>
+
+                    <div class="work-grid">
+                        <!-- Project 1 -->
+                        <article class="project-card anim-fade-up" data-tilt>
+                            <div class="project-card-inner">
+                                <div class="project-sketch">
+                                    <svg
+                                        viewBox="0 0 400 250"
+                                        class="project-illustration"
+                                    >
+                                        <!-- Browser window sketch -->
+                                        <rect
+                                            x="20"
+                                            y="20"
+                                            width="360"
+                                            height="210"
+                                            rx="8"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.5"
+                                            class="draw-path"
+                                        />
+                                        <line
+                                            x1="20"
+                                            y1="50"
+                                            x2="380"
+                                            y2="50"
+                                            stroke="var(--ink)"
+                                            stroke-width="1"
+                                            class="draw-path"
+                                        />
+                                        <circle
+                                            cx="40"
+                                            cy="35"
+                                            r="5"
+                                            fill="none"
+                                            stroke="var(--ink-light)"
+                                            stroke-width="1"
+                                        />
+                                        <circle
+                                            cx="58"
+                                            cy="35"
+                                            r="5"
+                                            fill="none"
+                                            stroke="var(--ink-light)"
+                                            stroke-width="1"
+                                        />
+                                        <circle
+                                            cx="76"
+                                            cy="35"
+                                            r="5"
+                                            fill="none"
+                                            stroke="var(--ink-light)"
+                                            stroke-width="1"
+                                        />
+                                        <!-- Content lines -->
+                                        <rect
+                                            x="40"
+                                            y="70"
+                                            width="140"
+                                            height="12"
+                                            rx="2"
+                                            fill="var(--ink-faint)"
+                                        />
+                                        <rect
+                                            x="40"
+                                            y="95"
+                                            width="200"
+                                            height="8"
+                                            rx="2"
+                                            fill="var(--ink-faint)"
+                                            opacity="0.5"
+                                        />
+                                        <rect
+                                            x="40"
+                                            y="112"
+                                            width="170"
+                                            height="8"
+                                            rx="2"
+                                            fill="var(--ink-faint)"
+                                            opacity="0.5"
+                                        />
+                                        <rect
+                                            x="40"
+                                            y="140"
+                                            width="80"
+                                            height="30"
+                                            rx="4"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.2"
+                                        />
+                                        <!-- Image placeholder -->
+                                        <rect
+                                            x="260"
+                                            y="70"
+                                            width="100"
+                                            height="100"
+                                            rx="4"
+                                            fill="none"
+                                            stroke="var(--ink-light)"
+                                            stroke-width="1"
+                                            stroke-dasharray="4 3"
+                                        />
+                                        <path
+                                            d="M285 120 L310 100 L335 120 L320 110 L340 130"
+                                            fill="none"
+                                            stroke="var(--ink-light)"
+                                            stroke-width="1"
+                                        />
+                                    </svg>
+                                </div>
+                                <div class="project-info">
+                                    <span class="project-category"
+                                        >Web Application</span
+                                    >
+                                    <h3 class="project-title">
+                                        E-Commerce Platform
+                                    </h3>
+                                    <p class="project-desc">
+                                        A modern shopping experience with smooth
+                                        animations and intuitive navigation.
+                                    </p>
+                                    <div class="project-tech">
+                                        <span>React</span>
+                                        <span>Node.js</span>
+                                        <span>MongoDB</span>
+                                    </div>
+                                    <div class="project-links">
+                                        <a href="#" class="project-link">
+                                            View Project
+                                            <svg
+                                                width="14"
+                                                height="14"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                            >
+                                                <path
+                                                    d="M7 17L17 7M17 7H7M17 7V17"
+                                                />
+                                            </svg>
+                                        </a>
+                                        <a href="#" class="project-link">
+                                            Source
+                                            <svg
+                                                width="14"
+                                                height="14"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                            >
+                                                <path
+                                                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                                                />
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Project 2 -->
+                        <article class="project-card anim-fade-up" data-tilt>
+                            <div class="project-card-inner">
+                                <div class="project-sketch">
+                                    <svg
+                                        viewBox="0 0 400 250"
+                                        class="project-illustration"
+                                    >
+                                        <!-- Mobile app sketch -->
+                                        <rect
+                                            x="130"
+                                            y="15"
+                                            width="140"
+                                            height="220"
+                                            rx="16"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.5"
+                                            class="draw-path"
+                                        />
+                                        <rect
+                                            x="140"
+                                            y="45"
+                                            width="120"
+                                            height="160"
+                                            rx="4"
+                                            fill="none"
+                                            stroke="var(--ink-light)"
+                                            stroke-width="0.8"
+                                        />
+                                        <!-- Status bar -->
+                                        <line
+                                            x1="170"
+                                            y1="30"
+                                            x2="230"
+                                            y2="30"
+                                            stroke="var(--ink-light)"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                        />
+                                        <!-- App content -->
+                                        <circle
+                                            cx="200"
+                                            cy="85"
+                                            r="20"
+                                            fill="none"
+                                            stroke="var(--ink-light)"
+                                            stroke-width="1"
+                                        />
+                                        <rect
+                                            x="155"
+                                            y="115"
+                                            width="90"
+                                            height="8"
+                                            rx="2"
+                                            fill="var(--ink-faint)"
+                                        />
+                                        <rect
+                                            x="165"
+                                            y="130"
+                                            width="70"
+                                            height="6"
+                                            rx="2"
+                                            fill="var(--ink-faint)"
+                                            opacity="0.5"
+                                        />
+                                        <rect
+                                            x="155"
+                                            y="150"
+                                            width="40"
+                                            height="20"
+                                            rx="10"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1"
+                                        />
+                                        <rect
+                                            x="205"
+                                            y="150"
+                                            width="40"
+                                            height="20"
+                                            rx="10"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1"
+                                        />
+                                        <!-- Home indicator -->
+                                        <line
+                                            x1="180"
+                                            y1="225"
+                                            x2="220"
+                                            y2="225"
+                                            stroke="var(--ink-light)"
+                                            stroke-width="3"
+                                            stroke-linecap="round"
+                                        />
+                                    </svg>
+                                </div>
+                                <div class="project-info">
+                                    <span class="project-category"
+                                        >Mobile App</span
+                                    >
+                                    <h3 class="project-title">
+                                        Wellness Tracker
+                                    </h3>
+                                    <p class="project-desc">
+                                        A mindful wellness companion that helps
+                                        track daily habits and mental health.
+                                    </p>
+                                    <div class="project-tech">
+                                        <span>React Native</span>
+                                        <span>Firebase</span>
+                                        <span>TypeScript</span>
+                                    </div>
+                                    <div class="project-links">
+                                        <a href="#" class="project-link">
+                                            View Project
+                                            <svg
+                                                width="14"
+                                                height="14"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                            >
+                                                <path
+                                                    d="M7 17L17 7M17 7H7M17 7V17"
+                                                />
+                                            </svg>
+                                        </a>
+                                        <a href="#" class="project-link">
+                                            Source
+                                            <svg
+                                                width="14"
+                                                height="14"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                            >
+                                                <path
+                                                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                                                />
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Project 3 -->
+                        <article class="project-card anim-fade-up" data-tilt>
+                            <div class="project-card-inner">
+                                <div class="project-sketch">
+                                    <svg
+                                        viewBox="0 0 400 250"
+                                        class="project-illustration"
+                                    >
+                                        <!-- Dashboard sketch -->
+                                        <rect
+                                            x="20"
+                                            y="20"
+                                            width="360"
+                                            height="210"
+                                            rx="8"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.5"
+                                            class="draw-path"
+                                        />
+                                        <!-- Sidebar -->
+                                        <line
+                                            x1="100"
+                                            y1="20"
+                                            x2="100"
+                                            y2="230"
+                                            stroke="var(--ink-light)"
+                                            stroke-width="1"
+                                        />
+                                        <circle
+                                            cx="60"
+                                            cy="50"
+                                            r="12"
+                                            fill="none"
+                                            stroke="var(--ink-light)"
+                                            stroke-width="1"
+                                        />
+                                        <rect
+                                            x="40"
+                                            y="80"
+                                            width="40"
+                                            height="6"
+                                            rx="2"
+                                            fill="var(--ink-faint)"
+                                            opacity="0.5"
+                                        />
+                                        <rect
+                                            x="40"
+                                            y="100"
+                                            width="40"
+                                            height="6"
+                                            rx="2"
+                                            fill="var(--ink-faint)"
+                                            opacity="0.3"
+                                        />
+                                        <rect
+                                            x="40"
+                                            y="120"
+                                            width="40"
+                                            height="6"
+                                            rx="2"
+                                            fill="var(--ink-faint)"
+                                            opacity="0.3"
+                                        />
+                                        <rect
+                                            x="40"
+                                            y="140"
+                                            width="40"
+                                            height="6"
+                                            rx="2"
+                                            fill="var(--ink-faint)"
+                                            opacity="0.3"
+                                        />
+                                        <!-- Chart area -->
+                                        <polyline
+                                            points="120,180 160,140 200,160 240,100 280,120 320,80 360,90"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.5"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                        />
+                                        <!-- Stat cards -->
+                                        <rect
+                                            x="120"
+                                            y="40"
+                                            width="70"
+                                            height="45"
+                                            rx="4"
+                                            fill="none"
+                                            stroke="var(--ink-light)"
+                                            stroke-width="1"
+                                        />
+                                        <rect
+                                            x="200"
+                                            y="40"
+                                            width="70"
+                                            height="45"
+                                            rx="4"
+                                            fill="none"
+                                            stroke="var(--ink-light)"
+                                            stroke-width="1"
+                                        />
+                                        <rect
+                                            x="280"
+                                            y="40"
+                                            width="80"
+                                            height="45"
+                                            rx="4"
+                                            fill="none"
+                                            stroke="var(--ink-light)"
+                                            stroke-width="1"
+                                        />
+                                    </svg>
+                                </div>
+                                <div class="project-info">
+                                    <span class="project-category"
+                                        >Dashboard</span
+                                    >
+                                    <h3 class="project-title">
+                                        Analytics Platform
+                                    </h3>
+                                    <p class="project-desc">
+                                        A data visualization dashboard with
+                                        real-time analytics and clean UI.
+                                    </p>
+                                    <div class="project-tech">
+                                        <span>Vue.js</span>
+                                        <span>D3.js</span>
+                                        <span>Python</span>
+                                    </div>
+                                    <div class="project-links">
+                                        <a href="#" class="project-link">
+                                            View Project
+                                            <svg
+                                                width="14"
+                                                height="14"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                            >
+                                                <path
+                                                    d="M7 17L17 7M17 7H7M17 7V17"
+                                                />
+                                            </svg>
+                                        </a>
+                                        <a href="#" class="project-link">
+                                            Source
+                                            <svg
+                                                width="14"
+                                                height="14"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                            >
+                                                <path
+                                                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                                                />
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Project 4 -->
+                        <article class="project-card anim-fade-up" data-tilt>
+                            <div class="project-card-inner">
+                                <div class="project-sketch">
+                                    <svg
+                                        viewBox="0 0 400 250"
+                                        class="project-illustration"
+                                    >
+                                        <!-- Creative / illustration site -->
+                                        <rect
+                                            x="20"
+                                            y="20"
+                                            width="360"
+                                            height="210"
+                                            rx="8"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.5"
+                                            class="draw-path"
+                                        />
+                                        <!-- Torii gate illustration -->
+                                        <line
+                                            x1="140"
+                                            y1="200"
+                                            x2="140"
+                                            y2="100"
+                                            stroke="var(--ink)"
+                                            stroke-width="2"
+                                        />
+                                        <line
+                                            x1="260"
+                                            y1="200"
+                                            x2="260"
+                                            y2="100"
+                                            stroke="var(--ink)"
+                                            stroke-width="2"
+                                        />
+                                        <path
+                                            d="M125 105 Q200 85 275 105"
+                                            fill="none"
+                                            stroke="var(--ink)"
+                                            stroke-width="2.5"
+                                            stroke-linecap="round"
+                                        />
+                                        <line
+                                            x1="135"
+                                            y1="130"
+                                            x2="265"
+                                            y2="130"
+                                            stroke="var(--ink)"
+                                            stroke-width="1.5"
+                                        />
+                                        <!-- Steps -->
+                                        <rect
+                                            x="150"
+                                            y="200"
+                                            width="100"
+                                            height="8"
+                                            rx="1"
+                                            fill="none"
+                                            stroke="var(--ink-light)"
+                                            stroke-width="1"
+                                        />
+                                        <!-- Cherry blossom petals -->
+                                        <circle
+                                            cx="100"
+                                            cy="80"
+                                            r="3"
+                                            fill="var(--accent)"
+                                            opacity="0.6"
+                                        />
+                                        <circle
+                                            cx="300"
+                                            cy="70"
+                                            r="2.5"
+                                            fill="var(--accent)"
+                                            opacity="0.5"
+                                        />
+                                        <circle
+                                            cx="180"
+                                            cy="60"
+                                            r="2"
+                                            fill="var(--accent)"
+                                            opacity="0.4"
+                                        />
+                                        <circle
+                                            cx="250"
+                                            cy="55"
+                                            r="3"
+                                            fill="var(--accent)"
+                                            opacity="0.5"
+                                        />
+                                        <circle
+                                            cx="320"
+                                            cy="100"
+                                            r="2"
+                                            fill="var(--accent)"
+                                            opacity="0.3"
+                                        />
+                                        <circle
+                                            cx="80"
+                                            cy="110"
+                                            r="2.5"
+                                            fill="var(--accent)"
+                                            opacity="0.4"
+                                        />
+                                    </svg>
+                                </div>
+                                <div class="project-info">
+                                    <span class="project-category"
+                                        >Creative Site</span
+                                    >
+                                    <h3 class="project-title">
+                                        Cultural Portal
+                                    </h3>
+                                    <p class="project-desc">
+                                        An immersive cultural experience site
+                                        with scroll-driven storytelling.
+                                    </p>
+                                    <div class="project-tech">
+                                        <span>GSAP</span>
+                                        <span>Three.js</span>
+                                        <span>Nuxt</span>
+                                    </div>
+                                    <div class="project-links">
+                                        <a href="#" class="project-link">
+                                            View Project
+                                            <svg
+                                                width="14"
+                                                height="14"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                            >
+                                                <path
+                                                    d="M7 17L17 7M17 7H7M17 7V17"
+                                                />
+                                            </svg>
+                                        </a>
+                                        <a href="#" class="project-link">
+                                            Source
+                                            <svg
+                                                width="14"
+                                                height="14"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                            >
+                                                <path
+                                                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                                                />
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======== SKILLS ======== -->
+            <section class="section skills" id="skills">
+                <div class="section-container">
+                    <div class="section-header">
+                        <h2 class="section-title anim-reveal">
+                            <span class="section-num">03.</span>
+                            Skills & Tools
+                            <span class="section-title-jp">技能</span>
+                        </h2>
+                        <div class="section-line anim-reveal"></div>
+                    </div>
+
+                    <div class="skills-content">
+                        <div class="skill-category anim-fade-up">
+                            <div class="skill-category-header">
+                                <svg viewBox="0 0 40 40" width="28" height="28">
+                                    <rect
+                                        x="4"
+                                        y="4"
+                                        width="32"
+                                        height="32"
+                                        rx="4"
+                                        fill="none"
+                                        stroke="var(--ink)"
+                                        stroke-width="1.5"
+                                    />
+                                    <text
+                                        x="20"
+                                        y="26"
+                                        text-anchor="middle"
+                                        font-size="16"
+                                        font-family="Caveat"
+                                        fill="var(--ink)"
+                                    >
+                                        &lt;/&gt;
+                                    </text>
+                                </svg>
+                                <h3>Frontend</h3>
+                            </div>
+                            <div class="skill-items">
+                                <div class="skill-item" data-level="90">
+                                    <span class="skill-name">HTML / CSS</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-bar-fill"></div>
+                                    </div>
+                                </div>
+                                <div class="skill-item" data-level="85">
+                                    <span class="skill-name">JavaScript</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-bar-fill"></div>
+                                    </div>
+                                </div>
+                                <div class="skill-item" data-level="80">
+                                    <span class="skill-name">React</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-bar-fill"></div>
+                                    </div>
+                                </div>
+                                <div class="skill-item" data-level="75">
+                                    <span class="skill-name">Vue.js</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-bar-fill"></div>
+                                    </div>
+                                </div>
+                                <div class="skill-item" data-level="70">
+                                    <span class="skill-name">TypeScript</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-bar-fill"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="skill-category anim-fade-up">
+                            <div class="skill-category-header">
+                                <svg viewBox="0 0 40 40" width="28" height="28">
+                                    <rect
+                                        x="4"
+                                        y="4"
+                                        width="32"
+                                        height="32"
+                                        rx="4"
+                                        fill="none"
+                                        stroke="var(--ink)"
+                                        stroke-width="1.5"
+                                    />
+                                    <text
+                                        x="20"
+                                        y="26"
+                                        text-anchor="middle"
+                                        font-size="14"
+                                        font-family="Caveat"
+                                        fill="var(--ink)"
+                                    >
+                                        &#123;&#125;
+                                    </text>
+                                </svg>
+                                <h3>Backend</h3>
+                            </div>
+                            <div class="skill-items">
+                                <div class="skill-item" data-level="80">
+                                    <span class="skill-name">Node.js</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-bar-fill"></div>
+                                    </div>
+                                </div>
+                                <div class="skill-item" data-level="75">
+                                    <span class="skill-name">Python</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-bar-fill"></div>
+                                    </div>
+                                </div>
+                                <div class="skill-item" data-level="70">
+                                    <span class="skill-name">PostgreSQL</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-bar-fill"></div>
+                                    </div>
+                                </div>
+                                <div class="skill-item" data-level="65">
+                                    <span class="skill-name">GraphQL</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-bar-fill"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="skill-category anim-fade-up">
+                            <div class="skill-category-header">
+                                <svg viewBox="0 0 40 40" width="28" height="28">
+                                    <rect
+                                        x="4"
+                                        y="4"
+                                        width="32"
+                                        height="32"
+                                        rx="4"
+                                        fill="none"
+                                        stroke="var(--ink)"
+                                        stroke-width="1.5"
+                                    />
+                                    <circle
+                                        cx="20"
+                                        cy="20"
+                                        r="8"
+                                        fill="none"
+                                        stroke="var(--ink)"
+                                        stroke-width="1.2"
+                                    />
+                                    <circle
+                                        cx="20"
+                                        cy="20"
+                                        r="3"
+                                        fill="var(--ink)"
+                                    />
+                                </svg>
+                                <h3>Design & Tools</h3>
+                            </div>
+                            <div class="skill-items">
+                                <div class="skill-item" data-level="85">
+                                    <span class="skill-name">Figma</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-bar-fill"></div>
+                                    </div>
+                                </div>
+                                <div class="skill-item" data-level="75">
+                                    <span class="skill-name">Git / GitHub</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-bar-fill"></div>
+                                    </div>
+                                </div>
+                                <div class="skill-item" data-level="70">
+                                    <span class="skill-name">Docker</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-bar-fill"></div>
+                                    </div>
+                                </div>
+                                <div class="skill-item" data-level="65">
+                                    <span class="skill-name">Illustration</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-bar-fill"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======== CONTACT ======== -->
+            <section class="section contact" id="contact">
+                <div class="section-container">
+                    <div class="section-header">
+                        <h2 class="section-title anim-reveal">
+                            <span class="section-num">04.</span>
+                            Get In Touch
+                            <span class="section-title-jp">連絡先</span>
+                        </h2>
+                        <div class="section-line anim-reveal"></div>
+                    </div>
+
+                    <div class="contact-content">
+                        <div class="contact-text anim-fade-up">
+                            <p>
+                                Whether you have a project in mind, want to
+                                collaborate, or just want to say hello — my
+                                inbox is always open. I'll do my best to get
+                                back to you as soon as possible!
+                            </p>
+                            <!-- Small crane origami SVG -->
+                            <svg
+                                viewBox="0 0 120 100"
+                                class="contact-crane"
+                                width="120"
+                            >
+                                <path
+                                    d="M10 80 L60 20 L110 80"
+                                    fill="none"
+                                    stroke="var(--ink)"
+                                    stroke-width="1.2"
+                                    stroke-linecap="round"
+                                    class="draw-path"
+                                />
+                                <path
+                                    d="M60 20 L60 90"
+                                    fill="none"
+                                    stroke="var(--ink)"
+                                    stroke-width="1"
+                                    stroke-linecap="round"
+                                />
+                                <path
+                                    d="M35 50 L85 50"
+                                    fill="none"
+                                    stroke="var(--ink)"
+                                    stroke-width="1"
+                                    stroke-linecap="round"
+                                />
+                                <path
+                                    d="M10 80 L35 50"
+                                    fill="none"
+                                    stroke="var(--ink)"
+                                    stroke-width="1"
+                                    stroke-linecap="round"
+                                />
+                                <path
+                                    d="M110 80 L85 50"
+                                    fill="none"
+                                    stroke="var(--ink)"
+                                    stroke-width="1"
+                                    stroke-linecap="round"
+                                />
+                                <!-- Wing folds -->
+                                <path
+                                    d="M35 50 L10 30"
+                                    fill="none"
+                                    stroke="var(--ink)"
+                                    stroke-width="1"
+                                    stroke-linecap="round"
+                                />
+                                <path
+                                    d="M85 50 L110 30"
+                                    fill="none"
+                                    stroke="var(--ink)"
+                                    stroke-width="1"
+                                    stroke-linecap="round"
+                                />
+                                <!-- Head -->
+                                <path
+                                    d="M60 20 L50 10 L55 18"
+                                    fill="none"
+                                    stroke="var(--ink)"
+                                    stroke-width="1"
+                                    stroke-linecap="round"
+                                />
+                            </svg>
+                        </div>
+
+                        <form
+                            class="contact-form anim-fade-up"
+                            id="contact-form"
+                        >
+                            <div class="form-group">
+                                <label for="name" class="form-label"
+                                    >Name
+                                    <span class="jp-small">名前</span></label
+                                >
+                                <input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    class="form-input"
+                                    placeholder="Tanjiro Kamado"
+                                    required
+                                />
+                                <div class="form-line"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="form-label"
+                                    >Email
+                                    <span class="jp-small">メール</span></label
+                                >
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    class="form-input"
+                                    placeholder="hello@example.com"
+                                    required
+                                />
+                                <div class="form-line"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="message" class="form-label"
+                                    >Message
+                                    <span class="jp-small"
+                                        >メッセージ</span
+                                    ></label
+                                >
+                                <textarea
+                                    id="message"
+                                    name="message"
+                                    class="form-input form-textarea"
+                                    rows="5"
+                                    placeholder="Tell me about your project..."
+                                    required
+                                ></textarea>
+                                <div class="form-line"></div>
+                            </div>
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-submit"
+                            >
+                                <span>Send Message</span>
+                                <svg
+                                    class="send-icon"
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <path
+                                        d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"
+                                    />
+                                </svg>
+                                <svg
+                                    class="check-icon"
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2.5"
+                                    style="display: none"
+                                >
+                                    <path d="M5 12L10 17L20 7" />
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- ======== FOOTER ======== -->
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="footer-deco">
+                    <!-- Decorative wave line -->
+                    <svg
+                        viewBox="0 0 800 30"
+                        class="footer-wave"
+                        preserveAspectRatio="none"
+                    >
+                        <path
+                            d="M0 15 Q100 0 200 15 Q300 30 400 15 Q500 0 600 15 Q700 30 800 15"
+                            fill="none"
+                            stroke="var(--ink-light)"
+                            stroke-width="1"
+                        />
+                    </svg>
+                </div>
+                <div class="footer-content">
+                    <div class="footer-socials">
+                        <a href="#" class="social-link" aria-label="GitHub">
+                            <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                            >
+                                <path
+                                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                                />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                            >
+                                <path
+                                    d="M4 4l11.733 16h4.267l-11.733 -16h-4.267zm6.4 0l9.6 16m-16 0l9.6 -16"
+                                />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="LinkedIn">
+                            <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                            >
+                                <path
+                                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"
+                                />
+                                <circle cx="4" cy="4" r="2" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Email">
+                            <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                            >
+                                <rect
+                                    x="2"
+                                    y="4"
+                                    width="20"
+                                    height="16"
+                                    rx="2"
+                                />
+                                <path d="M22 7l-10 7L2 7" />
+                            </svg>
+                        </a>
+                    </div>
+                    <p class="footer-copy">
+                        Crafted with care & green tea
+                        <span class="footer-year"></span>
+                    </p>
+                    <p class="footer-jp">丁寧に作られた</p>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Floating cherry blossom petals (generated via JS) -->
+        <div class="petals-container" id="petals-container"></div>
+
+        <script type="module" src="/main.js"></script>
+    </body>
+</html>
