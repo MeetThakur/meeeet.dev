@@ -27,7 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
     initCustomCursor();
     initMagneticButtons();
     initBentoSpotlight();
-    initHeroParallax();
     initPillRipple();
     initNavRipples();
     initLiveCPStats();
@@ -306,7 +305,7 @@ function initSVGDrawing() {
 
     // Observe containers that hold SVG drawings
     const svgContainers = document.querySelectorAll(
-        ".sketch-deco, .portrait-placeholder, .project-sketch, .contact-crane",
+        ".portrait-placeholder, .project-sketch, .contact-crane",
     );
     svgContainers.forEach((container) => svgObserver.observe(container));
 }
@@ -883,58 +882,6 @@ function initBentoSpotlight() {
         }
     `;
     document.head.appendChild(style);
-}
-
-// ---------- Hero Parallax ----------
-function initHeroParallax() {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const left = document.querySelector(".hero-sketch-left");
-    const right = document.querySelector(".hero-sketch-right");
-    if (!left || !right) return;
-
-    let mouseDx = 0,
-        mouseDy = 0;
-    let scrollFactor = 0;
-    let parallaxRaf = false;
-
-    function applyParallax() {
-        left.style.transform = `translate(${mouseDx * -12}px, ${mouseDy * -8 + scrollFactor}px) rotate(${mouseDx * -2}deg)`;
-        right.style.transform = `translate(${mouseDx * 12}px, ${mouseDy * -8 + scrollFactor * 0.6}px) rotate(${mouseDx * 2}deg)`;
-        parallaxRaf = false;
-    }
-
-    // Mouse-based parallax
-    if (!window.matchMedia("(hover: none)").matches) {
-        document.addEventListener(
-            "mousemove",
-            (e) => {
-                const cx = window.innerWidth / 2;
-                const cy = window.innerHeight / 2;
-                mouseDx = (e.clientX - cx) / cx;
-                mouseDy = (e.clientY - cy) / cy;
-                if (!parallaxRaf) {
-                    parallaxRaf = true;
-                    requestAnimationFrame(applyParallax);
-                }
-            },
-            { passive: true },
-        );
-    }
-
-    // Scroll-based parallax
-    window.addEventListener(
-        "scroll",
-        () => {
-            if (window.scrollY > window.innerHeight) return;
-            scrollFactor = window.scrollY * 0.12;
-            if (!parallaxRaf) {
-                parallaxRaf = true;
-                requestAnimationFrame(applyParallax);
-            }
-        },
-        { passive: true },
-    );
 }
 
 // ---------- Pill Ripple Effect ----------

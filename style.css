@@ -571,18 +571,6 @@ img {
     width: 100%;
 }
 
-.hero-sketch-left,
-.hero-sketch-right {
-    flex-shrink: 0;
-    width: 200px;
-    opacity: 0.85;
-}
-
-.sketch-deco {
-    width: 100%;
-    height: auto;
-}
-
 .hero-text {
     text-align: center;
     max-width: 600px;
@@ -1623,11 +1611,6 @@ a.bento-stat:hover .bento-stat-sub {
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1024px) {
-    .hero-sketch-left,
-    .hero-sketch-right {
-        width: 140px;
-    }
-
     .bento-grid {
         grid-template-columns: 1fr 1fr;
         grid-template-rows: auto;
@@ -1671,23 +1654,6 @@ a.bento-stat:hover .bento-stat-sub {
     .hero-content {
         flex-direction: column;
         gap: 2rem;
-    }
-
-    .hero-sketch-left,
-    .hero-sketch-right {
-        width: 120px;
-        position: absolute;
-        opacity: 0.3;
-    }
-
-    .hero-sketch-left {
-        left: 5%;
-        top: 15%;
-    }
-
-    .hero-sketch-right {
-        right: 5%;
-        bottom: 15%;
     }
 
     .hero-name-main {
@@ -2134,13 +2100,6 @@ body.theme-transitioning article {
     to {
         transform: translateX(100%);
     }
-}
-
-/* ---------- Hero Parallax Layers ---------- */
-.hero-sketch-left,
-.hero-sketch-right {
-    contain: layout style;
-    transition: transform 0.1s linear;
 }
 
 /* ---------- Section Divider Lines ---------- */
