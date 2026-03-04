@@ -493,6 +493,30 @@ function initCherryBlossomPetals() {
     // Reduce motion check
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+    // Cache petal colors — refresh on theme change
+    let petalColor1 =
+        getComputedStyle(document.documentElement)
+            .getPropertyValue("--accent")
+            .trim() || "#c97a82";
+    let petalColor2 =
+        getComputedStyle(document.documentElement)
+            .getPropertyValue("--accent-light")
+            .trim() || "#e8b4b8";
+    const petalThemeObserver = new MutationObserver(() => {
+        petalColor1 =
+            getComputedStyle(document.documentElement)
+                .getPropertyValue("--accent")
+                .trim() || "#c97a82";
+        petalColor2 =
+            getComputedStyle(document.documentElement)
+                .getPropertyValue("--accent-light")
+                .trim() || "#e8b4b8";
+    });
+    petalThemeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["data-theme"],
+    });
+
     function createPetal() {
         const petal = document.createElement("div");
         petal.classList.add("petal");
@@ -503,12 +527,8 @@ function initCherryBlossomPetals() {
         const duration = 8000 + Math.random() * 7000;
         const swayAmount = 80 + Math.random() * 100;
 
-        // SVG petal shape — read accent from CSS vars for dark mode compat
-        const style = getComputedStyle(document.documentElement);
-        const color1 = style.getPropertyValue("--accent").trim() || "#c97a82";
-        const color2 =
-            style.getPropertyValue("--accent-light").trim() || "#e8b4b8";
-        const hue = Math.random() > 0.5 ? color1 : color2;
+        // SVG petal shape — use cached colors
+        const hue = Math.random() > 0.5 ? petalColor1 : petalColor2;
         petal.innerHTML = `
             <svg viewBox="0 0 20 20" width="${size}" height="${size}">
                 <ellipse cx="10" cy="10" rx="8" ry="5"
@@ -583,52 +603,65 @@ function initInkCanvas() {
     resize();
     window.addEventListener("resize", resize);
 
+    // Cache particle color — only refresh when theme changes
+    let particleRgb =
+        getComputedStyle(document.documentElement)
+            .getPropertyValue("--particle-rgb")
+            .trim() || "26, 26, 26";
+    const themeObserver = new MutationObserver(() => {
+        particleRgb =
+            getComputedStyle(document.documentElement)
+                .getPropertyValue("--particle-rgb")
+                .trim() || "26, 26, 26";
+    });
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["data-theme"],
+    });
+
+    let mouseMoveRaf = false;
     document.addEventListener("mousemove", (e) => {
         mouse.x = e.clientX;
         mouse.y = e.clientY;
 
-        // Spawn a few ink particles on movement
-        if (Math.random() > 0.6) {
-            for (let i = 0; i < 2; i++) {
+        if (mouseMoveRaf) return;
+        mouseMoveRaf = true;
+        requestAnimationFrame(() => {
+            mouseMoveRaf = false;
+            // Spawn one ink particle per throttled frame
+            if (particles.length < 120 && Math.random() > 0.5) {
                 particles.push({
                     x: mouse.x + (Math.random() - 0.5) * 8,
                     y: mouse.y + (Math.random() - 0.5) * 8,
                     radius: Math.random() * 1.5 + 0.5,
                     alpha: 0.15 + Math.random() * 0.1,
-                    decay: 0.003 + Math.random() * 0.005,
+                    decay: 0.004 + Math.random() * 0.005,
                     vx: (Math.random() - 0.5) * 0.3,
                     vy: (Math.random() - 0.5) * 0.3,
                 });
             }
-        }
+        });
     });
 
     function animate() {
         ctx.clearRect(0, 0, width, height);
 
-        particles.forEach((p, i) => {
+        // Iterate backwards so splice doesn't skip elements
+        for (let i = particles.length - 1; i >= 0; i--) {
+            const p = particles[i];
             p.x += p.vx;
             p.y += p.vy;
             p.alpha -= p.decay;
 
             if (p.alpha <= 0) {
                 particles.splice(i, 1);
-                return;
+                continue;
             }
 
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-            const rgb =
-                getComputedStyle(document.documentElement)
-                    .getPropertyValue("--particle-rgb")
-                    .trim() || "26, 26, 26";
-            ctx.fillStyle = `rgba(${rgb}, ${p.alpha})`;
+            ctx.fillStyle = `rgba(${particleRgb}, ${p.alpha})`;
             ctx.fill();
-        });
-
-        // Keep particle count manageable
-        if (particles.length > 200) {
-            particles = particles.slice(-150);
         }
 
         animationId = requestAnimationFrame(animate);
@@ -736,19 +769,27 @@ function initCustomCursor() {
     let ringX = -100,
         ringY = -100;
 
-    document.addEventListener("mousemove", (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        dot.style.left = mouseX + "px";
-        dot.style.top = mouseY + "px";
-    });
+    // Use transform instead of left/top — avoids layout recalc
+    dot.style.left = "0";
+    dot.style.top = "0";
+    ring.style.left = "0";
+    ring.style.top = "0";
+
+    document.addEventListener(
+        "mousemove",
+        (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            dot.style.transform = `translate(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%))`;
+        },
+        { passive: true },
+    );
 
     // Smooth lag for ring
     function followMouse() {
         ringX += (mouseX - ringX) * 0.15;
         ringY += (mouseY - ringY) * 0.15;
-        ring.style.left = ringX + "px";
-        ring.style.top = ringY + "px";
+        ring.style.transform = `translate(calc(${ringX}px - 50%), calc(${ringY}px - 50%))`;
         requestAnimationFrame(followMouse);
     }
     followMouse();
@@ -810,15 +851,27 @@ function initBentoSpotlight() {
 
     const cards = document.querySelectorAll(".bento-card");
     cards.forEach((card) => {
-        card.addEventListener("mousemove", (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            card.style.setProperty("--spot-x", x + "px");
-            card.style.setProperty("--spot-y", y + "px");
-            // Move the ::before pseudo-element via CSS custom props
-            card.style.cssText += `;--spot-x:${x}px;--spot-y:${y}px;`;
-        });
+        let rafPending = false;
+        card.addEventListener(
+            "mousemove",
+            (e) => {
+                if (rafPending) return;
+                rafPending = true;
+                requestAnimationFrame(() => {
+                    rafPending = false;
+                    const rect = card.getBoundingClientRect();
+                    card.style.setProperty(
+                        "--spot-x",
+                        e.clientX - rect.left + "px",
+                    );
+                    card.style.setProperty(
+                        "--spot-y",
+                        e.clientY - rect.top + "px",
+                    );
+                });
+            },
+            { passive: true },
+        );
     });
 
     // Inject a tiny style that uses the custom properties
@@ -840,37 +893,44 @@ function initHeroParallax() {
     const right = document.querySelector(".hero-sketch-right");
     if (!left || !right) return;
 
+    let mouseDx = 0,
+        mouseDy = 0;
+    let scrollFactor = 0;
+    let parallaxRaf = false;
+
+    function applyParallax() {
+        left.style.transform = `translate(${mouseDx * -12}px, ${mouseDy * -8 + scrollFactor}px) rotate(${mouseDx * -2}deg)`;
+        right.style.transform = `translate(${mouseDx * 12}px, ${mouseDy * -8 + scrollFactor * 0.6}px) rotate(${mouseDx * 2}deg)`;
+        parallaxRaf = false;
+    }
+
     // Mouse-based parallax
     if (!window.matchMedia("(hover: none)").matches) {
-        document.addEventListener("mousemove", (e) => {
-            const cx = window.innerWidth / 2;
-            const cy = window.innerHeight / 2;
-            const dx = (e.clientX - cx) / cx; // -1 to 1
-            const dy = (e.clientY - cy) / cy;
-
-            left.style.transform = `translate(${dx * -12}px, ${dy * -8}px) rotate(${dx * -2}deg)`;
-            right.style.transform = `translate(${dx * 12}px, ${dy * -8}px) rotate(${dx * 2}deg)`;
-        });
+        document.addEventListener(
+            "mousemove",
+            (e) => {
+                const cx = window.innerWidth / 2;
+                const cy = window.innerHeight / 2;
+                mouseDx = (e.clientX - cx) / cx;
+                mouseDy = (e.clientY - cy) / cy;
+                if (!parallaxRaf) {
+                    parallaxRaf = true;
+                    requestAnimationFrame(applyParallax);
+                }
+            },
+            { passive: true },
+        );
     }
 
     // Scroll-based parallax
     window.addEventListener(
         "scroll",
         () => {
-            const scrollY = window.scrollY;
-            if (scrollY > window.innerHeight) return; // only in hero
-
-            const factor = scrollY * 0.15;
-            left.style.setProperty("--scroll-y", factor + "px");
-            right.style.setProperty("--scroll-y", -factor + "px");
-
-            // Combine with any existing mouse transforms
-            const currentLeft = left.style.transform || "";
-            const currentRight = right.style.transform || "";
-
-            if (!currentLeft.includes("translateY")) {
-                left.style.transform += ` translateY(${factor}px)`;
-                right.style.transform += ` translateY(${factor * 0.6}px)`;
+            if (window.scrollY > window.innerHeight) return;
+            scrollFactor = window.scrollY * 0.12;
+            if (!parallaxRaf) {
+                parallaxRaf = true;
+                requestAnimationFrame(applyParallax);
             }
         },
         { passive: true },
