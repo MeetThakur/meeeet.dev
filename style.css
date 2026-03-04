@@ -815,11 +815,6 @@ img {
     gap: 2rem;
 }
 
-.work-grid-featured {
-    grid-template-columns: 1fr;
-    gap: 3rem;
-}
-
 .project-card {
     position: relative;
     border-radius: var(--radius-lg);
@@ -878,22 +873,12 @@ img {
     transition: transform 0.6s var(--ease-out);
 }
 
-/* Featured cards get a wider illustration */
-.project-card--featured .project-illustration {
-    max-width: 640px;
-}
-
 .project-card:hover .project-illustration {
     transform: scale(1.03);
 }
 
 .project-info {
     padding: 1.5rem;
-}
-
-/* Featured card info gets more breathing room */
-.project-card--featured .project-info {
-    padding: 2rem 2rem 1.75rem;
 }
 
 .project-category {
@@ -904,31 +889,18 @@ img {
     letter-spacing: 0.03em;
 }
 
-/* Meta row: category + badge side by side */
-.project-meta-row {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 0.15rem;
-}
-
-/* Project badge (tech label or live indicator) */
-.project-badge {
+/* Live badge */
+.project-badge--live {
     font-size: var(--fs-xs);
     font-weight: 600;
-    padding: 0.2rem 0.65rem;
+    padding: 0.18rem 0.6rem;
     border-radius: 100px;
-    border: 1px solid var(--indigo-light);
-    color: var(--indigo);
-    letter-spacing: 0.04em;
-}
-
-.project-badge--live {
-    border-color: #6baa6b;
+    border: 1px solid #6baa6b;
     color: #4d8a4d;
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
+    letter-spacing: 0.04em;
 }
 
 .live-dot {
@@ -952,27 +924,12 @@ img {
     }
 }
 
-/* Tagline — one punchy sentence under the title */
-.project-tagline {
-    font-family: "Caveat", cursive;
-    font-size: var(--fs-md);
-    color: var(--ink-light);
-    margin-bottom: 0.6rem;
-    font-weight: 600;
-    letter-spacing: 0.01em;
-}
-
 .project-title {
     font-family: "Noto Serif JP", serif;
     font-size: var(--fs-lg);
     font-weight: 400;
-    margin: 0.4rem 0 0.3rem;
+    margin: 0.4rem 0 0.75rem;
     letter-spacing: -0.01em;
-}
-
-/* Featured title is a bit larger */
-.project-card--featured .project-title {
-    font-size: var(--fs-xl);
 }
 
 .project-desc {
@@ -980,50 +937,6 @@ img {
     color: var(--ink-soft);
     line-height: 1.7;
     margin-bottom: 1rem;
-}
-
-/* Feature bullet list */
-.project-features {
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.4rem 1.5rem;
-    margin-bottom: 1.25rem;
-}
-
-.project-features li {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.45rem;
-    font-size: var(--fs-sm);
-    color: var(--ink-soft);
-    line-height: 1.5;
-}
-
-.project-features li svg {
-    flex-shrink: 0;
-    margin-top: 2px;
-}
-
-/* Primary link gets button treatment */
-.project-link--primary {
-    background: var(--ink);
-    color: var(--paper) !important;
-    padding: 0.5rem 1.1rem;
-    border-radius: 100px;
-    font-size: var(--fs-sm);
-    font-weight: 500;
-    transition: all 0.35s var(--ease-out);
-}
-
-.project-link--primary::after {
-    display: none;
-}
-
-.project-link--primary:hover {
-    background: var(--accent-deep);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(212, 135, 143, 0.28);
 }
 
 .project-tech {
