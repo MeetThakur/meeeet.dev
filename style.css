@@ -794,8 +794,8 @@ img {
     position: absolute;
     inset: 0;
     border-radius: calc(var(--radius) + 4px);
-    background: var(--gradient-border);
-    opacity: 0.25;
+    background: var(--paper-dark);
+    opacity: 1;
     z-index: 0;
 }
 
@@ -2196,32 +2196,6 @@ body.theme-transitioning article {
 
 a.bento-stat:hover .bento-stat-num {
     text-shadow: 0 0 20px var(--accent-text-glow);
-}
-
-/* ---------- Portrait Glow Ring ---------- */
-.portrait-frame::after {
-    content: "";
-    position: absolute;
-    inset: -8px;
-    border-radius: calc(var(--radius) + 8px);
-    background: conic-gradient(
-        from 0deg,
-        transparent,
-        var(--accent-faint),
-        transparent,
-        var(--accent-light),
-        transparent
-    );
-    opacity: 0;
-    z-index: -1;
-    transition: opacity 0.6s var(--ease-out);
-    animation: portraitGlow 4s linear infinite;
-}
-
-@keyframes portraitGlow {
-    to {
-        rotate: 360deg;
-    }
 }
 
 /* ---------- Scroll-triggered Section Entrances ---------- */
