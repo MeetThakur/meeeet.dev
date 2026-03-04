@@ -64,7 +64,11 @@ html {
 }
 
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family:
+        "Inter",
+        -apple-system,
+        BlinkMacSystemFont,
+        sans-serif;
     font-weight: 400;
     font-size: var(--fs-base);
     line-height: 1.7;
@@ -117,8 +121,7 @@ img {
     pointer-events: none;
     z-index: 9999;
     opacity: 0.03;
-    background-image:
-        url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
     background-repeat: repeat;
 }
 
@@ -151,9 +154,10 @@ img {
     right: 0;
     z-index: 10000;
     padding: 0 2rem;
-    transition: background var(--duration) var(--ease-out),
-                box-shadow var(--duration) var(--ease-out),
-                padding var(--duration) var(--ease-out);
+    transition:
+        background var(--duration) var(--ease-out),
+        box-shadow var(--duration) var(--ease-out),
+        padding var(--duration) var(--ease-out);
 }
 
 .nav.scrolled {
@@ -189,7 +193,7 @@ img {
     content: attr(data-jp);
     position: absolute;
     left: calc(100% + 8px);
-    font-family: 'Noto Serif JP', serif;
+    font-family: "Noto Serif JP", serif;
     font-size: var(--fs-xs);
     color: var(--ink-light);
     opacity: 0;
@@ -232,7 +236,7 @@ img {
     bottom: -14px;
     left: 50%;
     transform: translateX(-50%) translateY(2px);
-    font-family: 'Noto Serif JP', serif;
+    font-family: "Noto Serif JP", serif;
     font-size: 9px;
     color: var(--accent);
     opacity: 0;
@@ -241,7 +245,7 @@ img {
 }
 
 .nav-link::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: -2px;
     left: 0;
@@ -321,7 +325,7 @@ img {
 .mobile-link {
     font-size: var(--fs-xl);
     font-weight: 300;
-    font-family: 'Noto Serif JP', serif;
+    font-family: "Noto Serif JP", serif;
     letter-spacing: 0.04em;
     transform: translateY(20px);
     opacity: 0;
@@ -333,10 +337,18 @@ img {
     opacity: 1;
 }
 
-.mobile-menu.open .mobile-link:nth-child(1) { transition-delay: 0.1s; }
-.mobile-menu.open .mobile-link:nth-child(2) { transition-delay: 0.15s; }
-.mobile-menu.open .mobile-link:nth-child(3) { transition-delay: 0.2s; }
-.mobile-menu.open .mobile-link:nth-child(4) { transition-delay: 0.25s; }
+.mobile-menu.open .mobile-link:nth-child(1) {
+    transition-delay: 0.1s;
+}
+.mobile-menu.open .mobile-link:nth-child(2) {
+    transition-delay: 0.15s;
+}
+.mobile-menu.open .mobile-link:nth-child(3) {
+    transition-delay: 0.2s;
+}
+.mobile-menu.open .mobile-link:nth-child(4) {
+    transition-delay: 0.25s;
+}
 
 .mobile-link .jp {
     display: block;
@@ -367,7 +379,7 @@ img {
 }
 
 .section-title {
-    font-family: 'Noto Serif JP', serif;
+    font-family: "Noto Serif JP", serif;
     font-weight: 400;
     font-size: var(--fs-2xl);
     letter-spacing: -0.01em;
@@ -376,7 +388,7 @@ img {
 }
 
 .section-num {
-    font-family: 'Caveat', cursive;
+    font-family: "Caveat", cursive;
     font-size: var(--fs-lg);
     color: var(--accent);
     margin-right: 0.5rem;
@@ -402,7 +414,7 @@ img {
 }
 
 .section-line::after {
-    content: '✦';
+    content: "✦";
     position: absolute;
     right: -20px;
     top: -8px;
@@ -448,7 +460,7 @@ img {
 }
 
 .hero-greeting {
-    font-family: 'Caveat', cursive;
+    font-family: "Caveat", cursive;
     font-size: var(--fs-lg);
     color: var(--accent);
     margin-bottom: 0.5rem;
@@ -456,7 +468,7 @@ img {
 }
 
 .hero-name {
-    font-family: 'Noto Serif JP', serif;
+    font-family: "Noto Serif JP", serif;
     font-weight: 700;
     margin-bottom: 1rem;
     line-height: 1.1;
@@ -483,7 +495,7 @@ img {
 }
 
 .hero-role {
-    font-family: 'Caveat', cursive;
+    font-family: "Caveat", cursive;
     font-size: var(--fs-xl);
     color: var(--ink-soft);
     margin-bottom: 1.5rem;
@@ -498,8 +510,13 @@ img {
 }
 
 @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
 }
 
 .hero-desc {
@@ -544,14 +561,31 @@ img {
 }
 
 @keyframes float {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(-6px); }
+    0%,
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    50% {
+        transform: translateX(-50%) translateY(-6px);
+    }
 }
 
 @keyframes scrollLine {
-    0% { opacity: 0; transform: scaleY(0); transform-origin: top; }
-    50% { opacity: 1; transform: scaleY(1); transform-origin: top; }
-    100% { opacity: 0; transform: scaleY(0); transform-origin: bottom; }
+    0% {
+        opacity: 0;
+        transform: scaleY(0);
+        transform-origin: top;
+    }
+    50% {
+        opacity: 1;
+        transform: scaleY(1);
+        transform-origin: top;
+    }
+    100% {
+        opacity: 0;
+        transform: scaleY(0);
+        transform-origin: bottom;
+    }
 }
 
 /* ---------- Buttons ---------- */
@@ -624,8 +658,14 @@ img {
 }
 
 @keyframes catBlink {
-    0%, 90%, 100% { transform: scaleY(1); }
-    95% { transform: scaleY(0.1); }
+    0%,
+    90%,
+    100% {
+        transform: scaleY(1);
+    }
+    95% {
+        transform: scaleY(0.1);
+    }
 }
 
 /* ---------- ABOUT ---------- */
@@ -646,18 +686,27 @@ img {
 .portrait-placeholder {
     background: var(--paper-warm);
     border-radius: var(--radius);
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    overflow: hidden;
     aspect-ratio: 4/5;
     border: 1px solid var(--ink-ghost);
+    position: relative;
 }
 
-.portrait-svg {
+.portrait-img {
     width: 100%;
-    height: auto;
-    max-width: 240px;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    filter: sepia(8%) contrast(1.02) brightness(1.01);
+    transition:
+        transform 0.6s var(--ease-out),
+        filter 0.6s var(--ease-out);
+}
+
+.portrait-frame:hover .portrait-img {
+    transform: scale(1.03);
+    filter: sepia(4%) contrast(1.04) brightness(1.02);
 }
 
 /* Frame corner decorations */
@@ -730,7 +779,7 @@ img {
 
 .stat-number {
     display: block;
-    font-family: 'Caveat', cursive;
+    font-family: "Caveat", cursive;
     font-size: var(--fs-3xl);
     font-weight: 700;
     color: var(--accent-deep);
@@ -738,7 +787,7 @@ img {
 }
 
 .stat-number::after {
-    content: '+';
+    content: "+";
     font-size: 0.6em;
 }
 
@@ -752,7 +801,12 @@ img {
 
 /* ---------- WORK ---------- */
 .work {
-    background: linear-gradient(180deg, var(--paper) 0%, var(--paper-warm) 50%, var(--paper) 100%);
+    background: linear-gradient(
+        180deg,
+        var(--paper) 0%,
+        var(--paper-warm) 50%,
+        var(--paper) 100%
+    );
 }
 
 .work-grid {
@@ -811,7 +865,7 @@ img {
 }
 
 .project-category {
-    font-family: 'Caveat', cursive;
+    font-family: "Caveat", cursive;
     font-size: var(--fs-sm);
     color: var(--accent);
     font-weight: 600;
@@ -819,7 +873,7 @@ img {
 }
 
 .project-title {
-    font-family: 'Noto Serif JP', serif;
+    font-family: "Noto Serif JP", serif;
     font-size: var(--fs-lg);
     font-weight: 400;
     margin: 0.4rem 0 0.75rem;
@@ -874,7 +928,7 @@ img {
 }
 
 .project-link::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: -2px;
     left: 0;
@@ -931,7 +985,7 @@ img {
 }
 
 .skill-category-header h3 {
-    font-family: 'Noto Serif JP', serif;
+    font-family: "Noto Serif JP", serif;
     font-size: var(--fs-md);
     font-weight: 400;
     letter-spacing: 0.01em;
@@ -974,7 +1028,7 @@ img {
 }
 
 .skill-bar-fill::after {
-    content: '';
+    content: "";
     position: absolute;
     right: 0;
     top: -2px;
@@ -993,7 +1047,11 @@ img {
 
 /* ---------- CONTACT ---------- */
 .contact {
-    background: linear-gradient(180deg, var(--paper) 0%, var(--paper-warm) 100%);
+    background: linear-gradient(
+        180deg,
+        var(--paper) 0%,
+        var(--paper-warm) 100%
+    );
 }
 
 .contact-content {
@@ -1016,7 +1074,9 @@ img {
 
 .contact-crane {
     opacity: 0.6;
-    transition: opacity 0.4s var(--ease-out), transform 0.6s var(--ease-out);
+    transition:
+        opacity 0.4s var(--ease-out),
+        transform 0.6s var(--ease-out);
 }
 
 .contact-crane:hover {
@@ -1044,7 +1104,7 @@ img {
 }
 
 .form-label .jp-small {
-    font-family: 'Noto Serif JP', serif;
+    font-family: "Noto Serif JP", serif;
     font-size: var(--fs-xs);
     color: var(--ink-light);
     font-weight: 200;
@@ -1174,11 +1234,11 @@ img {
 }
 
 .footer-year::before {
-    content: ' · ';
+    content: " · ";
 }
 
 .footer-jp {
-    font-family: 'Noto Serif JP', serif;
+    font-family: "Noto Serif JP", serif;
     font-size: var(--fs-xs);
     color: var(--ink-faint);
     margin-top: 0.4rem;
@@ -1212,7 +1272,9 @@ img {
 .anim-fade-up {
     opacity: 0;
     transform: translateY(30px);
-    transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+    transition:
+        opacity 0.7s var(--ease-out),
+        transform 0.7s var(--ease-out);
 }
 
 .anim-fade-up.visible {
@@ -1220,16 +1282,28 @@ img {
     transform: translateY(0);
 }
 
-.anim-fade-up:nth-child(1) { transition-delay: 0.0s; }
-.anim-fade-up:nth-child(2) { transition-delay: 0.1s; }
-.anim-fade-up:nth-child(3) { transition-delay: 0.2s; }
-.anim-fade-up:nth-child(4) { transition-delay: 0.3s; }
-.anim-fade-up:nth-child(5) { transition-delay: 0.4s; }
+.anim-fade-up:nth-child(1) {
+    transition-delay: 0s;
+}
+.anim-fade-up:nth-child(2) {
+    transition-delay: 0.1s;
+}
+.anim-fade-up:nth-child(3) {
+    transition-delay: 0.2s;
+}
+.anim-fade-up:nth-child(4) {
+    transition-delay: 0.3s;
+}
+.anim-fade-up:nth-child(5) {
+    transition-delay: 0.4s;
+}
 
 .anim-reveal {
     opacity: 0;
     transform: translateY(15px);
-    transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+    transition:
+        opacity 0.6s var(--ease-out),
+        transform 0.6s var(--ease-out);
 }
 
 .anim-reveal.visible {
