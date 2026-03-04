@@ -11,6 +11,18 @@
             rel="stylesheet"
         />
         <link rel="stylesheet" href="/style.css" />
+        <script>
+            // Prevent flash of wrong theme — runs before paint
+            (function () {
+                var t = localStorage.getItem("theme");
+                if (!t)
+                    t = window.matchMedia("(prefers-color-scheme: dark)")
+                        .matches
+                        ? "dark"
+                        : "light";
+                document.documentElement.setAttribute("data-theme", t);
+            })();
+        </script>
     </head>
     <body>
         <!-- Ink splatter & paper texture overlay -->
@@ -57,6 +69,44 @@
                     <a href="#contact" class="nav-link" data-jp="連絡"
                         >Contact</a
                     >
+                    <button
+                        class="theme-toggle"
+                        id="theme-toggle"
+                        aria-label="Toggle dark mode"
+                    >
+                        <svg
+                            class="icon-moon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path
+                                d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+                            />
+                        </svg>
+                        <svg
+                            class="icon-sun"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <circle cx="12" cy="12" r="5" />
+                            <line x1="12" y1="1" x2="12" y2="3" />
+                            <line x1="12" y1="21" x2="12" y2="23" />
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                            <line x1="1" y1="12" x2="3" y2="12" />
+                            <line x1="21" y1="12" x2="23" y2="12" />
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                        </svg>
+                    </button>
                 </div>
                 <button
                     class="nav-menu-btn"
@@ -84,6 +134,42 @@
             <a href="#contact" class="mobile-link"
                 >Contact <span class="jp">連絡</span></a
             >
+            <button
+                class="theme-toggle"
+                id="theme-toggle-mobile"
+                aria-label="Toggle dark mode"
+            >
+                <svg
+                    class="icon-moon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                </svg>
+                <svg
+                    class="icon-sun"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <circle cx="12" cy="12" r="5" />
+                    <line x1="12" y1="1" x2="12" y2="3" />
+                    <line x1="12" y1="21" x2="12" y2="23" />
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                    <line x1="1" y1="12" x2="3" y2="12" />
+                    <line x1="21" y1="12" x2="23" y2="12" />
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                </svg>
+            </button>
         </div>
 
         <!-- Scroll progress indicator -->
@@ -145,9 +231,9 @@
                             ><span class="cursor">|</span>
                         </p>
                         <p class="hero-desc anim-fade-up">
-                            I craft digital experiences with the delicacy of ink
-                            on paper — minimal, intentional, and full of quiet
-                            beauty.
+                            I build things for the web and mobile — clean,
+                            purposeful, and made to last. Always learning,
+                            always shipping.
                         </p>
                         <div class="hero-actions anim-fade-up">
                             <a href="#work" class="btn btn-primary">
@@ -166,6 +252,30 @@
                             <a href="#contact" class="btn btn-ghost"
                                 >Get In Touch</a
                             >
+                            <a
+                                href="https://drive.google.com/drive/u/0/folders/1e8QK_ItSmdohK6oBCKd3gWcDma0IJfrf"
+                                target="_blank"
+                                rel="noopener"
+                                class="btn btn-ghost"
+                            >
+                                <svg
+                                    width="15"
+                                    height="15"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <path
+                                        d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                                    />
+                                    <polyline points="7 10 12 15 17 10" />
+                                    <line x1="12" y1="15" x2="12" y2="3" />
+                                </svg>
+                                Resume
+                            </a>
                         </div>
                     </div>
 
@@ -324,7 +434,7 @@
                             <div class="portrait-frame">
                                 <div class="portrait-placeholder">
                                     <img
-                                        src="https://api.dicebear.com/9.x/adventurer/svg?seed=animeboy&backgroundColor=f5f0e8&hairColor=2c2c2c&skinColor=f7d9c4&eyes=variant01,variant04,variant08,variant13&eyebrows=variant01,variant04&mouth=variant01,variant05,variant07&hair=short01,short02,short03,short04,short05&features=none&accessories=glasses02"
+                                        src="/avatar.png"
                                         alt="Anime boy portrait"
                                         class="portrait-img"
                                     />
@@ -347,46 +457,49 @@
 
                         <div class="about-text anim-fade-up">
                             <p class="about-intro">
-                                I'm a <strong>creative developer</strong> who
-                                loves blending design and code. My work lives at
-                                the intersection of aesthetics and functionality
-                                — like a well-composed manga panel.
+                                I'm <strong>Meet</strong> — a developer who
+                                loves turning ideas into real, working products.
+                                Whether it's a full-stack web app or a mobile
+                                experience, I care about getting the details
+                                right.
                             </p>
                             <p>
-                                With a background in both design and
-                                engineering, I build interfaces that feel alive.
-                                I care deeply about typography, whitespace, and
-                                those tiny interactions that make a user smile.
+                                I spend my time building with the MERN stack and
+                                React Native, diving into algorithms, and
+                                occasionally taking projects from zero to
+                                deployed. I've also had the chance to present
+                                research and compete in national hackathons.
                             </p>
                             <p>
-                                When I'm not coding, you'll find me sketching,
-                                reading manga, or exploring quiet cafés with a
-                                notebook in hand.
+                                Outside of code, I'm usually grinding
+                                competitive programming or exploring something
+                                new that caught my curiosity.
                             </p>
                             <div class="about-stats">
+                                <div class="stat">
+                                    <span
+                                        class="stat-number"
+                                        data-count="1700"
+                                        data-suffix="+"
+                                        >0</span
+                                    >
+                                    <span class="stat-label"
+                                        >LeetCode Rating</span
+                                    >
+                                </div>
                                 <div class="stat">
                                     <span class="stat-number" data-count="3"
                                         >0</span
                                     >
                                     <span class="stat-label"
-                                        >Years of Experience</span
+                                        >Projects Shipped</span
                                     >
                                 </div>
                                 <div class="stat">
-                                    <span class="stat-number" data-count="25"
+                                    <span class="stat-number" data-count="2"
                                         >0</span
                                     >
-                                    <span class="stat-label"
-                                        >Projects Completed</span
-                                    >
-                                </div>
-                                <div class="stat">
-                                    <span class="stat-number" data-count="10"
-                                        >0</span
-                                    >
-                                    <span class="stat-label"
-                                        >Happy Clients</span
-                                    >
+                                    <span class="stat-label">Hackathons</span>
                                 </div>
                             </div>
                         </div>
@@ -902,176 +1015,132 @@
                         <div class="section-line anim-reveal"></div>
                     </div>
 
-                    <div class="skills-content">
-                        <div class="skill-category anim-fade-up">
-                            <div class="skill-category-header">
-                                <svg viewBox="0 0 40 40" width="28" height="28">
-                                    <rect
-                                        x="4"
-                                        y="4"
-                                        width="32"
-                                        height="32"
-                                        rx="4"
-                                        fill="none"
-                                        stroke="var(--ink)"
-                                        stroke-width="1.5"
-                                    />
-                                    <text
-                                        x="20"
-                                        y="26"
-                                        text-anchor="middle"
-                                        font-size="16"
-                                        font-family="Caveat"
-                                        fill="var(--ink)"
-                                    >
-                                        &lt;/&gt;
-                                    </text>
-                                </svg>
-                                <h3>Frontend</h3>
+                    <div class="bento-grid">
+                        <!-- CARD: Languages — tall left -->
+                        <div
+                            class="bento-card bento-card--languages anim-fade-up"
+                        >
+                            <div class="bento-label">
+                                <span class="bento-icon">{ }</span>
+                                Languages
                             </div>
-                            <div class="skill-items">
-                                <div class="skill-item" data-level="90">
-                                    <span class="skill-name">HTML / CSS</span>
-                                    <div class="skill-bar">
-                                        <div class="skill-bar-fill"></div>
-                                    </div>
-                                </div>
-                                <div class="skill-item" data-level="85">
-                                    <span class="skill-name">JavaScript</span>
-                                    <div class="skill-bar">
-                                        <div class="skill-bar-fill"></div>
-                                    </div>
-                                </div>
-                                <div class="skill-item" data-level="80">
-                                    <span class="skill-name">React</span>
-                                    <div class="skill-bar">
-                                        <div class="skill-bar-fill"></div>
-                                    </div>
-                                </div>
-                                <div class="skill-item" data-level="75">
-                                    <span class="skill-name">Vue.js</span>
-                                    <div class="skill-bar">
-                                        <div class="skill-bar-fill"></div>
-                                    </div>
-                                </div>
-                                <div class="skill-item" data-level="70">
-                                    <span class="skill-name">TypeScript</span>
-                                    <div class="skill-bar">
-                                        <div class="skill-bar-fill"></div>
-                                    </div>
-                                </div>
+                            <div class="bento-pills">
+                                <span class="bento-pill bento-pill--accent"
+                                    >Python</span
+                                >
+                                <span class="bento-pill">C / C++</span>
+                                <span class="bento-pill bento-pill--accent"
+                                    >JavaScript</span
+                                >
+                                <span class="bento-pill">TypeScript</span>
+                            </div>
+                            <p class="bento-note">The languages I think in.</p>
+                        </div>
+
+                        <!-- CARD: Web & Mobile — wide top-right -->
+                        <div class="bento-card bento-card--web anim-fade-up">
+                            <div class="bento-label">
+                                <span class="bento-icon">⬡</span>
+                                Web & Mobile
+                            </div>
+                            <div class="bento-pills">
+                                <span class="bento-pill bento-pill--accent"
+                                    >React</span
+                                >
+                                <span class="bento-pill bento-pill--accent"
+                                    >Node.js</span
+                                >
+                                <span class="bento-pill">Express</span>
+                                <span class="bento-pill">MongoDB</span>
+                                <span class="bento-pill">PostgreSQL</span>
+                                <span class="bento-pill bento-pill--accent"
+                                    >React Native</span
+                                >
+                                <span class="bento-pill">Expo</span>
+                                <span class="bento-pill">REST APIs</span>
                             </div>
                         </div>
 
-                        <div class="skill-category anim-fade-up">
-                            <div class="skill-category-header">
-                                <svg viewBox="0 0 40 40" width="28" height="28">
-                                    <rect
-                                        x="4"
-                                        y="4"
-                                        width="32"
-                                        height="32"
-                                        rx="4"
-                                        fill="none"
-                                        stroke="var(--ink)"
-                                        stroke-width="1.5"
-                                    />
-                                    <text
-                                        x="20"
-                                        y="26"
-                                        text-anchor="middle"
-                                        font-size="14"
-                                        font-family="Caveat"
-                                        fill="var(--ink)"
-                                    >
-                                        &#123;&#125;
-                                    </text>
-                                </svg>
-                                <h3>Backend</h3>
+                        <!-- CARD: Competitive Programming — small highlight -->
+                        <div class="bento-card bento-card--cp anim-fade-up">
+                            <div class="bento-label">
+                                <span class="bento-icon">⌥</span>
+                                Competitive Programming
                             </div>
-                            <div class="skill-items">
-                                <div class="skill-item" data-level="80">
-                                    <span class="skill-name">Node.js</span>
-                                    <div class="skill-bar">
-                                        <div class="skill-bar-fill"></div>
-                                    </div>
-                                </div>
-                                <div class="skill-item" data-level="75">
-                                    <span class="skill-name">Python</span>
-                                    <div class="skill-bar">
-                                        <div class="skill-bar-fill"></div>
-                                    </div>
-                                </div>
-                                <div class="skill-item" data-level="70">
-                                    <span class="skill-name">PostgreSQL</span>
-                                    <div class="skill-bar">
-                                        <div class="skill-bar-fill"></div>
-                                    </div>
-                                </div>
-                                <div class="skill-item" data-level="65">
-                                    <span class="skill-name">GraphQL</span>
-                                    <div class="skill-bar">
-                                        <div class="skill-bar-fill"></div>
-                                    </div>
-                                </div>
+                            <div class="bento-stats-row">
+                                <a
+                                    class="bento-stat"
+                                    href="https://leetcode.com/Meet11_"
+                                    target="_blank"
+                                    rel="noopener"
+                                >
+                                    <span class="bento-stat-num"
+                                        >1700<span class="bento-stat-plus"
+                                            >+</span
+                                        ></span
+                                    >
+                                    <span class="bento-stat-sub">LeetCode</span>
+                                </a>
+                                <a
+                                    class="bento-stat"
+                                    href="https://codechef.com/users/meetrix"
+                                    target="_blank"
+                                    rel="noopener"
+                                >
+                                    <span class="bento-stat-num">★★★</span>
+                                    <span class="bento-stat-sub">CodeChef</span>
+                                </a>
+                                <a
+                                    class="bento-stat"
+                                    href="https://codeforces.com/profile/meet_11"
+                                    target="_blank"
+                                    rel="noopener"
+                                >
+                                    <span class="bento-stat-num">Expert</span>
+                                    <span class="bento-stat-sub"
+                                        >Codeforces</span
+                                    >
+                                </a>
                             </div>
                         </div>
 
-                        <div class="skill-category anim-fade-up">
-                            <div class="skill-category-header">
-                                <svg viewBox="0 0 40 40" width="28" height="28">
-                                    <rect
-                                        x="4"
-                                        y="4"
-                                        width="32"
-                                        height="32"
-                                        rx="4"
-                                        fill="none"
-                                        stroke="var(--ink)"
-                                        stroke-width="1.5"
-                                    />
-                                    <circle
-                                        cx="20"
-                                        cy="20"
-                                        r="8"
-                                        fill="none"
-                                        stroke="var(--ink)"
-                                        stroke-width="1.2"
-                                    />
-                                    <circle
-                                        cx="20"
-                                        cy="20"
-                                        r="3"
-                                        fill="var(--ink)"
-                                    />
-                                </svg>
-                                <h3>Design & Tools</h3>
+                        <!-- CARD: Tools & Libraries -->
+                        <div class="bento-card bento-card--tools anim-fade-up">
+                            <div class="bento-label">
+                                <span class="bento-icon">◈</span>
+                                Tools & Libraries
                             </div>
-                            <div class="skill-items">
-                                <div class="skill-item" data-level="85">
-                                    <span class="skill-name">Figma</span>
-                                    <div class="skill-bar">
-                                        <div class="skill-bar-fill"></div>
-                                    </div>
-                                </div>
-                                <div class="skill-item" data-level="75">
-                                    <span class="skill-name">Git / GitHub</span>
-                                    <div class="skill-bar">
-                                        <div class="skill-bar-fill"></div>
-                                    </div>
-                                </div>
-                                <div class="skill-item" data-level="70">
-                                    <span class="skill-name">Docker</span>
-                                    <div class="skill-bar">
-                                        <div class="skill-bar-fill"></div>
-                                    </div>
-                                </div>
-                                <div class="skill-item" data-level="65">
-                                    <span class="skill-name">Illustration</span>
-                                    <div class="skill-bar">
-                                        <div class="skill-bar-fill"></div>
-                                    </div>
-                                </div>
+                            <div class="bento-pills">
+                                <span class="bento-pill">Git</span>
+                                <span class="bento-pill bento-pill--accent"
+                                    >Pandas</span
+                                >
+                                <span class="bento-pill bento-pill--accent"
+                                    >Scikit-learn</span
+                                >
+                                <span class="bento-pill">Streamlit</span>
+                                <span class="bento-pill">Matplotlib</span>
+                                <span class="bento-pill">Zustand</span>
+                            </div>
+                        </div>
+
+                        <!-- CARD: Core CS — wide bottom -->
+                        <div class="bento-card bento-card--core anim-fade-up">
+                            <div class="bento-label">
+                                <span class="bento-icon">∑</span>
+                                Core CS
+                            </div>
+                            <div class="bento-pills">
+                                <span class="bento-pill bento-pill--accent"
+                                    >DSA</span
+                                >
+                                <span class="bento-pill">OOP</span>
+                                <span class="bento-pill">DBMS</span>
+                                <span class="bento-pill">OS</span>
+                                <span class="bento-pill"
+                                    >Computer Networks</span
+                                >
+                                <span class="bento-pill">Network Security</span>
                             </div>
                         </div>
                     </div>
@@ -1098,6 +1167,102 @@
                                 inbox is always open. I'll do my best to get
                                 back to you as soon as possible!
                             </p>
+                            <div class="contact-info">
+                                <a
+                                    href="mailto:meet11india@gmail.com"
+                                    class="contact-info-item"
+                                >
+                                    <svg
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <rect
+                                            x="2"
+                                            y="4"
+                                            width="20"
+                                            height="16"
+                                            rx="2"
+                                        />
+                                        <path d="M22 7l-10 7L2 7" />
+                                    </svg>
+                                    meet11india@gmail.com
+                                </a>
+                                <a
+                                    href="https://linkedin.com/in/MeetThakur"
+                                    target="_blank"
+                                    rel="noopener"
+                                    class="contact-info-item"
+                                >
+                                    <svg
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <path
+                                            d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"
+                                        />
+                                        <circle cx="4" cy="4" r="2" />
+                                    </svg>
+                                    linkedin.com/in/MeetThakur
+                                </a>
+                                <a
+                                    href="https://github.com/MeetThakur"
+                                    target="_blank"
+                                    rel="noopener"
+                                    class="contact-info-item"
+                                >
+                                    <svg
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <path
+                                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                                        />
+                                    </svg>
+                                    github.com/MeetThakur
+                                </a>
+                                <a
+                                    href="https://drive.google.com/drive/u/0/folders/1e8QK_ItSmdohK6oBCKd3gWcDma0IJfrf"
+                                    target="_blank"
+                                    rel="noopener"
+                                    class="contact-info-item"
+                                >
+                                    <svg
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <path
+                                            d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                                        />
+                                        <polyline points="7 10 12 15 17 10" />
+                                        <line x1="12" y1="15" x2="12" y2="3" />
+                                    </svg>
+                                    Resume / CV
+                                </a>
+                            </div>
                             <!-- Small crane origami SVG -->
                             <svg
                                 viewBox="0 0 120 100"
@@ -1257,86 +1422,7 @@
         <!-- ======== FOOTER ======== -->
         <footer class="footer">
             <div class="footer-inner">
-                <div class="footer-deco">
-                    <!-- Decorative wave line -->
-                    <svg
-                        viewBox="0 0 800 30"
-                        class="footer-wave"
-                        preserveAspectRatio="none"
-                    >
-                        <path
-                            d="M0 15 Q100 0 200 15 Q300 30 400 15 Q500 0 600 15 Q700 30 800 15"
-                            fill="none"
-                            stroke="var(--ink-light)"
-                            stroke-width="1"
-                        />
-                    </svg>
-                </div>
                 <div class="footer-content">
-                    <div class="footer-socials">
-                        <a href="#" class="social-link" aria-label="GitHub">
-                            <svg
-                                width="20"
-                                height="20"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="1.5"
-                            >
-                                <path
-                                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
-                                />
-                            </svg>
-                        </a>
-                        <a href="#" class="social-link" aria-label="Twitter">
-                            <svg
-                                width="20"
-                                height="20"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="1.5"
-                            >
-                                <path
-                                    d="M4 4l11.733 16h4.267l-11.733 -16h-4.267zm6.4 0l9.6 16m-16 0l9.6 -16"
-                                />
-                            </svg>
-                        </a>
-                        <a href="#" class="social-link" aria-label="LinkedIn">
-                            <svg
-                                width="20"
-                                height="20"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="1.5"
-                            >
-                                <path
-                                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"
-                                />
-                                <circle cx="4" cy="4" r="2" />
-                            </svg>
-                        </a>
-                        <a href="#" class="social-link" aria-label="Email">
-                            <svg
-                                width="20"
-                                height="20"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="1.5"
-                            >
-                                <rect
-                                    x="2"
-                                    y="4"
-                                    width="20"
-                                    height="16"
-                                    rx="2"
-                                />
-                                <path d="M22 7l-10 7L2 7" />
-                            </svg>
-                        </a>
-                    </div>
                     <p class="footer-copy">
                         Crafted with care & green tea
                         <span class="footer-year"></span>
