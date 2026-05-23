@@ -57,20 +57,20 @@ export const HeroSection = () => {
       <div className="max-w-4xl mx-auto w-full relative z-10 flex flex-col items-center text-center">
         
         {/* Playful Scrapbook Greeting */}
-        <div className="relative font-sketch text-3xl md:text-4xl text-highlighter-pink dark:text-neon-pink transform -rotate-2 mb-6 animate-[slideUp_0.8s_ease-out_0s_both]">
+        <div className="relative font-sketch text-2xl sm:text-3xl md:text-4xl text-highlighter-pink dark:text-neon-pink transform -rotate-2 mb-6 animate-[slideUp_0.8s_ease-out_0s_both]">
           Hello, I'm
           <ArrowDoodle className="hidden md:block absolute -right-16 -top-4 w-10 h-10 rotate-[70deg] text-highlighter-blue/80 dark:text-neon-blue stroke-draw animate-draw" style={{ animationDelay: '1s' }} />
         </div>
         
         {/* Name - Original Bold Sans typography */}
-        <h1 className="font-sans font-black text-6xl md:text-8xl tracking-tighter text-ink-dark dark:text-ink-light mb-6 relative drop-shadow-sm animate-[slideUp_0.8s_ease-out_0.2s_both]">
+        <h1 className="font-sans font-black text-5xl sm:text-7xl md:text-8xl tracking-tighter text-ink-dark dark:text-ink-light mb-6 relative drop-shadow-sm animate-[slideUp_0.8s_ease-out_0.2s_both]">
           {resumeData.name}
         </h1>
 
         {/* Typing Role - With Scrapbook Highlighter */}
         <div className="relative inline-block mb-10 transform rotate-1 group animate-[slideUp_0.8s_ease-out_0.4s_both]">
           <span 
-            className="highlight-text font-sketch text-3xl md:text-4xl text-black dark:text-white px-3 py-1 transition-transform group-hover:scale-105 inline-block"
+            className="highlight-text font-sketch text-2xl sm:text-3xl md:text-4xl text-black dark:text-white px-3 py-1 transition-transform group-hover:scale-105 inline-block"
             style={{ '--highlight-color': 'var(--color-highlighter-yellow)' } as React.CSSProperties}
           >
             {typedRole}

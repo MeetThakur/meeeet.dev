@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ThemeProvider } from "../components/ThemeProvider";
 import { Navbar } from "../components/Navbar";
 import { HeroSection } from "../components/HeroSection";
 import { AboutSection } from "../components/AboutSection";
@@ -48,12 +47,16 @@ export default function Home() {
   }, []);
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      {/* Notebook Binding Graphic */}
-      <div className="notebook-binding hidden md:block" />
+    <div className="w-full min-h-screen py-0 md:py-8 px-0 md:px-6 lg:px-12 transition-colors duration-300">
       
-      {/* Main Content Area - padded left on desktop for binding */}
-      <div className="md:ml-10 min-h-screen relative overflow-hidden">
+      {/* Centered Notebook Page */}
+      <div className="relative w-full max-w-6xl mx-auto notebook-paper-sheet shadow-2xl md:rounded-2xl border-x-0 md:border border-black/5 dark:border-white/5 overflow-hidden transition-colors duration-300 min-h-screen md:min-h-[calc(100vh-4rem)]">
+        
+        {/* Notebook Binding Graphic */}
+        <div className="notebook-binding hidden md:block" />
+
+        {/* Notebook red margin line */}
+        <div className="absolute top-0 bottom-0 left-12 w-[1px] bg-red-400/30 dark:bg-red-500/20 hidden md:block" />
         
         {/* Custom Marker Cursor */}
         <div 
@@ -75,7 +78,7 @@ export default function Home() {
 
         <Navbar />
         
-        <main className="flex flex-col gap-12 sm:gap-24 relative z-10 pb-20">
+        <main className="pl-4 pr-4 md:pl-20 md:pr-12 pt-16 flex flex-col gap-12 sm:gap-24 relative z-10 pb-20">
           <HeroSection />
           
           <div className="w-full flex justify-center py-8">
@@ -96,6 +99,6 @@ export default function Home() {
           <ContactSection />
         </main>
       </div>
-    </ThemeProvider>
+    </div>
   );
 }
