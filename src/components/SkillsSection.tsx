@@ -26,11 +26,11 @@ export const SkillsSection = () => {
         {resumeData.skills.map((skillGroup, i) => (
           <motion.div 
             key={i} 
-            initial={{ opacity: 0, scale: 0.9, y: 30 }}
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
             whileInView={{ opacity: 1, scale: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, delay: i * 0.1, type: "spring", bounce: 0.4 }}
-            className="group/section relative p-6 md:p-8 rounded-3xl bg-white/50 dark:bg-black/20 border border-black/5 dark:border-white/5 hover:border-black/10 dark:hover:border-white/10 backdrop-blur-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+            transition={{ duration: 0.4, delay: i * 0.1, ease: "easeOut" }}
+            className="group/section relative p-6 md:p-8 rounded-3xl bg-white/50 dark:bg-black/20 border border-black/5 dark:border-white/5 hover:border-black/10 dark:hover:border-white/10 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
           >
             {/* Category Title */}
             <div className="mb-6 relative">

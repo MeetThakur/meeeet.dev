@@ -9,10 +9,10 @@ export const ContactSection = () => {
       
       {/* Premium Letter Graphic */}
       <motion.div 
-        initial={{ opacity: 0, y: 50, rotate: -5 }}
+        initial={{ opacity: 0, y: 30, rotate: -3 }}
         whileInView={{ opacity: 1, y: 0, rotate: 1 }}
         viewport={{ once: true, margin: "-50px" }}
-        transition={{ duration: 0.8, type: "spring", bounce: 0.3 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className="relative w-full max-w-lg bg-white dark:bg-[#252528] p-10 md:p-14 shadow-xl border border-black/10 dark:border-white/10 mt-10 hover:rotate-0 transition-transform duration-500"
       >
         
@@ -35,19 +35,28 @@ export const ContactSection = () => {
         </p>
 
         <form 
-          onSubmit={(e) => {
-            e.preventDefault();
-            // In a real app, integrate with Formspree or EmailJS here.
-            window.location.href = `mailto:${resumeData.email}`;
-          }}
+          action="https://formspree.io/f/mlgwqolj"
+          method="POST"
           className="mt-8 flex flex-col gap-6 font-sketch text-xl w-full relative z-10"
         >
           <div className="flex flex-col relative">
             <label htmlFor="name" className="text-slate-500 mb-1 text-lg">Dear Meet,</label>
             <input 
               type="text" 
+              name="name"
               id="name" 
               placeholder="My name is..." 
+              required
+              className="bg-transparent border-none outline-none border-b-2 border-black/10 dark:border-white/10 focus:border-ink-blue dark:focus:border-neon-pink focus:ring-0 text-ink-dark dark:text-ink-light placeholder:text-black/20 dark:placeholder:text-white/20 px-1 py-1 transition-colors w-full"
+            />
+          </div>
+
+          <div className="flex flex-col relative">
+            <input 
+              type="email" 
+              name="email"
+              id="email" 
+              placeholder="My email is..." 
               required
               className="bg-transparent border-none outline-none border-b-2 border-black/10 dark:border-white/10 focus:border-ink-blue dark:focus:border-neon-pink focus:ring-0 text-ink-dark dark:text-ink-light placeholder:text-black/20 dark:placeholder:text-white/20 px-1 py-1 transition-colors w-full"
             />
@@ -55,6 +64,7 @@ export const ContactSection = () => {
           
           <div className="flex flex-col relative mt-2">
             <textarea 
+              name="message"
               id="message" 
               placeholder="I wanted to reach out because..." 
               required

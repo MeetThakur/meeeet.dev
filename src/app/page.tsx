@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Navbar } from "../components/Navbar";
 import { HeroSection } from "../components/HeroSection";
 import { AboutSection } from "../components/AboutSection";
@@ -10,35 +10,47 @@ import { ContactSection } from "../components/ContactSection";
 import { CursorTrail } from "../components/CursorTrail";
 
 export default function Home() {
-  const [cursorPos, setCursorPos] = useState({ x: -100, y: -100 });
-  const [isHovering, setIsHovering] = useState(false);
+  const cursorRef = useRef<HTMLDivElement>(null);
+  const isHoveringRef = useRef(false);
 
   useEffect(() => {
     // Only enable custom cursor on non-touch devices
     const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
     if (isTouch) return;
 
+    const cursor = cursorRef.current;
+    if (!cursor) return;
+
+    // Direct DOM manipulation instead of setState — zero React re-renders
     const moveCursor = (e: MouseEvent) => {
-      setCursorPos({ x: e.clientX, y: e.clientY });
+      cursor.style.left = `${e.clientX}px`;
+      cursor.style.top = `${e.clientY}px`;
     };
 
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (
-        target.tagName === "A" || 
-        target.tagName === "BUTTON" || 
-        target.closest("a") || 
-        target.closest("button") ||
-        target.classList.contains("sticky-note")
-      ) {
-        setIsHovering(true);
-      } else {
-        setIsHovering(false);
+      const hovering =
+        target.tagName === "A" ||
+        target.tagName === "BUTTON" ||
+        !!target.closest("a") ||
+        !!target.closest("button") ||
+        target.classList.contains("sticky-note");
+
+      if (hovering !== isHoveringRef.current) {
+        isHoveringRef.current = hovering;
+        cursor.style.transform = `translate(-50%, -50%) scale(${hovering ? 1.5 : 1})`;
+        // Toggle child visibility
+        const dot = cursor.querySelector('[data-cursor="dot"]') as HTMLElement;
+        const ring = cursor.querySelector('[data-cursor="ring"]') as HTMLElement;
+        if (dot && ring) {
+          dot.style.display = hovering ? "none" : "block";
+          ring.style.display = hovering ? "block" : "none";
+        }
       }
     };
 
-    window.addEventListener("mousemove", moveCursor);
-    window.addEventListener("mouseover", handleMouseOver);
+    window.addEventListener("mousemove", moveCursor, { passive: true });
+    window.addEventListener("mouseover", handleMouseOver, { passive: true });
 
     return () => {
       window.removeEventListener("mousemove", moveCursor);
@@ -47,10 +59,10 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="w-full min-h-screen py-0 md:py-8 px-0 md:px-6 lg:px-12 transition-colors duration-300">
+    <div className="w-full min-h-screen py-0 md:py-8 px-0 md:px-6 lg:px-12">
       
       {/* Centered Notebook Page */}
-      <div className="relative w-full max-w-6xl mx-auto notebook-paper-sheet shadow-2xl md:rounded-2xl border-x-0 md:border border-black/5 dark:border-white/5 overflow-hidden transition-colors duration-300 min-h-screen md:min-h-[calc(100vh-4rem)]">
+      <div className="relative w-full max-w-6xl mx-auto notebook-paper-sheet shadow-2xl md:rounded-2xl border-x-0 md:border border-black/5 dark:border-white/5 overflow-hidden min-h-screen md:min-h-[calc(100vh-4rem)]">
         
         {/* Notebook Binding Graphic */}
         <div className="notebook-binding hidden md:block" />
@@ -58,20 +70,19 @@ export default function Home() {
         {/* Notebook red margin line */}
         <div className="absolute top-0 bottom-0 left-12 w-[1px] bg-red-400/30 dark:bg-red-500/20 hidden md:block" />
         
-        {/* Custom Marker Cursor */}
+        {/* Custom Marker Cursor — GPU-accelerated, no React re-renders */}
         <div 
-          className={`hidden md:block fixed pointer-events-none z-[100] transition-transform duration-100 ease-out`}
+          ref={cursorRef}
+          className="hidden md:block fixed pointer-events-none z-[100] will-change-transform"
           style={{ 
-            left: `${cursorPos.x}px`, 
-            top: `${cursorPos.y}px`,
-            transform: `translate(-50%, -50%) scale(${isHovering ? 1.5 : 1})`
+            left: '-100px', 
+            top: '-100px',
+            transform: 'translate(-50%, -50%) scale(1)',
+            transition: 'transform 0.15s ease-out'
           }}
         >
-          {isHovering ? (
-            <div className="w-8 h-8 rounded-full border-2 border-dashed border-red-500/50 animate-[spin_4s_linear_infinite]" />
-          ) : (
-            <div className="w-5 h-5 rounded-full bg-highlighter-yellow/60 dark:bg-neon-pink/40 backdrop-blur-[1px] shadow-sm transform rotate-45" />
-          )}
+          <div data-cursor="dot" className="w-5 h-5 rounded-full bg-highlighter-yellow/60 dark:bg-neon-pink/40 shadow-sm transform rotate-45" />
+          <div data-cursor="ring" className="w-8 h-8 rounded-full border-2 border-dashed border-red-500/50 animate-[spin_4s_linear_infinite]" style={{ display: 'none' }} />
         </div>
         
         <CursorTrail />

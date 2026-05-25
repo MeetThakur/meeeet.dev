@@ -36,39 +36,39 @@ export const HeroSection = () => {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex flex-col justify-center px-4 md:px-20 pt-20 overflow-hidden"
+      className="relative py-16 md:py-24 px-4 md:px-20 overflow-hidden"
     >
-      {/* Subtle Animated Background Elements (keeping the fun theme alive) */}
+      {/* Subtle Background Doodles — static rotations, no continuous animations */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[15%] left-[10%] opacity-20 dark:opacity-30 animate-float" style={{ animationDelay: '0s' }}>
-          <StarDoodle className="w-16 h-16 text-highlighter-pink dark:text-neon-pink animate-[spin_20s_linear_infinite]" />
+        <div className="absolute top-[15%] left-[10%] opacity-15 dark:opacity-20 animate-float" style={{ animationDelay: '0s' }}>
+          <StarDoodle className="w-16 h-16 text-highlighter-pink dark:text-neon-pink rotate-12" />
         </div>
-        <div className="absolute top-[20%] right-[15%] opacity-10 dark:opacity-20 animate-float" style={{ animationDelay: '1.5s' }}>
-          <CircleDoodle className="w-24 h-24 text-highlighter-blue dark:text-neon-blue animate-[spin_25s_linear_infinite_reverse]" />
+        <div className="absolute top-[20%] right-[15%] opacity-10 dark:opacity-15 animate-float" style={{ animationDelay: '1.5s' }}>
+          <CircleDoodle className="w-24 h-24 text-highlighter-blue dark:text-neon-blue -rotate-6" />
         </div>
-        <div className="absolute bottom-[25%] left-[15%] opacity-20 dark:opacity-30 animate-float" style={{ animationDelay: '2s' }}>
-          <AsteriskDoodle className="w-12 h-12 text-highlighter-orange dark:text-neon-orange animate-[spin_15s_linear_infinite]" />
+        <div className="absolute bottom-[25%] left-[15%] opacity-15 dark:opacity-20 animate-float" style={{ animationDelay: '2s' }}>
+          <AsteriskDoodle className="w-12 h-12 text-highlighter-orange dark:text-neon-orange rotate-45" />
         </div>
-        <div className="absolute bottom-[20%] right-[20%] opacity-15 dark:opacity-25 animate-float" style={{ animationDelay: '0.8s' }}>
-          <StarDoodle className="w-20 h-20 text-highlighter-green dark:text-neon-green animate-[spin_30s_linear_infinite]" />
+        <div className="absolute bottom-[20%] right-[20%] opacity-10 dark:opacity-15 animate-float" style={{ animationDelay: '0.8s' }}>
+          <StarDoodle className="w-20 h-20 text-highlighter-green dark:text-neon-green -rotate-12" />
         </div>
       </div>
 
       <div className="max-w-4xl mx-auto w-full relative z-10 flex flex-col items-center text-center">
         
         {/* Playful Scrapbook Greeting */}
-        <div className="relative font-sketch text-2xl sm:text-3xl md:text-4xl text-highlighter-pink dark:text-neon-pink transform -rotate-2 mb-6 animate-[slideUp_0.8s_ease-out_0s_both]">
+        <div className="relative font-sketch text-2xl sm:text-3xl md:text-4xl text-highlighter-pink dark:text-neon-pink transform -rotate-2 mb-2 animate-[slideUp_0.8s_ease-out_0s_both]">
           Hello, I'm
           <ArrowDoodle className="hidden md:block absolute -right-16 -top-4 w-10 h-10 rotate-[70deg] text-highlighter-blue/80 dark:text-neon-blue stroke-draw animate-draw" style={{ animationDelay: '1s' }} />
         </div>
         
         {/* Name - Original Bold Sans typography */}
-        <h1 className="font-sans font-black text-5xl sm:text-7xl md:text-8xl tracking-tighter text-ink-dark dark:text-ink-light mb-6 relative drop-shadow-sm animate-[slideUp_0.8s_ease-out_0.2s_both]">
+        <h1 className="font-sans font-black text-5xl sm:text-7xl md:text-8xl tracking-tighter text-ink-dark dark:text-ink-light mb-4 relative drop-shadow-sm animate-[slideUp_0.8s_ease-out_0.2s_both]">
           {resumeData.name}
         </h1>
 
         {/* Typing Role - With Scrapbook Highlighter */}
-        <div className="relative inline-block mb-10 transform rotate-1 group animate-[slideUp_0.8s_ease-out_0.4s_both]">
+        <div className="relative inline-block mb-8 transform rotate-1 group animate-[slideUp_0.8s_ease-out_0.4s_both]">
           <span 
             className="highlight-text font-sketch text-2xl sm:text-3xl md:text-4xl text-black dark:text-white px-3 py-1 transition-transform group-hover:scale-105 inline-block"
             style={{ '--highlight-color': 'var(--color-highlighter-yellow)' } as React.CSSProperties}
@@ -81,9 +81,9 @@ export const HeroSection = () => {
           </div>
         </div>
 
-        {/* Minimal Bio - Merging the user's requested text with the current theme */}
+        {/* Minimal Bio */}
         <p className="font-sans text-xl text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed mix-blend-multiply dark:mix-blend-screen bg-white/40 dark:bg-black/20 p-6 rounded-2xl border border-black/5 dark:border-white/5 animate-[slideUp_0.8s_ease-out_0.6s_both]">
-          I build things for the web and mobile — clean, purposeful, and made to last. Always learning, always shipping.
+          Full-stack developer and competitive programmer. I design, build, and ship web and mobile applications.
         </p>
         
         {/* Action Buttons - Minimal but themed */}

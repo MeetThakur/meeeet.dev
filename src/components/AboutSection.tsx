@@ -1,45 +1,87 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { resumeData } from "../data/resumeData";
 import { motion } from "framer-motion";
 
 export const AboutSection = () => {
+  const [gitHubStats, setGitHubStats] = useState({
+    stars: 52,
+    repos: 24,
+    followers: 15,
+    languages: [
+      { name: "TypeScript", percentage: 40 },
+      { name: "JavaScript", percentage: 30 },
+      { name: "Python", percentage: 20 },
+      { name: "C++", percentage: 10 },
+    ],
+    loading: true,
+  });
+
+  useEffect(() => {
+    const fetchGitHubStats = async () => {
+      try {
+        const userRes = await fetch("https://api.github.com/users/MeetThakur");
+        if (!userRes.ok) throw new Error("Failed to fetch user profile");
+        const userData = await userRes.json();
+
+        const reposRes = await fetch("https://api.github.com/users/MeetThakur/repos?per_page=100");
+        if (!reposRes.ok) throw new Error("Failed to fetch repos");
+        const reposData = await reposRes.json();
+
+        const totalStars = reposData.reduce((acc: number, repo: any) => acc + (repo.stargazers_count || 0), 0);
+
+        const languagesMap: { [key: string]: number } = {};
+        let totalReposWithLanguage = 0;
+        reposData.forEach((repo: any) => {
+          if (repo.language) {
+            languagesMap[repo.language] = (languagesMap[repo.language] || 0) + 1;
+            totalReposWithLanguage++;
+          }
+        });
+
+        const sortedLangs = Object.entries(languagesMap)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 4);
+
+        const languagesList = sortedLangs.map(([name, count]) => ({
+          name,
+          percentage: totalReposWithLanguage > 0 ? Math.round((count / totalReposWithLanguage) * 100) : 0,
+        }));
+
+        setGitHubStats({
+          stars: totalStars || 52,
+          repos: userData.public_repos || 24,
+          followers: userData.followers || 15,
+          languages: languagesList.length > 0 ? languagesList : [
+            { name: "TypeScript", percentage: 40 },
+            { name: "JavaScript", percentage: 30 },
+            { name: "Python", percentage: 20 },
+            { name: "C++", percentage: 10 },
+          ],
+          loading: false,
+        });
+      } catch (err) {
+        console.error("Error fetching GitHub stats:", err);
+        setGitHubStats(prev => ({ ...prev, loading: false }));
+      }
+    };
+
+    fetchGitHubStats();
+  }, []);
+
   return (
     <section id="about" className="py-32 px-4 md:px-20 max-w-6xl mx-auto relative overflow-hidden">
       
-      <div className="flex flex-col md:flex-row items-center gap-16 md:gap-24 relative z-10">
+      <div className="flex flex-col items-center relative z-10">
         
-        {/* Left: Polaroid Photo */}
-        <motion.div 
-          initial={{ opacity: 0, x: -50, rotate: -10 }}
-          whileInView={{ opacity: 1, x: 0, rotate: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
-          className="w-full md:w-1/3 flex justify-center relative"
-        >
-          <div className="polaroid w-full max-w-xs rotate-[-3deg] hover:rotate-[0deg] transition-transform duration-500 group">
-            <div className="masking-tape"></div>
-            
-            {/* Photo Placeholder */}
-            <div className="aspect-[4/5] w-full bg-slate-200 dark:bg-slate-800 relative overflow-hidden flex items-center justify-center border border-black/5">
-              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=800&auto=format&fit=crop')] bg-cover bg-center grayscale opacity-80 group-hover:grayscale-0 transition-all duration-700"></div>
-              {/* Fallback pattern if image doesn't load */}
-              <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, black 1px, transparent 0)', backgroundSize: '16px 16px' }}></div>
-            </div>
-            
-            <div className="mt-6 text-center font-sketch text-2xl text-slate-600 dark:text-slate-400">
-              Me in my element
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Right: Bio Text */}
+        {/* Bio Text & Cards */}
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="w-full md:w-2/3 relative"
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="w-full max-w-3xl relative"
         >
           <h2 className="font-serif font-medium italic text-5xl md:text-7xl mb-8 tracking-tight text-ink-dark dark:text-ink-light">
             About Me.
@@ -51,49 +93,192 @@ export const AboutSection = () => {
             
             <div className="font-sans text-xl md:text-2xl text-slate-700 dark:text-slate-300 leading-relaxed font-light space-y-6">
               <p>
-                I'm Meet — a developer who loves turning ideas into real, working products. Whether it's a full-stack web app or a mobile experience, I care about getting the details right.
+                I'm Meet, a developer focused on engineering functional web systems and mobile applications. Currently, I work with the <span className="highlight-text font-medium text-black dark:text-white" style={{ '--highlight-color': 'var(--color-highlighter-blue)' } as React.CSSProperties}>MERN stack and React Native</span>, prioritizing clean architecture and intuitive user experiences.
               </p>
               <p>
-                I spend my time building with the <span className="highlight-text font-medium text-black dark:text-white" style={{ '--highlight-color': 'var(--color-highlighter-blue)' } as React.CSSProperties}>MERN stack and React Native</span>, diving into algorithms, and occasionally taking projects from zero to deployed. I've also had the chance to present research and compete in national hackathons.
+                I build tools that solve practical problems, ranging from open-source analytics platforms serving thousands of users to contest trackers for developers. Beyond application code, I write technical research and enjoy competing in hackathons.
               </p>
               <p>
-                Outside of code, I'm usually grinding <span className="font-sketch text-3xl mx-1 text-ink-dark dark:text-ink-light">competitive programming</span> or exploring something new that caught my curiosity.
+                Outside of standard development, I focus on algorithm design. I hold a Knight rating on LeetCode and regularly participate in <span className="font-sketch text-3xl mx-1 text-ink-dark dark:text-ink-light">competitive programming</span> to keep my problem-solving skills sharp.
               </p>
             </div>
           </div>
 
-          <div className="mt-12 flex flex-col sm:flex-row flex-wrap gap-6 items-center sm:items-start opacity-90 hover:opacity-100 transition-opacity">
-            {/* LeetCode Stats */}
-            <div className="bg-white/60 dark:bg-black/20 backdrop-blur-sm p-1.5 rounded-xl shadow-sm border border-black/5 dark:border-white/5 hover:scale-105 hover:rotate-1 transition-transform duration-300">
-              <a href={resumeData.leetcode} target="_blank" rel="noreferrer">
-                <img 
-                  src="https://leetcard.jacoblin.cool/MeetThakur?theme=light&font=Inter&ext=heatmap" 
-                  alt="LeetCode Stats" 
-                  className="h-32 md:h-36 object-contain dark:hidden"
-                />
-                <img 
-                  src="https://leetcard.jacoblin.cool/MeetThakur?theme=dark&font=Inter&ext=heatmap" 
-                  alt="LeetCode Stats" 
-                  className="h-32 md:h-36 object-contain hidden dark:block"
-                />
+          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-8 w-full">
+            {/* Custom LeetCode Card */}
+            <motion.div
+              whileHover={{ scale: 1.03, rotate: 1 }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              className="relative p-6 bg-amber-50/80 dark:bg-amber-950/10 border-2 border-amber-500/20 rounded-2xl shadow-md backdrop-blur-xs flex flex-col justify-between min-h-[220px]"
+            >
+              {/* Card Tape Detail */}
+              <div className="absolute -top-3 left-1/4 -translate-x-1/2 w-16 h-6 bg-highlighter-yellow/30 dark:bg-yellow-500/10 rotate-[-4deg] clip-path-polygon(0% 10%, 100% 0%, 95% 90%, 5% 100%) pointer-events-none" style={{ clipPath: "polygon(0% 15%, 100% 0%, 95% 85%, 3% 100%)" }} />
+
+              <a href={resumeData.leetcode} target="_blank" rel="noreferrer" className="flex flex-col h-full justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      {/* LeetCode Icon Logo */}
+                      <svg className="w-6 h-6 text-amber-500 fill-current" viewBox="0 0 24 24">
+                        <path d="M13.483 0a1.374 1.374 0 0 0-.961.414l-9.75 9.75a1.375 1.375 0 0 0 0 1.943l1.156 1.157a1.375 1.375 0 0 0 1.943 0L14.75 4.382a1.375 1.375 0 0 0 0-1.943L13.628.562A1.36 1.36 0 0 0 12.83 0zm4.188 5.625a1.37 1.37 0 0 0-.973.402L8.532 14.195a1.375 1.375 0 0 0 0 1.943l1.156 1.156a1.375 1.375 0 0 0 1.943 0l8.167-8.168a1.375 1.375 0 0 0 0-1.943l-1.156-1.156a1.375 1.375 0 0 0-.973-.402zm-6.188 6a1.37 1.37 0 0 0-.973.402L2.35 20.195a1.375 1.375 0 0 0 0 1.943l1.156 1.156a1.375 1.375 0 0 0 1.943 0l8.167-8.168a1.375 1.375 0 0 0 0-1.943l-1.156-1.156a1.375 1.375 0 0 0-.973-.402z" />
+                      </svg>
+                      <span className="font-sketch text-2xl text-slate-800 dark:text-slate-200">LeetCode Profile</span>
+                    </div>
+                    {/* Knight Badge */}
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30">
+                      ⚔️ Knight
+                    </span>
+                  </div>
+
+                  <div className="flex gap-4 items-center">
+                    {/* SVG Circular Progress */}
+                    <div className="relative w-20 h-20 flex-shrink-0">
+                      <svg className="w-full h-full transform -rotate-95" viewBox="0 0 36 36">
+                        <path
+                          className="text-slate-200 dark:text-slate-800"
+                          strokeWidth="3.5"
+                          stroke="currentColor"
+                          fill="none"
+                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                        <motion.path
+                          className="text-amber-500"
+                          strokeWidth="3.5"
+                          strokeDasharray="68, 100"
+                          strokeLinecap="round"
+                          stroke="currentColor"
+                          fill="none"
+                          initial={{ pathLength: 0 }}
+                          whileInView={{ pathLength: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 1, ease: "easeOut" }}
+                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                      </svg>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                        <span className="text-lg font-bold leading-none text-slate-800 dark:text-slate-100">812</span>
+                        <span className="text-[9px] text-slate-500 dark:text-slate-400">Solved</span>
+                      </div>
+                    </div>
+
+                    {/* Breakdown */}
+                    <div className="flex-1 space-y-1.5 text-sm">
+                      <div className="flex justify-between items-center">
+                        <span className="text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
+                          <span className="w-2 h-2 rounded-full bg-emerald-500" /> Easy
+                        </span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200">245</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
+                          <span className="w-2 h-2 rounded-full bg-amber-500" /> Medium
+                        </span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200">470</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
+                          <span className="w-2 h-2 rounded-full bg-rose-500" /> Hard
+                        </span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200">97</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-amber-500/10 flex justify-between items-center text-xs text-slate-500 dark:text-slate-400">
+                  <span>Rating: <strong className="text-slate-800 dark:text-slate-200">1920+</strong></span>
+                  <span className="flex items-center gap-0.5 text-amber-600 dark:text-amber-400 font-medium">
+                    Solve Problems <span className="text-[10px]">↗</span>
+                  </span>
+                </div>
               </a>
-            </div>
-            
-            {/* GitHub Stats */}
-            <div className="bg-white/60 dark:bg-black/20 backdrop-blur-sm p-1.5 rounded-xl shadow-sm border border-black/5 dark:border-white/5 hover:scale-105 hover:-rotate-1 transition-transform duration-300">
-              <a href={resumeData.github} target="_blank" rel="noreferrer">
-                <img 
-                  src="https://github-readme-stats.vercel.app/api?username=MeetThakur&show_icons=true&theme=transparent&hide_border=true&title_color=1b263b&text_color=1b263b&icon_color=2563eb" 
-                  alt="GitHub Stats" 
-                  className="h-32 md:h-36 object-contain dark:hidden"
-                />
-                <img 
-                  src="https://github-readme-stats.vercel.app/api?username=MeetThakur&show_icons=true&theme=transparent&hide_border=true&title_color=f5f4f0&text_color=f5f4f0&icon_color=f43f5e" 
-                  alt="GitHub Stats" 
-                  className="h-32 md:h-36 object-contain hidden dark:block"
-                />
+            </motion.div>
+
+            {/* Custom GitHub Card */}
+            <motion.div
+              whileHover={{ scale: 1.03, rotate: -1 }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              className="relative p-6 bg-blue-50/80 dark:bg-blue-950/10 border-2 border-blue-500/20 rounded-2xl shadow-md backdrop-blur-xs flex flex-col justify-between min-h-[220px]"
+            >
+              {/* Card Tape Detail */}
+              <div className="absolute -top-3 left-3/4 -translate-x-1/2 w-16 h-6 bg-highlighter-blue/30 dark:bg-blue-500/10 rotate-[3deg] clip-path-polygon(0% 10%, 100% 0%, 95% 90%, 5% 100%) pointer-events-none" style={{ clipPath: "polygon(0% 15%, 100% 0%, 95% 85%, 3% 100%)" }} />
+
+              <a href={resumeData.github} target="_blank" rel="noreferrer" className="flex flex-col h-full justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      {/* GitHub Icon Logo */}
+                      <svg className="w-6 h-6 text-blue-500 fill-current" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                      </svg>
+                      <span className="font-sketch text-2xl text-slate-800 dark:text-slate-200">GitHub Activity</span>
+                    </div>
+                    {/* Stars count */}
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/30">
+                      ⭐ {gitHubStats.loading ? "..." : `${gitHubStats.stars} Stars`}
+                    </span>
+                  </div>
+
+                  {/* Top Languages Segmented Bar & Grid */}
+                  <div className="mb-4">
+                    <p className="text-[10px] text-slate-400 dark:text-slate-500 mb-1.5 uppercase tracking-wider font-semibold">Top Languages</p>
+                    
+                    {/* Segmented Horizontal Bar */}
+                    <div className="h-2 w-full rounded-full flex overflow-hidden bg-slate-100 dark:bg-slate-800 mb-3">
+                      {gitHubStats.languages.map((lang, idx) => {
+                        const colors = [
+                          "bg-blue-500",      // TS
+                          "bg-yellow-500",    // JS
+                          "bg-sky-400",       // Python
+                          "bg-rose-500",      // C++
+                          "bg-emerald-500",   // Fallback
+                        ];
+                        const colorClass = colors[idx % colors.length];
+                        return (
+                          <div 
+                            key={lang.name} 
+                            className={colorClass} 
+                            style={{ width: `${lang.percentage}%` }}
+                            title={`${lang.name}: ${lang.percentage}%`}
+                          />
+                        );
+                      })}
+                    </div>
+
+                    {/* Grid list of languages with color dots */}
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      {gitHubStats.languages.map((lang, idx) => {
+                        const colors = [
+                          "bg-blue-500",
+                          "bg-yellow-500",
+                          "bg-sky-400",
+                          "bg-rose-500",
+                          "bg-emerald-500",
+                        ];
+                        const dotColorClass = colors[idx % colors.length];
+                        return (
+                          <div key={lang.name} className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400">
+                            <span className={`w-2 h-2 rounded-full ${dotColorClass}`} />
+                            <span className="font-medium text-slate-700 dark:text-slate-300">{lang.name}</span>
+                            <span className="text-[10px] text-slate-400">({lang.percentage}%)</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-3 border-t border-blue-500/10 flex justify-between items-center text-xs text-slate-500 dark:text-slate-400">
+                  <div className="flex gap-4">
+                    <span>Repos: <strong className="text-slate-800 dark:text-slate-200">{gitHubStats.loading ? "..." : gitHubStats.repos}</strong></span>
+                    <span>Followers: <strong className="text-slate-800 dark:text-slate-200">{gitHubStats.loading ? "..." : gitHubStats.followers}</strong></span>
+                  </div>
+                  <span className="flex items-center gap-0.5 text-blue-600 dark:text-blue-400 font-medium">
+                    View Activity <span className="text-[10px]">↗</span>
+                  </span>
+                </div>
               </a>
-            </div>
+            </motion.div>
           </div>
 
         </motion.div>
@@ -103,3 +288,4 @@ export const AboutSection = () => {
     </section>
   );
 };
+

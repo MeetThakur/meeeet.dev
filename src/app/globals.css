@@ -45,16 +45,11 @@
   body {
     background-color: var(--color-desk-light);
     color: var(--color-ink-dark);
-    /* Premium subtle noise texture representing the desk surface */
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E");
-    background-attachment: fixed;
   }
 
   .dark body {
     background-color: var(--color-desk-dark);
     color: var(--color-ink-light);
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.075'/%3E%3C/svg%3E");
-    background-attachment: fixed;
   }
 }
 
@@ -63,20 +58,16 @@
   background-color: var(--color-notebook-light);
   background-image: 
     /* Dotted pattern */
-    radial-gradient(rgba(0, 0, 0, 0.05) 1.2px, transparent 1.2px),
-    /* Paper noise texture */
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
-  background-size: 24px 24px, 150px 150px;
+    radial-gradient(rgba(0, 0, 0, 0.05) 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
 }
 
 .dark .notebook-paper-sheet {
   background-color: var(--color-notebook-dark);
   background-image: 
     /* Dotted pattern for dark mode */
-    radial-gradient(rgba(255, 255, 255, 0.04) 1.2px, transparent 1.2px),
-    /* Paper noise texture */
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
-  background-size: 24px 24px, 150px 150px;
+    radial-gradient(rgba(255, 255, 255, 0.04) 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
 }
 
 /* Polaroids */
@@ -93,7 +84,7 @@
   box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5), 0 4px 6px -2px rgba(0,0,0,0.3);
 }
 
-/* Realistic Masking Tape */
+/* Realistic Masking Tape — no backdrop-filter for performance */
 .masking-tape {
   position: absolute;
   top: -15px;
@@ -101,9 +92,8 @@
   transform: translateX(-50%) rotate(-2deg);
   width: 100px;
   height: 30px;
-  background-color: rgba(255, 255, 230, 0.5);
+  background-color: rgba(255, 255, 230, 0.65);
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  backdrop-filter: blur(2px) contrast(0.9);
   mix-blend-mode: multiply;
   z-index: 10;
   /* Rough edges */

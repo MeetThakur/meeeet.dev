@@ -63,9 +63,9 @@ export const ProjectsSection = () => {
               initial={{ opacity: 0, scale: 0.9, y: 40 }}
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: i * 0.1, type: "spring", bounce: 0.4 }}
+              transition={{ duration: 0.4, delay: i * 0.1, ease: "easeOut" }}
               onClick={() => setSelectedProject(project)}
-              className={`premium-sticky cursor-pointer ${rotClass} ${colorClass.border} bg-gradient-to-br ${colorClass.bg} hover:scale-105 hover:z-30 hover:shadow-2xl transition-all duration-300 z-20 group`}
+              className={`premium-sticky cursor-pointer ${rotClass} ${colorClass.border} bg-gradient-to-br ${colorClass.bg} hover:scale-[1.02] hover:z-30 hover:shadow-xl transition-all duration-300 z-20 group`}
             >
               {/* Washi Tape */}
               <div className={`masking-tape ${colorClass.tape}`}></div>
@@ -75,16 +75,16 @@ export const ProjectsSection = () => {
                 {project.subtitle}
               </div>
               
-              <p className="font-sans text-sm leading-relaxed mb-6 font-medium text-slate-700 dark:text-slate-200 h-24 overflow-hidden relative">
+              <div className="font-sans text-sm leading-relaxed mb-6 font-medium text-slate-700 dark:text-slate-200 h-24 overflow-hidden relative">
                 {project.description}
                 <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/80 dark:from-black/80 to-transparent"></div>
-              </p>
+              </div>
 
               <div className="flex flex-wrap gap-2 mb-8 pointer-events-none">
                 {project.techStack.map((tech, j) => (
                   <span 
                     key={j} 
-                    className="text-xs font-bold px-2 py-1 bg-black/10 dark:bg-black/30 rounded-sm text-ink-dark dark:text-ink-light backdrop-blur-sm"
+                    className="text-xs font-bold px-2 py-1 bg-black/10 dark:bg-black/30 rounded-sm text-ink-dark dark:text-ink-light"
                   >
                     {tech}
                   </span>
@@ -118,9 +118,6 @@ export const ProjectsSection = () => {
               transition={{ type: "spring", bounce: 0.3 }}
               onClick={(e) => e.stopPropagation()}
               className="relative w-full max-w-2xl bg-paper-light dark:bg-paper-dark p-8 md:p-12 shadow-2xl border border-black/10 dark:border-white/10 max-h-[90vh] overflow-y-auto custom-scrollbar"
-              style={{
-                backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E\")"
-              }}
             >
               {/* Close Button */}
               <button 

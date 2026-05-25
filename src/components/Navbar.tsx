@@ -83,14 +83,11 @@ export const Navbar = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.8, ease: "easeInOut" }}
             className="fixed inset-0 z-[60] pointer-events-none"
-            style={{
-              backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E\")"
-            }}
           />
         )}
       </AnimatePresence>
 
-      <nav className="fixed top-0 w-full z-50 flex justify-center py-4 pointer-events-none">
+      <nav className="fixed top-0 inset-x-0 z-50 flex justify-center py-4 pointer-events-none">
         <div className="flex items-center gap-1.5 md:gap-4 bg-white/70 dark:bg-black/70 backdrop-blur-md px-3.5 md:px-6 py-2 rounded-full border border-black/10 dark:border-white/10 shadow-sm pointer-events-auto transition-colors">
           
           {/* Stylized M Logo */}

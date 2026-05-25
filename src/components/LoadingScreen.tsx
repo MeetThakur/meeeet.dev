@@ -23,9 +23,6 @@ export const LoadingScreen = () => {
           exit={{ opacity: 0, y: -50 }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
           className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-desk-light dark:bg-desk-dark"
-          style={{
-            backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E\")"
-          }}
         >
           {/* Animated SVG Signature/Logo */}
           <div className="relative flex items-center justify-center w-32 h-32 rounded-full bg-ink-blue/10 dark:bg-neon-pink/10 border border-ink-blue/30 dark:border-neon-pink/30 shadow-sm overflow-hidden mb-8">
