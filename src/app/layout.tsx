@@ -28,6 +28,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://meetthakur.dev"),
   title: "Meet Thakur | Software Developer Portfolio",
   description: "Interactive handcrafted notebook portfolio of Meet Thakur, a Software Developer and Competitive Programmer.",
   openGraph: {
@@ -65,7 +66,11 @@ export default function RootLayout({
       className={`${inter.variable} ${caveat.variable} ${patrickHand.variable} ${playfair.variable} antialiased`}
       suppressHydrationWarning
     >
-      <body className="font-sans min-h-screen text-ink-dark dark:text-ink-light selection:bg-highlighter-yellow/30 dark:selection:bg-neon-pink/30 transition-colors duration-300">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      </head>
+      <body className="font-sans min-h-screen text-ink-dark dark:text-ink-light selection:bg-highlighter-yellow/30 dark:selection:bg-neon-pink/30">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <LoadingScreen />
           {children}

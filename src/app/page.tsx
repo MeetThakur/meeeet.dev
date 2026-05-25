@@ -7,6 +7,7 @@ import { AboutSection } from "../components/AboutSection";
 import { ProjectsSection } from "../components/ProjectsSection";
 import { SkillsSection } from "../components/SkillsSection";
 import { ContactSection } from "../components/ContactSection";
+import { Footer } from "../components/Footer";
 import { CursorTrail } from "../components/CursorTrail";
 
 export default function Home() {
@@ -109,6 +110,8 @@ export default function Home() {
           <SkillsSection />
           <ContactSection />
         </main>
+
+        <Footer />
       </div>
     </div>
   );

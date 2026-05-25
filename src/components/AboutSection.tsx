@@ -223,7 +223,7 @@ export const AboutSection = () => {
                   <div className="mb-4">
                     <p className="text-[10px] text-slate-400 dark:text-slate-500 mb-1.5 uppercase tracking-wider font-semibold">Top Languages</p>
                     
-                    {/* Segmented Horizontal Bar */}
+                    {/* Segmented Horizontal Bar — animated on scroll */}
                     <div className="h-2 w-full rounded-full flex overflow-hidden bg-slate-100 dark:bg-slate-800 mb-3">
                       {gitHubStats.languages.map((lang, idx) => {
                         const colors = [
@@ -235,10 +235,13 @@ export const AboutSection = () => {
                         ];
                         const colorClass = colors[idx % colors.length];
                         return (
-                          <div 
+                          <motion.div 
                             key={lang.name} 
-                            className={colorClass} 
-                            style={{ width: `${lang.percentage}%` }}
+                            className={colorClass}
+                            initial={{ width: 0 }}
+                            whileInView={{ width: `${lang.percentage}%` }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, delay: idx * 0.15, ease: "easeOut" }}
                             title={`${lang.name}: ${lang.percentage}%`}
                           />
                         );
