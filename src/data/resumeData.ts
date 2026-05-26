@@ -50,13 +50,13 @@ export const resumeData = {
   ],
   projects: [
     {
-      title: "KhetSetu",
-      subtitle: "Smart Agricultural Platform",
-      techStack: ["MERN Stack", "scikit-learn", "OpenWeather API"],
-      github: "https://github.com/MeetThakur/Khetsetu",
+      title: "ConvoMetrics",
+      subtitle: "Messaging Analytics Tool",
+      techStack: ["Python", "Streamlit", "NumPy"],
+      github: "https://github.com/MeetThakur/ConvoMetrics",
       description:
-        "Full-stack platform using a Random Forest model for crop recommendations, integrated with real-time weather and market data to assist farmers in decision-making.",
-      color: "blue",
+        "Web app to analyze Telegram chat exports with stats on message frequency, active hours, and word trends; 2,000+ users and 50+ GitHub stars.",
+      color: "pink",
     },
     {
       title: "Krono",
@@ -68,13 +68,13 @@ export const resumeData = {
       color: "yellow",
     },
     {
-      title: "ConvoMetrics",
-      subtitle: "Messaging Analytics Tool",
-      techStack: ["Python", "Streamlit", "NumPy"],
-      github: "https://github.com/MeetThakur/ConvoMetrics",
+      title: "KhetSetu",
+      subtitle: "Smart Agricultural Platform",
+      techStack: ["MERN Stack", "scikit-learn", "OpenWeather API"],
+      github: "https://github.com/MeetThakur/Khetsetu",
       description:
-        "Web app to analyze Telegram chat exports with stats on message frequency, active hours, and word trends; 2,000+ users and 50+ GitHub stars.",
-      color: "pink",
+        "Full-stack platform using a Random Forest model for crop recommendations, integrated with real-time weather and market data to assist farmers in decision-making.",
+      color: "blue",
     },
   ],
   certifications: [
