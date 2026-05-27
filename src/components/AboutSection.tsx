@@ -93,13 +93,13 @@ export const AboutSection = () => {
             
             <div className="font-sans text-xl md:text-2xl text-slate-700 dark:text-slate-300 leading-relaxed font-light space-y-6">
               <p>
-                I'm Meet. I build web and mobile applications using the <span className="highlight-text font-medium text-black dark:text-white" style={{ '--highlight-color': 'var(--color-highlighter-blue)' } as React.CSSProperties}>MERN stack and React Native</span>. I care about writing clean code and making things that are easy to use.
+                I'm Meet, a developer who loves building applications for the web and mobile. I focus on writing clean code and creating intuitive, easy-to-use interfaces.
               </p>
               <p>
-                I enjoy building practical tools—from an open-source analytics platform with thousands of users, to a tracker app for competitive programmers. When I'm not coding, I'm usually participating in hackathons or reading up on technical research.
+                I enjoy working on practical projects that solve real problems. Whether I'm building tools from scratch, participating in hackathons, or exploring new technologies, I'm always looking for ways to learn and grow.
               </p>
               <p>
-                I also spend a lot of time on algorithms. I'm a Knight on LeetCode, and <span className="font-sketch text-3xl mx-1 text-ink-dark dark:text-ink-light">competitive programming</span> helps me stay sharp and write better code.
+                I also have a strong background in problem-solving. Regular participation in <span className="font-sketch text-3xl mx-1 text-ink-dark dark:text-ink-light">competitive programming</span> helps me stay sharp and think critically about the code I write.
               </p>
             </div>
           </div>
