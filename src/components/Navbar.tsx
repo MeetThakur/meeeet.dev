@@ -89,7 +89,7 @@ export const Navbar = () => {
               backgroundColor: theme === "dark" ? "var(--color-desk-light)" : "var(--color-desk-dark)"
             }}
             animate={{ 
-              clipPath: `circle(150vw at ${clickCoords.x}px ${clickCoords.y}px)` 
+              clipPath: `circle(150vmax at ${clickCoords.x}px ${clickCoords.y}px)` 
             }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.8, ease: "easeInOut" }}

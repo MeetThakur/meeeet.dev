@@ -93,13 +93,13 @@ export const AboutSection = () => {
             
             <div className="font-sans text-xl md:text-2xl text-slate-700 dark:text-slate-300 leading-relaxed font-light space-y-6">
               <p>
-                I'm Meet, a developer focused on engineering functional web systems and mobile applications. Currently, I work with the <span className="highlight-text font-medium text-black dark:text-white" style={{ '--highlight-color': 'var(--color-highlighter-blue)' } as React.CSSProperties}>MERN stack and React Native</span>, prioritizing clean architecture and intuitive user experiences.
+                I'm Meet, a software engineer focused on building robust web systems and mobile applications. Specializing in the <span className="highlight-text font-medium text-black dark:text-white" style={{ '--highlight-color': 'var(--color-highlighter-blue)' } as React.CSSProperties}>MERN stack and React Native</span>, I prioritize clean architecture and intuitive user experiences.
               </p>
               <p>
-                I build tools that solve practical problems, ranging from open-source analytics platforms serving thousands of users to contest trackers for developers. Beyond application code, I write technical research and enjoy competing in hackathons.
+                I engineer tools that solve real-world problems—from open-source analytics platforms serving thousands to contest trackers for developers. Beyond writing code, I actively engage in technical research and thrive in hackathon environments.
               </p>
               <p>
-                Outside of standard development, I focus on algorithm design. I hold a Knight rating on LeetCode and regularly participate in <span className="font-sketch text-3xl mx-1 text-ink-dark dark:text-ink-light">competitive programming</span> to keep my problem-solving skills sharp.
+                My foundation lies in algorithmic problem-solving. As a LeetCode Knight, I regularly participate in <span className="font-sketch text-3xl mx-1 text-ink-dark dark:text-ink-light">competitive programming</span> to sharpen my logic and optimize my approach to complex systems.
               </p>
             </div>
           </div>
