@@ -93,13 +93,13 @@ export const AboutSection = () => {
             
             <div className="font-sans text-xl md:text-2xl text-slate-700 dark:text-slate-300 leading-relaxed font-light space-y-6">
               <p>
-                I'm Meet, a software engineer focused on building robust web systems and mobile applications. Specializing in the <span className="highlight-text font-medium text-black dark:text-white" style={{ '--highlight-color': 'var(--color-highlighter-blue)' } as React.CSSProperties}>MERN stack and React Native</span>, I prioritize clean architecture and intuitive user experiences.
+                I'm Meet. I build web and mobile applications using the <span className="highlight-text font-medium text-black dark:text-white" style={{ '--highlight-color': 'var(--color-highlighter-blue)' } as React.CSSProperties}>MERN stack and React Native</span>. I care about writing clean code and making things that are easy to use.
               </p>
               <p>
-                I engineer tools that solve real-world problems—from open-source analytics platforms serving thousands to contest trackers for developers. Beyond writing code, I actively engage in technical research and thrive in hackathon environments.
+                I enjoy building practical tools—from an open-source analytics platform with thousands of users, to a tracker app for competitive programmers. When I'm not coding, I'm usually participating in hackathons or reading up on technical research.
               </p>
               <p>
-                My foundation lies in algorithmic problem-solving. As a LeetCode Knight, I regularly participate in <span className="font-sketch text-3xl mx-1 text-ink-dark dark:text-ink-light">competitive programming</span> to sharpen my logic and optimize my approach to complex systems.
+                I also spend a lot of time on algorithms. I'm a Knight on LeetCode, and <span className="font-sketch text-3xl mx-1 text-ink-dark dark:text-ink-light">competitive programming</span> helps me stay sharp and write better code.
               </p>
             </div>
           </div>
