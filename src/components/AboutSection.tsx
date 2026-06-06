@@ -423,55 +423,23 @@ export const AboutSection = () => {
                     </span>
                   </div>
 
-                  {/* Top Skills Segmented Bar & Grid */}
-                  <div className="mb-4">
-                    <p className="text-[10px] text-slate-400 dark:text-slate-500 mb-1.5 uppercase tracking-wider font-semibold">Mental Math Skills</p>
-                    
-                    {/* Segmented Horizontal Bar */}
-                    <div className="h-2 w-full rounded-full flex overflow-hidden bg-slate-100 dark:bg-slate-800 mb-3">
-                      <motion.div 
-                        className="bg-purple-500"
-                        initial={{ width: 0 }}
-                        whileInView={{ width: "40%" }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-                        title="Arithmetic: 90%"
-                      />
-                      <motion.div 
-                        className="bg-pink-500"
-                        initial={{ width: 0 }}
-                        whileInView={{ width: "35%" }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: 0.25, ease: "easeOut" }}
-                        title="Speed: 85%"
-                      />
-                      <motion.div 
-                        className="bg-indigo-500"
-                        initial={{ width: 0 }}
-                        whileInView={{ width: "25%" }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-                        title="Logic: 80%"
-                      />
+                  {/* 2x2 Grid of Stats */}
+                  <div className="grid grid-cols-2 gap-3 mb-2">
+                    <div className="p-2.5 bg-purple-500/5 dark:bg-purple-500/10 rounded-xl border border-purple-500/10 flex flex-col">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-semibold">Duels Played</span>
+                      <span className="text-sm font-bold text-slate-800 dark:text-slate-100 mt-0.5">150+ Battles</span>
                     </div>
-
-                    {/* Skill Breakdown */}
-                    <div className="grid grid-cols-2 gap-2 text-xs">
-                      <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400">
-                        <span className="w-2 h-2 rounded-full bg-purple-500" />
-                        <span className="font-medium text-slate-700 dark:text-slate-300">Arithmetic</span>
-                        <span className="text-[10px] text-slate-400">(90%)</span>
-                      </div>
-                      <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400">
-                        <span className="w-2 h-2 rounded-full bg-pink-500" />
-                        <span className="font-medium text-slate-700 dark:text-slate-300">Speed</span>
-                        <span className="text-[10px] text-slate-400">(85%)</span>
-                      </div>
-                      <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400">
-                        <span className="w-2 h-2 rounded-full bg-indigo-500" />
-                        <span className="font-medium text-slate-700 dark:text-slate-300">Logic</span>
-                        <span className="text-[10px] text-slate-400">(80%)</span>
-                      </div>
+                    <div className="p-2.5 bg-purple-500/5 dark:bg-purple-500/10 rounded-xl border border-purple-500/10 flex flex-col">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-semibold">Solve Speed</span>
+                      <span className="text-sm font-bold text-slate-800 dark:text-slate-100 mt-0.5">~1.2s Avg</span>
+                    </div>
+                    <div className="p-2.5 bg-purple-500/5 dark:bg-purple-500/10 rounded-xl border border-purple-500/10 flex flex-col">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-semibold">Accuracy</span>
+                      <span className="text-sm font-bold text-slate-800 dark:text-slate-100 mt-0.5">94% Core</span>
+                    </div>
+                    <div className="p-2.5 bg-purple-500/5 dark:bg-purple-500/10 rounded-xl border border-purple-500/10 flex flex-col">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-semibold">Top Streak</span>
+                      <span className="text-sm font-bold text-slate-800 dark:text-slate-100 mt-0.5">🔥 12 Wins</span>
                     </div>
                   </div>
                 </div>
