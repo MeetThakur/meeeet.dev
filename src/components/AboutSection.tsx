@@ -433,52 +433,6 @@ export const AboutSection = () => {
               </a>
             </motion.div>
 
-            {/* Custom Matiks Card */}
-            <motion.div
-              whileHover={{ scale: 1.03, rotate: -1 }}
-              transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              className="relative p-6 bg-purple-50/80 dark:bg-purple-950/10 border-2 border-purple-500/20 rounded-2xl shadow-md backdrop-blur-xs flex flex-col justify-between min-h-[220px]"
-            >
-              {/* Card Tape Detail */}
-              <div className="absolute -top-3 left-3/4 -translate-x-1/2 w-16 h-6 bg-highlighter-pink/30 dark:bg-purple-500/10 rotate-[3deg] clip-path-polygon(0% 10%, 100% 0%, 95% 90%, 5% 100%) pointer-events-none" style={{ clipPath: "polygon(0% 15%, 100% 0%, 95% 85%, 3% 100%)" }} />
-
-              <a href={resumeData.matiks} target="_blank" rel="noreferrer" className="flex flex-col h-full justify-between">
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      {/* Matiks Logo */}
-                      <svg className="w-6 h-6 text-purple-500 fill-current font-sans font-bold" viewBox="0 0 24 24">
-                        <text x="12" y="19" textAnchor="middle" fontSize="20" fill="currentColor">M</text>
-                      </svg>
-                      <span className="font-sketch text-2xl text-slate-800 dark:text-slate-200">Matiks Profile</span>
-                    </div>
-                    {/* Brain Badge */}
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-600 dark:text-emerald-400 border border-purple-500/30">
-                      🧠 Brain Games
-                    </span>
-                  </div>
-
-                  {/* Factual description of Matiks and the profile */}
-                  <div className="space-y-3 text-sm text-slate-600 dark:text-slate-400">
-                    <p className="leading-relaxed">
-                      Active member on the brain training platform, participating in live head-to-head mental math match-ups and cognitive challenges.
-                    </p>
-                    <div className="flex flex-wrap gap-2 pt-1">
-                      <span className="px-2.5 py-1 bg-purple-500/5 dark:bg-purple-500/10 rounded-md border border-purple-500/10 text-xs font-semibold text-purple-600 dark:text-purple-400">⚡ Speed Arithmetic</span>
-                      <span className="px-2.5 py-1 bg-purple-500/5 dark:bg-purple-500/10 rounded-md border border-purple-500/10 text-xs font-semibold text-purple-600 dark:text-purple-400">🧩 Logic Puzzles</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-3 border-t border-purple-500/10 flex justify-between items-center text-xs text-slate-500 dark:text-slate-400">
-                  <span>Username: <strong className="text-slate-800 dark:text-slate-200">meet11</strong></span>
-                  <span className="flex items-center gap-0.5 text-purple-600 dark:text-purple-400 font-medium">
-                    Train Brain <span className="text-[10px]">↗</span>
-                  </span>
-                </div>
-              </a>
-            </motion.div>
-
             {/* Custom Duolingo Card */}
             <motion.div
               whileHover={{ scale: 1.03, rotate: 1 }}
