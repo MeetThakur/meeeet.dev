@@ -417,29 +417,20 @@ export const AboutSection = () => {
                       </svg>
                       <span className="font-sketch text-2xl text-slate-800 dark:text-slate-200">Matiks Profile</span>
                     </div>
-                    {/* Duelist Badge */}
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/30">
-                      🧮 Duelist
+                    {/* Brain Badge */}
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-600 dark:text-emerald-400 border border-purple-500/30">
+                      🧠 Brain Games
                     </span>
                   </div>
 
-                  {/* 2x2 Grid of Stats */}
-                  <div className="grid grid-cols-2 gap-3 mb-2">
-                    <div className="p-2.5 bg-purple-500/5 dark:bg-purple-500/10 rounded-xl border border-purple-500/10 flex flex-col">
-                      <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-semibold">Duels Played</span>
-                      <span className="text-sm font-bold text-slate-800 dark:text-slate-100 mt-0.5">150+ Battles</span>
-                    </div>
-                    <div className="p-2.5 bg-purple-500/5 dark:bg-purple-500/10 rounded-xl border border-purple-500/10 flex flex-col">
-                      <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-semibold">Solve Speed</span>
-                      <span className="text-sm font-bold text-slate-800 dark:text-slate-100 mt-0.5">~1.2s Avg</span>
-                    </div>
-                    <div className="p-2.5 bg-purple-500/5 dark:bg-purple-500/10 rounded-xl border border-purple-500/10 flex flex-col">
-                      <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-semibold">Accuracy</span>
-                      <span className="text-sm font-bold text-slate-800 dark:text-slate-100 mt-0.5">94% Core</span>
-                    </div>
-                    <div className="p-2.5 bg-purple-500/5 dark:bg-purple-500/10 rounded-xl border border-purple-500/10 flex flex-col">
-                      <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-semibold">Top Streak</span>
-                      <span className="text-sm font-bold text-slate-800 dark:text-slate-100 mt-0.5">🔥 12 Wins</span>
+                  {/* Factual description of Matiks and the profile */}
+                  <div className="space-y-3 text-sm text-slate-600 dark:text-slate-400">
+                    <p className="leading-relaxed">
+                      Active member on the brain training platform, participating in live head-to-head mental math match-ups and cognitive challenges.
+                    </p>
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      <span className="px-2.5 py-1 bg-purple-500/5 dark:bg-purple-500/10 rounded-md border border-purple-500/10 text-xs font-semibold text-purple-600 dark:text-purple-400">⚡ Speed Arithmetic</span>
+                      <span className="px-2.5 py-1 bg-purple-500/5 dark:bg-purple-500/10 rounded-md border border-purple-500/10 text-xs font-semibold text-purple-600 dark:text-purple-400">🧩 Logic Puzzles</span>
                     </div>
                   </div>
                 </div>
