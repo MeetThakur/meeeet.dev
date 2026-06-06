@@ -7,6 +7,8 @@ export const resumeData = {
   linkedin: "https://linkedin.com/in/MeetThakur",
   github: "https://github.com/MeetThakur",
   leetcode: "https://leetcode.com/MeetThakur",
+  chesscom: "https://www.chess.com/member/Meet-11",
+  matiks: "https://www.matiks.com/profile/meet11",
   summary:
     "Computer Science undergraduate with hands-on experience in full-stack and mobile development, network security, and competitive programming. Built production-grade apps using MERN Stack and React Native, presented research at two national conferences.",
   education: [
