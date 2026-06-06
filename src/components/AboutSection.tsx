@@ -5,136 +5,68 @@ import { resumeData } from "../data/resumeData";
 import { motion } from "framer-motion";
 
 export const AboutSection = () => {
-  const [gitHubStats, setGitHubStats] = useState({
-    stars: 52,
-    repos: 24,
-    followers: 15,
-    languages: [
-      { name: "TypeScript", percentage: 40 },
-      { name: "JavaScript", percentage: 30 },
-      { name: "Python", percentage: 20 },
-      { name: "C++", percentage: 10 },
-    ],
-    loading: true,
-  });
-
-  const [chessStats, setChessStats] = useState({
-    rating: 775,
-    highestTactics: 1397,
-    winRate: 60,
-    loading: true,
-  });
-
-  const [duoLingoStats, setDuoLingoStats] = useState({
-    streak: 316,
-    xp: 16559,
-    language: "Spanish",
+  const [stats, setStats] = useState({
+    github: {
+      stars: 52,
+      repos: 24,
+      followers: 15,
+      languages: [
+        { name: "TypeScript", percentage: 40 },
+        { name: "JavaScript", percentage: 30 },
+        { name: "Python", percentage: 20 },
+        { name: "C++", percentage: 10 },
+      ],
+    },
+    chess: {
+      rating: 775,
+      highestTactics: 1397,
+      winRate: 60,
+    },
+    duolingo: {
+      streak: 316,
+      xp: 16559,
+      language: "Spanish",
+    },
     loading: true,
   });
 
   useEffect(() => {
-    const fetchGitHubStats = async () => {
+    const fetchStats = async () => {
       try {
-        const userRes = await fetch("https://api.github.com/users/MeetThakur");
-        if (!userRes.ok) throw new Error("Failed to fetch user profile");
-        const userData = await userRes.json();
-
-        const reposRes = await fetch("https://api.github.com/users/MeetThakur/repos?per_page=100");
-        if (!reposRes.ok) throw new Error("Failed to fetch repos");
-        const reposData = await reposRes.json();
-
-        const totalStars = reposData.reduce((acc: number, repo: any) => acc + (repo.stargazers_count || 0), 0);
-
-        const languagesMap: { [key: string]: number } = {};
-        let totalReposWithLanguage = 0;
-        reposData.forEach((repo: any) => {
-          if (repo.language) {
-            languagesMap[repo.language] = (languagesMap[repo.language] || 0) + 1;
-            totalReposWithLanguage++;
-          }
-        });
-
-        const sortedLangs = Object.entries(languagesMap)
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, 4);
-
-        const languagesList = sortedLangs.map(([name, count]) => ({
-          name,
-          percentage: totalReposWithLanguage > 0 ? Math.round((count / totalReposWithLanguage) * 100) : 0,
-        }));
-
-        setGitHubStats({
-          stars: totalStars || 52,
-          repos: userData.public_repos || 24,
-          followers: userData.followers || 15,
-          languages: languagesList.length > 0 ? languagesList : [
-            { name: "TypeScript", percentage: 40 },
-            { name: "JavaScript", percentage: 30 },
-            { name: "Python", percentage: 20 },
-            { name: "C++", percentage: 10 },
-          ],
+        const res = await fetch("/api/stats");
+        if (!res.ok) throw new Error("Failed to fetch consolidated stats");
+        const data = await res.json();
+        setStats({
+          github: {
+            stars: data.github?.stars ?? 52,
+            repos: data.github?.repos ?? 24,
+            followers: data.github?.followers ?? 15,
+            languages: data.github?.languages ?? [
+              { name: "TypeScript", percentage: 40 },
+              { name: "JavaScript", percentage: 30 },
+              { name: "Python", percentage: 20 },
+              { name: "C++", percentage: 10 },
+            ],
+          },
+          chess: {
+            rating: data.chess?.rating ?? 775,
+            highestTactics: data.chess?.highestTactics ?? 1397,
+            winRate: data.chess?.winRate ?? 60,
+          },
+          duolingo: {
+            streak: data.duolingo?.streak ?? 316,
+            xp: data.duolingo?.xp ?? 16559,
+            language: data.duolingo?.language ?? "Spanish",
+          },
           loading: false,
         });
       } catch (err) {
-        console.error("Error fetching GitHub stats:", err);
-        setGitHubStats(prev => ({ ...prev, loading: false }));
+        console.error("Error fetching consolidated stats:", err);
+        setStats(prev => ({ ...prev, loading: false }));
       }
     };
 
-    const fetchChessStats = async () => {
-      try {
-        const res = await fetch("https://api.chess.com/pub/player/meet-11/stats");
-        if (!res.ok) throw new Error("Failed to fetch Chess.com stats");
-        const data = await res.json();
-        
-        const rapidRating = data.chess_rapid?.last?.rating || 775;
-        const highestTactics = data.tactics?.highest?.rating || 1397;
-        const record = data.chess_rapid?.record || { win: 125, loss: 74, draw: 8 };
-        const totalGames = record.win + record.loss + record.draw;
-        const winRate = totalGames > 0 ? Math.round((record.win / totalGames) * 100) : 60;
-
-        setChessStats({
-          rating: rapidRating,
-          highestTactics,
-          winRate,
-          loading: false,
-        });
-      } catch (err) {
-        console.error("Error fetching Chess.com stats:", err);
-        setChessStats(prev => ({ ...prev, loading: false }));
-      }
-    };
-
-    const fetchDuoLingoStats = async () => {
-      try {
-        const res = await fetch("https://www.duolingo.com/2017-06-30/users?username=Meet11_");
-        if (!res.ok) throw new Error("Failed to fetch Duolingo stats");
-        const data = await res.json();
-        
-        if (data.users && data.users.length > 0) {
-          const user = data.users[0];
-          const streak = user.streak || 316;
-          const totalXp = user.totalXp || 16559;
-          const language = user.courses?.[0]?.title || "Spanish";
-
-          setDuoLingoStats({
-            streak,
-            xp: totalXp,
-            language,
-            loading: false,
-          });
-        } else {
-          setDuoLingoStats(prev => ({ ...prev, loading: false }));
-        }
-      } catch (err) {
-        console.error("Error fetching Duolingo stats:", err);
-        setDuoLingoStats(prev => ({ ...prev, loading: false }));
-      }
-    };
-
-    fetchGitHubStats();
-    fetchChessStats();
-    fetchDuoLingoStats();
+    fetchStats();
   }, []);
 
   return (
@@ -282,7 +214,7 @@ export const AboutSection = () => {
                     </div>
                     {/* Stars count */}
                     <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/30">
-                      ⭐ {gitHubStats.loading ? "..." : `${gitHubStats.stars} Stars`}
+                      ⭐ {stats.loading ? "..." : `${stats.github.stars} Stars`}
                     </span>
                   </div>
 
@@ -292,7 +224,7 @@ export const AboutSection = () => {
                     
                     {/* Segmented Horizontal Bar — animated on scroll */}
                     <div className="h-2 w-full rounded-full flex overflow-hidden bg-slate-100 dark:bg-slate-800 mb-3">
-                      {gitHubStats.languages.map((lang, idx) => {
+                      {stats.github.languages.map((lang, idx) => {
                         const colors = [
                           "bg-blue-500",      // TS
                           "bg-yellow-500",    // JS
@@ -317,7 +249,7 @@ export const AboutSection = () => {
 
                     {/* Grid list of languages with color dots */}
                     <div className="grid grid-cols-2 gap-2 text-xs">
-                      {gitHubStats.languages.map((lang, idx) => {
+                      {stats.github.languages.map((lang, idx) => {
                         const colors = [
                           "bg-blue-500",
                           "bg-yellow-500",
@@ -340,8 +272,8 @@ export const AboutSection = () => {
 
                 <div className="pt-3 border-t border-blue-500/10 flex justify-between items-center text-xs text-slate-500 dark:text-slate-400">
                   <div className="flex gap-4">
-                    <span>Repos: <strong className="text-slate-800 dark:text-slate-200">{gitHubStats.loading ? "..." : gitHubStats.repos}</strong></span>
-                    <span>Followers: <strong className="text-slate-800 dark:text-slate-200">{gitHubStats.loading ? "..." : gitHubStats.followers}</strong></span>
+                    <span>Repos: <strong className="text-slate-800 dark:text-slate-200">{stats.loading ? "..." : stats.github.repos}</strong></span>
+                    <span>Followers: <strong className="text-slate-800 dark:text-slate-200">{stats.loading ? "..." : stats.github.followers}</strong></span>
                   </div>
                   <span className="flex items-center gap-0.5 text-blue-600 dark:text-blue-400 font-medium">
                     View Activity <span className="text-[10px]">↗</span>
@@ -389,7 +321,7 @@ export const AboutSection = () => {
                         <motion.path
                           className="text-emerald-500"
                           strokeWidth="3.5"
-                          strokeDasharray={`${(chessStats.highestTactics / 2000) * 100}, 100`}
+                          strokeDasharray={`${(stats.chess.highestTactics / 2000) * 100}, 100`}
                           strokeLinecap="round"
                           stroke="currentColor"
                           fill="none"
@@ -401,7 +333,7 @@ export const AboutSection = () => {
                         />
                       </svg>
                       <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                        <span className="text-sm font-bold leading-none text-slate-800 dark:text-slate-100">{chessStats.loading ? "..." : chessStats.highestTactics}</span>
+                        <span className="text-sm font-bold leading-none text-slate-800 dark:text-slate-100">{stats.loading ? "..." : stats.chess.highestTactics}</span>
                         <span className="text-[9px] text-slate-500 dark:text-slate-400">Tactics</span>
                       </div>
                     </div>
@@ -410,15 +342,15 @@ export const AboutSection = () => {
                     <div className="flex-1 space-y-1.5 text-sm">
                       <div className="flex justify-between items-center">
                         <span className="text-slate-600 dark:text-slate-400">Rapid Rating</span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">{chessStats.loading ? "..." : chessStats.rating}</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.loading ? "..." : stats.chess.rating}</span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-slate-600 dark:text-slate-400">Win Rate</span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">{chessStats.loading ? "..." : `${chessStats.winRate}%`}</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.loading ? "..." : `${stats.chess.winRate}%`}</span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-slate-600 dark:text-slate-400">Games Played</span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">{chessStats.loading ? "..." : "207"}</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.loading ? "..." : "207"}</span>
                       </div>
                     </div>
                   </div>
@@ -472,7 +404,7 @@ export const AboutSection = () => {
                         <motion.path
                           className="text-lime-500"
                           strokeWidth="3.5"
-                          strokeDasharray={`${(duoLingoStats.streak / 365) * 100}, 100`}
+                          strokeDasharray={`${(stats.duolingo.streak / 365) * 100}, 100`}
                           strokeLinecap="round"
                           stroke="currentColor"
                           fill="none"
@@ -484,7 +416,7 @@ export const AboutSection = () => {
                         />
                       </svg>
                       <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                        <span className="text-sm font-bold leading-none text-slate-800 dark:text-slate-100">{duoLingoStats.loading ? "..." : duoLingoStats.streak}</span>
+                        <span className="text-sm font-bold leading-none text-slate-800 dark:text-slate-100">{stats.loading ? "..." : stats.duolingo.streak}</span>
                         <span className="text-[9px] text-slate-500 dark:text-slate-400">Streak</span>
                       </div>
                     </div>
@@ -493,11 +425,11 @@ export const AboutSection = () => {
                     <div className="flex-1 space-y-1.5 text-sm">
                       <div className="flex justify-between items-center">
                         <span className="text-slate-600 dark:text-slate-400">Total XP</span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">{duoLingoStats.loading ? "..." : duoLingoStats.xp.toLocaleString()}</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.loading ? "..." : stats.duolingo.xp.toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-slate-600 dark:text-slate-400">Learning</span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">{duoLingoStats.loading ? "..." : duoLingoStats.language}</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.loading ? "..." : stats.duolingo.language}</span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-slate-600 dark:text-slate-400">Active Since</span>
