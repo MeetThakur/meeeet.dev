@@ -18,6 +18,13 @@ export const AboutSection = () => {
     loading: true,
   });
 
+  const [chessStats, setChessStats] = useState({
+    rating: 775,
+    highestTactics: 1397,
+    winRate: 60,
+    loading: true,
+  });
+
   useEffect(() => {
     const fetchGitHubStats = async () => {
       try {
@@ -67,7 +74,32 @@ export const AboutSection = () => {
       }
     };
 
+    const fetchChessStats = async () => {
+      try {
+        const res = await fetch("https://api.chess.com/pub/player/meet-11/stats");
+        if (!res.ok) throw new Error("Failed to fetch Chess.com stats");
+        const data = await res.json();
+        
+        const rapidRating = data.chess_rapid?.last?.rating || 775;
+        const highestTactics = data.tactics?.highest?.rating || 1397;
+        const record = data.chess_rapid?.record || { win: 125, loss: 74, draw: 8 };
+        const totalGames = record.win + record.loss + record.draw;
+        const winRate = totalGames > 0 ? Math.round((record.win / totalGames) * 100) : 60;
+
+        setChessStats({
+          rating: rapidRating,
+          highestTactics,
+          winRate,
+          loading: false,
+        });
+      } catch (err) {
+        console.error("Error fetching Chess.com stats:", err);
+        setChessStats(prev => ({ ...prev, loading: false }));
+      }
+    };
+
     fetchGitHubStats();
+    fetchChessStats();
   }, []);
 
   return (
@@ -278,6 +310,176 @@ export const AboutSection = () => {
                   </div>
                   <span className="flex items-center gap-0.5 text-blue-600 dark:text-blue-400 font-medium">
                     View Activity <span className="text-[10px]">↗</span>
+                  </span>
+                </div>
+              </a>
+            </motion.div>
+
+            {/* Custom Chess.com Card */}
+            <motion.div
+              whileHover={{ scale: 1.03, rotate: 1 }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              className="relative p-6 bg-emerald-50/80 dark:bg-emerald-950/10 border-2 border-emerald-500/20 rounded-2xl shadow-md backdrop-blur-xs flex flex-col justify-between min-h-[220px]"
+            >
+              {/* Card Tape Detail */}
+              <div className="absolute -top-3 left-1/4 -translate-x-1/2 w-16 h-6 bg-highlighter-green/30 dark:bg-emerald-500/10 rotate-[-2deg] clip-path-polygon(0% 10%, 100% 0%, 95% 90%, 5% 100%) pointer-events-none" style={{ clipPath: "polygon(0% 15%, 100% 0%, 95% 85%, 3% 100%)" }} />
+
+              <a href={resumeData.chesscom} target="_blank" rel="noreferrer" className="flex flex-col h-full justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      {/* Chess.com Icon Logo */}
+                      <svg className="w-6 h-6 text-emerald-500 fill-current" viewBox="0 0 24 24">
+                        <path d="M12 2C10.34 2 9 3.34 9 5c0 1.25.77 2.32 1.85 2.78C10.31 8.8 10 9.87 10 11c0 1.76 1.15 3.26 2.75 3.82C11.53 15.65 10 17.65 10 20v2h4v-2c0-2.35-1.53-4.35-2.75-5.18C12.85 14.26 14 12.76 14 11c0-1.13-.31-2.2-.85-3.22C14.23 7.32 15 6.25 15 5c0-1.66-1.34-3-3-3zM12 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm0 6c1.1 0 2 1.34 2 3s-.9 3-2 3-2-1.34-2-3 .9-3 2-3z" />
+                      </svg>
+                      <span className="font-sketch text-2xl text-slate-800 dark:text-slate-200">Chess.com Profile</span>
+                    </div>
+                    {/* Player Badge */}
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                      ♟️ Player
+                    </span>
+                  </div>
+
+                  <div className="flex gap-4 items-center">
+                    {/* SVG Circular Progress showing Tactics rating ratio */}
+                    <div className="relative w-20 h-20 flex-shrink-0">
+                      <svg className="w-full h-full transform -rotate-95" viewBox="0 0 36 36">
+                        <path
+                          className="text-slate-200 dark:text-slate-800"
+                          strokeWidth="3.5"
+                          stroke="currentColor"
+                          fill="none"
+                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                        <motion.path
+                          className="text-emerald-500"
+                          strokeWidth="3.5"
+                          strokeDasharray={`${(chessStats.highestTactics / 2000) * 100}, 100`}
+                          strokeLinecap="round"
+                          stroke="currentColor"
+                          fill="none"
+                          initial={{ pathLength: 0 }}
+                          whileInView={{ pathLength: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 1, ease: "easeOut" }}
+                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                      </svg>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                        <span className="text-sm font-bold leading-none text-slate-800 dark:text-slate-100">{chessStats.loading ? "..." : chessStats.highestTactics}</span>
+                        <span className="text-[9px] text-slate-500 dark:text-slate-400">Tactics</span>
+                      </div>
+                    </div>
+
+                    {/* Breakdown of Ratings/Win-rate */}
+                    <div className="flex-1 space-y-1.5 text-sm">
+                      <div className="flex justify-between items-center">
+                        <span className="text-slate-600 dark:text-slate-400">Rapid Rating</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200">{chessStats.loading ? "..." : chessStats.rating}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-slate-600 dark:text-slate-400">Win Rate</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200">{chessStats.loading ? "..." : `${chessStats.winRate}%`}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-slate-600 dark:text-slate-400">Games Played</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200">{chessStats.loading ? "..." : "207"}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-emerald-500/10 flex justify-between items-center text-xs text-slate-500 dark:text-slate-400">
+                  <span>Username: <strong className="text-slate-800 dark:text-slate-200">Meet-11</strong></span>
+                  <span className="flex items-center gap-0.5 text-emerald-600 dark:text-emerald-400 font-medium">
+                    Play Chess <span className="text-[10px]">↗</span>
+                  </span>
+                </div>
+              </a>
+            </motion.div>
+
+            {/* Custom Matiks Card */}
+            <motion.div
+              whileHover={{ scale: 1.03, rotate: -1 }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              className="relative p-6 bg-purple-50/80 dark:bg-purple-950/10 border-2 border-purple-500/20 rounded-2xl shadow-md backdrop-blur-xs flex flex-col justify-between min-h-[220px]"
+            >
+              {/* Card Tape Detail */}
+              <div className="absolute -top-3 left-3/4 -translate-x-1/2 w-16 h-6 bg-highlighter-pink/30 dark:bg-purple-500/10 rotate-[3deg] clip-path-polygon(0% 10%, 100% 0%, 95% 90%, 5% 100%) pointer-events-none" style={{ clipPath: "polygon(0% 15%, 100% 0%, 95% 85%, 3% 100%)" }} />
+
+              <a href={resumeData.matiks} target="_blank" rel="noreferrer" className="flex flex-col h-full justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      {/* Matiks Logo */}
+                      <svg className="w-6 h-6 text-purple-500 fill-current font-sans font-bold" viewBox="0 0 24 24">
+                        <text x="12" y="19" textAnchor="middle" fontSize="20" fill="currentColor">M</text>
+                      </svg>
+                      <span className="font-sketch text-2xl text-slate-800 dark:text-slate-200">Matiks Profile</span>
+                    </div>
+                    {/* Duelist Badge */}
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/30">
+                      🧮 Duelist
+                    </span>
+                  </div>
+
+                  {/* Top Skills Segmented Bar & Grid */}
+                  <div className="mb-4">
+                    <p className="text-[10px] text-slate-400 dark:text-slate-500 mb-1.5 uppercase tracking-wider font-semibold">Mental Math Skills</p>
+                    
+                    {/* Segmented Horizontal Bar */}
+                    <div className="h-2 w-full rounded-full flex overflow-hidden bg-slate-100 dark:bg-slate-800 mb-3">
+                      <motion.div 
+                        className="bg-purple-500"
+                        initial={{ width: 0 }}
+                        whileInView={{ width: "40%" }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
+                        title="Arithmetic: 90%"
+                      />
+                      <motion.div 
+                        className="bg-pink-500"
+                        initial={{ width: 0 }}
+                        whileInView={{ width: "35%" }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, delay: 0.25, ease: "easeOut" }}
+                        title="Speed: 85%"
+                      />
+                      <motion.div 
+                        className="bg-indigo-500"
+                        initial={{ width: 0 }}
+                        whileInView={{ width: "25%" }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+                        title="Logic: 80%"
+                      />
+                    </div>
+
+                    {/* Skill Breakdown */}
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400">
+                        <span className="w-2 h-2 rounded-full bg-purple-500" />
+                        <span className="font-medium text-slate-700 dark:text-slate-300">Arithmetic</span>
+                        <span className="text-[10px] text-slate-400">(90%)</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400">
+                        <span className="w-2 h-2 rounded-full bg-pink-500" />
+                        <span className="font-medium text-slate-700 dark:text-slate-300">Speed</span>
+                        <span className="text-[10px] text-slate-400">(85%)</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400">
+                        <span className="w-2 h-2 rounded-full bg-indigo-500" />
+                        <span className="font-medium text-slate-700 dark:text-slate-300">Logic</span>
+                        <span className="text-[10px] text-slate-400">(80%)</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-3 border-t border-purple-500/10 flex justify-between items-center text-xs text-slate-500 dark:text-slate-400">
+                  <span>Username: <strong className="text-slate-800 dark:text-slate-200">meet11</strong></span>
+                  <span className="flex items-center gap-0.5 text-purple-600 dark:text-purple-400 font-medium">
+                    Train Brain <span className="text-[10px]">↗</span>
                   </span>
                 </div>
               </a>
