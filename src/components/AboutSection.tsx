@@ -25,6 +25,13 @@ export const AboutSection = () => {
     loading: true,
   });
 
+  const [duoLingoStats, setDuoLingoStats] = useState({
+    streak: 316,
+    xp: 16559,
+    language: "Spanish",
+    loading: true,
+  });
+
   useEffect(() => {
     const fetchGitHubStats = async () => {
       try {
@@ -98,8 +105,36 @@ export const AboutSection = () => {
       }
     };
 
+    const fetchDuoLingoStats = async () => {
+      try {
+        const res = await fetch("https://www.duolingo.com/2017-06-30/users?username=Meet11_");
+        if (!res.ok) throw new Error("Failed to fetch Duolingo stats");
+        const data = await res.json();
+        
+        if (data.users && data.users.length > 0) {
+          const user = data.users[0];
+          const streak = user.streak || 316;
+          const totalXp = user.totalXp || 16559;
+          const language = user.courses?.[0]?.title || "Spanish";
+
+          setDuoLingoStats({
+            streak,
+            xp: totalXp,
+            language,
+            loading: false,
+          });
+        } else {
+          setDuoLingoStats(prev => ({ ...prev, loading: false }));
+        }
+      } catch (err) {
+        console.error("Error fetching Duolingo stats:", err);
+        setDuoLingoStats(prev => ({ ...prev, loading: false }));
+      }
+    };
+
     fetchGitHubStats();
     fetchChessStats();
+    fetchDuoLingoStats();
   }, []);
 
   return (
@@ -439,6 +474,89 @@ export const AboutSection = () => {
                   <span>Username: <strong className="text-slate-800 dark:text-slate-200">meet11</strong></span>
                   <span className="flex items-center gap-0.5 text-purple-600 dark:text-purple-400 font-medium">
                     Train Brain <span className="text-[10px]">↗</span>
+                  </span>
+                </div>
+              </a>
+            </motion.div>
+
+            {/* Custom Duolingo Card */}
+            <motion.div
+              whileHover={{ scale: 1.03, rotate: 1 }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              className="relative p-6 bg-lime-50/80 dark:bg-lime-950/10 border-2 border-lime-500/20 rounded-2xl shadow-md backdrop-blur-xs flex flex-col justify-between min-h-[220px]"
+            >
+              {/* Card Tape Detail */}
+              <div className="absolute -top-3 left-1/4 -translate-x-1/2 w-16 h-6 bg-highlighter-green/30 dark:bg-lime-500/10 rotate-[-2deg] clip-path-polygon(0% 10%, 100% 0%, 95% 90%, 5% 100%) pointer-events-none" style={{ clipPath: "polygon(0% 15%, 100% 0%, 95% 85%, 3% 100%)" }} />
+
+              <a href={resumeData.duolingo} target="_blank" rel="noreferrer" className="flex flex-col h-full justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      {/* Duolingo Owl SVG Logo */}
+                      <svg className="w-6 h-6 text-lime-600 fill-current" viewBox="0 0 24 24">
+                        <path d="M14.484 18.213c1.142 1.033 2.657 1.662 4.316 1.662l.294-.001c1.985-.038 3.749-.976 4.905-2.422v1.98c0 2.522-2.043 4.568-4.567 4.568H4.569C2.045 23.998.002 21.954.002 19.43v-1.92c1.181 1.443 2.976 2.365 4.985 2.365l.35-.001c1.61-.027 3.076-.646 4.191-1.648.555.764 1.456 1.26 2.473 1.26 1.023 0 1.928-.502 2.483-1.273zm-5.349-.996c-.989 1.022-2.375 1.658-3.909 1.658h-.239c-2.229 0-4.146-1.343-4.987-3.262v-7.16c.281-.64.68-1.216 1.169-1.699-.035-.731.132-1.469.511-2.128.256-.44.867-.504 1.21-.124l.766.851c.007-.003.014-.003.021-.005-.098-.78.037-1.587.419-2.308.24-.45.757-.53 1.114-.164 0 0 3.939 3.979 4.035 4.084 1.542 1.348 4.066 1.287 5.686-.18.002-.003.007-.005.009-.007.042-.042 3.855-3.9 3.855-3.9.3361-.3451.8619-.3101 1.113.164.385.724.518 1.535.417 2.32.002.001.003.001.004.002l.007.002c.001 0 .002 0 .003.001l.776-.86c.342-.38.954-.316 1.207.124.387.673.553 1.427.509 2.173.496.501.897 1.099 1.169 1.762v6.941c-.816 1.978-2.761 3.373-5.032 3.373H18.8c-1.547 0-2.945-.648-3.936-1.686a.8386.8386 0 0 0-.009-.067c.313-.017.528-.162.688-.33.152-.16.299-.397.299-.776 0 0-.022-.312-.024-.324.693.767 1.696 1.249 2.811 1.249 2.092 0 3.787-1.696 3.787-3.787v-2.243c0-2.092-1.697-3.787-3.787-3.787-2.093 0-3.787 1.695-3.787 3.787v2.243c0 .266.027.526.079.776-.712-.784-1.744-1.278-2.842-1.278-1.239 0-2.339.523-3.064 1.355.063-.274.097-.56.097-.853v-2.243c0-2.092-1.697-3.787-3.788-3.787-2.09 0-3.787 1.695-3.787 3.787v2.243c0 2.093 1.697 3.787 3.787 3.787 1.151 0 2.182-.513 2.876-1.322-.008.035-.039.395-.039.395 0 .378.147.616.298.775.16.168.374.312.688.331a.7783.7783 0 0 0-.012.097zm.997.073c.729.131 1.733.305 1.792.305h.157c.059 0 1.789-.303 1.789-.303-.327.705-1.041 1.194-1.869 1.194-.829 0-1.543-.49-1.869-1.196zm-.971-1.379c.246-1.313 1.462-2.259 2.918-2.259 1.324 0 2.521.97 2.763 2.259v.105c0 .082-.029.115-.103.106l-2.658.473h-.157l-2.66-.476c-.075.01-.103-.023-.103-.105Zm8.023-6.392c.255-.14.549-.22.861-.22.992 0 1.798.804 1.798 1.798v1.919c0 .991-.804 1.797-1.798 1.797-.991 0-1.797-.803-1.797-1.797v-1.542c.034.003.068.005.103.005.64 0 1.16-.518 1.16-1.156 0-.312-.125-.596-.327-.804zM5.162 9.461c.227-.104.48-.162.746-.162.991 0 1.798.804 1.798 1.798v1.919c0 .991-.804 1.797-1.798 1.797-.991 0-1.797-.803-1.797-1.797v-1.571c.089.022.182.034.278.034.641 0 1.16-.518 1.16-1.156 0-.342-.149-.65-.387-.862ZM.002 6.554V4.568C.002 2.044 2.045 0 4.569 0h14.865c2.522 0 4.565 2.044 4.565 4.568v2.041a5.1847 5.1847 0 0 0-.164-.197 4.8592 4.8592 0 0 0-.646-2.284c-.433-.754-1.315-1.037-2.07-.786a4.785 4.785 0 0 0-.327-.774h-.001c-.287-.54-.758-.835-1.248-.908-.493-.073-1.033.072-1.464.515l-3.82 3.864c-1.226 1.11-3.127 1.199-4.313.205-.103-.109-4.025-4.071-4.025-4.071-.427-.438-.966-.584-1.46-.51-.489.073-.961.367-1.248.907v.002c-.133.25-.241.508-.327.771-.753-.252-1.635.029-2.071.782 0 0-.001.001-.001.002-.4.694-.613 1.459-.645 2.23-.057.065-.113.13-.167.197z" />
+                      </svg>
+                      <span className="font-sketch text-2xl text-slate-800 dark:text-slate-200">Duolingo Profile</span>
+                    </div>
+                    {/* Polyglot Badge */}
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-lime-500/10 text-lime-600 dark:text-lime-400 border border-lime-500/30">
+                      🦉 Polyglot
+                    </span>
+                  </div>
+
+                  <div className="flex gap-4 items-center">
+                    {/* SVG Circular Progress showing Streak progress (316 out of 365) */}
+                    <div className="relative w-20 h-20 flex-shrink-0">
+                      <svg className="w-full h-full transform -rotate-95" viewBox="0 0 36 36">
+                        <path
+                          className="text-slate-200 dark:text-slate-800"
+                          strokeWidth="3.5"
+                          stroke="currentColor"
+                          fill="none"
+                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                        <motion.path
+                          className="text-lime-500"
+                          strokeWidth="3.5"
+                          strokeDasharray={`${(duoLingoStats.streak / 365) * 100}, 100`}
+                          strokeLinecap="round"
+                          stroke="currentColor"
+                          fill="none"
+                          initial={{ pathLength: 0 }}
+                          whileInView={{ pathLength: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 1, ease: "easeOut" }}
+                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                      </svg>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                        <span className="text-sm font-bold leading-none text-slate-800 dark:text-slate-100">{duoLingoStats.loading ? "..." : duoLingoStats.streak}</span>
+                        <span className="text-[9px] text-slate-500 dark:text-slate-400">Streak</span>
+                      </div>
+                    </div>
+
+                    {/* Breakdown of Ratings/Win-rate */}
+                    <div className="flex-1 space-y-1.5 text-sm">
+                      <div className="flex justify-between items-center">
+                        <span className="text-slate-600 dark:text-slate-400">Total XP</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200">{duoLingoStats.loading ? "..." : duoLingoStats.xp.toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-slate-600 dark:text-slate-400">Learning</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200">{duoLingoStats.loading ? "..." : duoLingoStats.language}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-slate-600 dark:text-slate-400">Active Since</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200">Jan 2021</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-lime-500/10 flex justify-between items-center text-xs text-slate-500 dark:text-slate-400">
+                  <span>Username: <strong className="text-slate-800 dark:text-slate-200">Meet11_</strong></span>
+                  <span className="flex items-center gap-0.5 text-lime-600 dark:text-lime-400 font-medium">
+                    Learn Language <span className="text-[10px]">↗</span>
                   </span>
                 </div>
               </a>
