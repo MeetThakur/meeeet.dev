@@ -17,8 +17,9 @@ export async function GET() {
     },
     chess: {
       rating: 775,
-      highestTactics: 1397,
+      highestTactics: 1413,
       winRate: 60,
+      totalGames: 372,
     },
     duolingo: {
       streak: 316,
@@ -95,6 +96,7 @@ export async function GET() {
         rating: rapidRating,
         highestTactics,
         winRate,
+        totalGames,
       };
     }
   } catch (err) {

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { resumeData } from "../data/resumeData";
 import { motion } from "framer-motion";
+import { Briefcase, MapPin } from "lucide-react";
 
 export const AboutSection = () => {
   const [stats, setStats] = useState({
@@ -19,8 +20,9 @@ export const AboutSection = () => {
     },
     chess: {
       rating: 775,
-      highestTactics: 1397,
+      highestTactics: 1413,
       winRate: 60,
+      totalGames: 372,
     },
     duolingo: {
       streak: 316,
@@ -50,8 +52,9 @@ export const AboutSection = () => {
           },
           chess: {
             rating: data.chess?.rating ?? 775,
-            highestTactics: data.chess?.highestTactics ?? 1397,
+            highestTactics: data.chess?.highestTactics ?? 1413,
             winRate: data.chess?.winRate ?? 60,
+            totalGames: data.chess?.totalGames ?? 372,
           },
           duolingo: {
             streak: data.duolingo?.streak ?? 316,
@@ -92,14 +95,87 @@ export const AboutSection = () => {
             
             <div className="font-sans text-xl md:text-2xl text-slate-700 dark:text-slate-300 leading-relaxed font-light space-y-6">
               <p>
-                I'm Meet, a developer who loves building applications for the web and mobile. I focus on writing clean code and creating intuitive, easy-to-use interfaces.
+                I'm Meet, a CS undergrad currently interning at{" "}
+                <span className="font-sketch text-2xl text-ink-dark dark:text-ink-light">Eightfold AI</span>{" "}
+                where I'm building a Salesforce backup-and-restore pipeline on Databricks from the ground up.
               </p>
               <p>
-                I enjoy working on practical projects that solve real problems. Whether I'm building tools from scratch, participating in hackathons, or exploring new technologies, I'm always looking for ways to learn and grow.
+                Outside of work I ship solo projects — a chat analytics tool used by 2,000+ people, a cross-platform competitive programming tracker, and an AI advisory platform for farmers. I care about writing clean, production-ready code.
               </p>
               <p>
-                I also have a strong background in problem-solving. Regular participation in <span className="font-sketch text-3xl mx-1 text-ink-dark dark:text-ink-light">competitive programming</span> helps me stay sharp and think critically about the code I write.
+                I'm also a{" "}
+                <span className="font-sketch text-3xl mx-1 text-ink-dark dark:text-ink-light">competitive programmer</span>{" "}
+                — Codeforces Expert, LeetCode Knight (top 4%), 4-star on CodeChef — which keeps my problem-solving sharp.
               </p>
+            </div>
+          </div>
+
+          {/* Experience Timeline */}
+          <div className="mt-16">
+            <h3 className="font-serif italic text-3xl md:text-4xl text-ink-dark dark:text-ink-light mb-8">
+              Experience.
+            </h3>
+            <div className="relative space-y-6">
+              {/* Vertical line */}
+              <div className="absolute left-5 top-3 bottom-3 w-px bg-black/10 dark:bg-white/10" />
+
+              {resumeData.experience.map((exp, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.4, delay: i * 0.1, ease: "easeOut" }}
+                  className="flex gap-6 relative"
+                >
+                  {/* Timeline dot */}
+                  <div className={`relative z-10 flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-sm border-2 ${
+                    exp.isCurrent
+                      ? "bg-ink-blue/10 dark:bg-neon-pink/10 border-ink-blue/40 dark:border-neon-pink/40"
+                      : "bg-white dark:bg-[#161618] border-black/15 dark:border-white/15"
+                  }`}>
+                    <Briefcase className={`w-4 h-4 ${exp.isCurrent ? "text-ink-blue dark:text-neon-pink" : "text-slate-400"}`} />
+                  </div>
+
+                  {/* Card */}
+                  <div className="flex-1 pb-2">
+                    <div className="flex flex-wrap items-center gap-2 mb-1">
+                      <span className="font-sans font-bold text-lg text-ink-dark dark:text-ink-light">
+                        {exp.role}
+                      </span>
+                      {exp.isCurrent && (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-ink-blue/10 dark:bg-neon-pink/10 text-ink-blue dark:text-neon-pink border border-ink-blue/20 dark:border-neon-pink/20">
+                          <span className="w-1.5 h-1.5 rounded-full bg-ink-blue dark:bg-neon-pink animate-pulse" />
+                          Current
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-3 text-sm text-slate-500 dark:text-slate-400">
+                      <span className="font-sketch text-base text-slate-700 dark:text-slate-300">{exp.company}</span>
+                      <span>·</span>
+                      <span>{exp.duration}</span>
+                      {exp.location && (
+                        <>
+                          <span>·</span>
+                          <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{exp.location}</span>
+                        </>
+                      )}
+                    </div>
+                    <p className="font-sans text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+                      {exp.description}
+                    </p>
+                    {exp.techStack && (
+                      <div className="flex flex-wrap gap-1.5 mt-3">
+                        {exp.techStack.map((tech, j) => (
+                          <span key={j} className="text-xs font-medium px-2 py-0.5 bg-black/5 dark:bg-white/5 rounded-md text-slate-600 dark:text-slate-300 border border-black/5 dark:border-white/5">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </div>
 
@@ -350,7 +426,7 @@ export const AboutSection = () => {
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-slate-600 dark:text-slate-400">Games Played</span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.loading ? "..." : "207"}</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.loading ? "..." : stats.chess.totalGames}</span>
                       </div>
                     </div>
                   </div>

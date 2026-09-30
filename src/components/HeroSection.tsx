@@ -83,7 +83,7 @@ export const HeroSection = () => {
 
         {/* Minimal Bio */}
         <p className="font-sans text-xl text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed mix-blend-multiply dark:mix-blend-screen bg-white/40 dark:bg-black/20 p-6 rounded-2xl border border-black/5 dark:border-white/5 animate-[slideUp_0.8s_ease-out_0.6s_both]">
-          Full-stack developer. I design and build clean, functional applications.
+          Engineering Intern at <strong>Eightfold AI</strong>. I build full-stack and mobile products — from tools shipped to 2,000+ users to an AI advisory platform for farmers.
         </p>
         
         {/* Action Buttons - Minimal but themed */}
@@ -106,12 +106,6 @@ export const HeroSection = () => {
         </div>
       </div>
 
-      <style dangerouslySetInnerHTML={{__html: `
-        @keyframes slideUp {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}} />
     </section>
   );
 };
