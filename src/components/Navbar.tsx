@@ -17,8 +17,7 @@ export const Navbar = () => {
   const [clickCoords, setClickCoords] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    setMounted(true);
-    
+    const id = requestAnimationFrame(() => setMounted(true));
     const handleScroll = () => {
       const sections = ["hero", "about", "projects", "skills", "contact"];
       let current = "hero";
@@ -38,7 +37,10 @@ export const Navbar = () => {
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      cancelAnimationFrame(id);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   // Close mobile menu on resize to desktop

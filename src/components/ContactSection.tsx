@@ -33,7 +33,7 @@ export const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="py-32 px-4 pb-40 max-w-3xl mx-auto relative flex justify-center overflow-hidden">
+    <section id="contact" className="py-16 md:py-32 px-4 pb-24 md:pb-40 max-w-3xl mx-auto relative flex justify-center overflow-hidden">
       
       {/* Premium Letter Graphic */}
       <motion.div 
@@ -48,14 +48,14 @@ export const ContactSection = () => {
         <div className="masking-tape"></div>
 
         {/* Realistic Stamp */}
-        <div className="absolute top-6 right-6 w-16 h-20 border-2 border-dotted border-red-500/60 dark:border-neon-pink/40 opacity-80 flex flex-col items-center justify-center p-1 rotate-[4deg]">
+        <div className="absolute top-6 right-6 w-16 h-20 hidden sm:flex border-2 border-dotted border-red-500/60 dark:border-neon-pink/40 opacity-80 flex-col items-center justify-center p-1 rotate-[4deg]">
           <span className="font-sketch text-xs uppercase tracking-[0.2em] text-red-500/80 dark:text-neon-pink/60">POST</span>
           <span className="text-2xl mt-1 opacity-70">✉</span>
           <div className="absolute inset-0 bg-red-500/5 mix-blend-multiply dark:mix-blend-screen"></div>
         </div>
 
         <h2 className="font-serif font-medium italic text-5xl md:text-7xl mb-8 leading-none tracking-tight text-ink-dark dark:text-ink-light">
-          Let's talk.
+          Let&apos;s talk.
         </h2>
         
         <p className="font-sans text-lg text-slate-600 dark:text-slate-400 mb-10 leading-relaxed max-w-sm">
@@ -70,7 +70,7 @@ export const ContactSection = () => {
           >
             <div className="text-5xl mb-4">✉️</div>
             <h3 className="font-sketch text-2xl text-ink-dark dark:text-ink-light mb-2">Message sent!</h3>
-            <p className="font-sans text-slate-500 dark:text-slate-400 mb-6">Thanks for reaching out. I'll get back to you soon.</p>
+            <p className="font-sans text-slate-500 dark:text-slate-400 mb-6">Thanks for reaching out. I&apos;ll get back to you soon.</p>
             <button
               onClick={() => setFormState("idle")}
               className="font-sketch text-lg text-ink-blue dark:text-neon-pink hover:underline decoration-wavy"
@@ -84,39 +84,43 @@ export const ContactSection = () => {
             className="mt-8 flex flex-col gap-6 font-sketch text-xl w-full relative z-10"
           >
             <div className="flex flex-col relative">
-              <label htmlFor="name" className="text-slate-500 mb-1 text-lg">Dear Meet,</label>
+              <label htmlFor="name" className="text-slate-500 dark:text-slate-400 mb-1 text-lg">Dear Meet,</label>
               <input 
                 type="text" 
                 name="name"
+                autoComplete="name"
                 id="name" 
                 placeholder="My name is..." 
                 required
                 disabled={formState === "sending"}
-                className="bg-transparent border-none outline-none border-b-2 border-black/10 dark:border-white/10 focus:border-ink-blue dark:focus:border-neon-pink focus:ring-0 text-ink-dark dark:text-ink-light placeholder:text-black/20 dark:placeholder:text-white/20 px-1 py-1 transition-colors w-full disabled:opacity-50"
+                className="bg-transparent outline-none border-x-0 border-t-0 border-b-2 border-solid border-slate-300 dark:border-white/25 focus:border-ink-blue dark:focus:border-neon-pink focus:ring-0 text-ink-dark dark:text-ink-light placeholder:text-slate-400 dark:placeholder:text-slate-500 px-1 py-1 transition-colors w-full disabled:opacity-50"
               />
             </div>
 
             <div className="flex flex-col relative">
               <input 
-                type="email" 
+                type="email"
+                aria-label="Your email"
+                autoComplete="email" 
                 name="email"
                 id="email" 
                 placeholder="My email is..." 
                 required
                 disabled={formState === "sending"}
-                className="bg-transparent border-none outline-none border-b-2 border-black/10 dark:border-white/10 focus:border-ink-blue dark:focus:border-neon-pink focus:ring-0 text-ink-dark dark:text-ink-light placeholder:text-black/20 dark:placeholder:text-white/20 px-1 py-1 transition-colors w-full disabled:opacity-50"
+                className="bg-transparent outline-none border-x-0 border-t-0 border-b-2 border-solid border-slate-300 dark:border-white/25 focus:border-ink-blue dark:focus:border-neon-pink focus:ring-0 text-ink-dark dark:text-ink-light placeholder:text-slate-400 dark:placeholder:text-slate-500 px-1 py-1 transition-colors w-full disabled:opacity-50"
               />
             </div>
             
             <div className="flex flex-col relative mt-2">
               <textarea 
+                aria-label="Your message"
                 name="message"
                 id="message" 
                 placeholder="I wanted to reach out because..." 
                 required
                 rows={4}
                 disabled={formState === "sending"}
-                className="bg-transparent border-none outline-none border-b-2 border-black/10 dark:border-white/10 focus:border-ink-blue dark:focus:border-neon-pink focus:ring-0 text-ink-dark dark:text-ink-light placeholder:text-black/20 dark:placeholder:text-white/20 px-1 py-1 resize-none transition-colors custom-scrollbar w-full disabled:opacity-50"
+                className="bg-transparent outline-none border-x-0 border-t-0 border-b-2 border-solid border-slate-300 dark:border-white/25 focus:border-ink-blue dark:focus:border-neon-pink focus:ring-0 text-ink-dark dark:text-ink-light placeholder:text-slate-400 dark:placeholder:text-slate-500 px-1 py-1 resize-none transition-colors custom-scrollbar w-full disabled:opacity-50"
                 style={{
                   lineHeight: '32px',
                   backgroundImage: 'repeating-linear-gradient(transparent, transparent 31px, rgba(0,0,0,0.05) 31px, rgba(0,0,0,0.05) 32px)'

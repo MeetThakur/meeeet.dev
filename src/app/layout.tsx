@@ -36,14 +36,6 @@ export const metadata: Metadata = {
     description: "Explore my handcrafted notebook portfolio, projects, and skills.",
     url: "https://meetthakur.dev",
     siteName: "Meet Thakur Portfolio",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Meet Thakur Portfolio Preview",
-      },
-    ],
     locale: "en_US",
     type: "website",
   },
@@ -51,7 +43,6 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Meet Thakur | Software Developer",
     description: "Explore my handcrafted notebook portfolio, projects, and skills.",
-    images: ["/og-image.png"],
   },
 };
 
@@ -67,11 +58,15 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="font-sans min-h-screen text-ink-dark dark:text-ink-light selection:bg-highlighter-yellow/30 dark:selection:bg-neon-pink/30">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <a
+            href="#main"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[210] focus:px-4 focus:py-2 focus:rounded-full focus:bg-ink-dark focus:text-white dark:focus:bg-ink-light dark:focus:text-black font-sans font-bold"
+          >
+            Skip to content
+          </a>
           <LoadingScreen />
           {children}
           <BackToTop />

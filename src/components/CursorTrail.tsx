@@ -6,56 +6,42 @@ import { useTheme } from "next-themes";
 export const CursorTrail = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { resolvedTheme } = useTheme();
+  const isDarkRef = useRef(false);
+
+  // Keep the theme in a ref so changing it doesn't tear down the animation loop
+  useEffect(() => {
+    isDarkRef.current = resolvedTheme === "dark";
+  }, [resolvedTheme]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (reducedMotion.matches) return;
+
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
-    // Resize canvas
+    // Size the canvas for the device pixel ratio so the stroke stays crisp
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
     window.addEventListener("resize", resize, { passive: true });
 
     type Point = { x: number; y: number; age: number };
     const points: Point[] = [];
-    let animationFrameId: number;
+    let animationFrameId = 0;
+    let running = false;
     let lastX = -1;
     let lastY = -1;
-    let isIdle = true;
-
-    // Throttle: only push a new point if cursor moved at least 4px
-    const handleMouseMove = (e: MouseEvent) => {
-      const dx = e.clientX - lastX;
-      const dy = e.clientY - lastY;
-      if (dx * dx + dy * dy > 16) {
-        // Cap at 30 points max to prevent unbounded growth
-        if (points.length > 30) points.shift();
-        points.push({ x: e.clientX, y: e.clientY, age: 0 });
-        lastX = e.clientX;
-        lastY = e.clientY;
-        isIdle = false;
-      }
-    };
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
-
-    const isDarkCheck = () =>
-      resolvedTheme === "dark" || document.documentElement.classList.contains("dark");
 
     const render = () => {
-      // Skip rendering when no visible points (idle optimization)
-      if (points.length === 0) {
-        isIdle = true;
-        animationFrameId = requestAnimationFrame(render);
-        return;
-      }
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
       ctx.beginPath();
       for (let i = 0; i < points.length; i++) {
@@ -72,37 +58,57 @@ export const CursorTrail = () => {
       }
 
       if (points.length > 1) {
-        const isDark = isDarkCheck();
-        ctx.strokeStyle = isDark ? "rgba(255, 255, 255, 0.4)" : "rgba(0, 0, 0, 0.4)";
+        ctx.strokeStyle = isDarkRef.current ? "rgba(255, 255, 255, 0.4)" : "rgba(0, 0, 0, 0.4)";
         ctx.lineWidth = 2.5;
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
         ctx.stroke();
       }
 
-      // Faster fade — 15 frames instead of 20
+      // Fade out: drop points older than 15 frames
       let i = points.length;
       while (i--) {
         if (points[i].age > 15) points.splice(i, 1);
       }
 
+      // Stop the loop entirely once the trail has faded; mouse move restarts it
+      if (points.length === 0) {
+        running = false;
+        return;
+      }
       animationFrameId = requestAnimationFrame(render);
     };
 
-    render();
+    // Throttle: only push a new point if cursor moved at least 4px
+    const handleMouseMove = (e: MouseEvent) => {
+      const dx = e.clientX - lastX;
+      const dy = e.clientY - lastY;
+      if (dx * dx + dy * dy > 16) {
+        // Cap at 30 points max to prevent unbounded growth
+        if (points.length > 30) points.shift();
+        points.push({ x: e.clientX, y: e.clientY, age: 0 });
+        lastX = e.clientX;
+        lastY = e.clientY;
+        if (!running) {
+          running = true;
+          animationFrameId = requestAnimationFrame(render);
+        }
+      }
+    };
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
 
     return () => {
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", handleMouseMove);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [resolvedTheme]);
+  }, []);
 
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-[9999] hidden md:block"
-      style={{ willChange: "contents" }}
+      aria-hidden="true"
+      className="fixed inset-0 pointer-events-none z-[130] hidden md:block"
     />
   );
 };

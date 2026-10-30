@@ -36,7 +36,7 @@ export const BackToTop = () => {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: "spring", stiffness: 200, damping: 20 }}
-          className="fixed bottom-0 right-4 md:right-8 z-40"
+          className="fixed bottom-0 right-2 md:right-8 z-40 scale-75 origin-bottom md:scale-100"
         >
           <button
             onClick={scrollToTop}

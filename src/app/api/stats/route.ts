@@ -1,40 +1,24 @@
 import { NextResponse } from "next/server";
+import { DEFAULT_STATS, type Stats } from "../../../data/defaultStats";
 
 export const revalidate = 3600; // Cache the whole API route response for 1 hour
 
+const FETCH_TIMEOUT_MS = 5000;
+
 export async function GET() {
-  const stats = {
-    github: {
-      stars: 52,
-      repos: 24,
-      followers: 15,
-      languages: [
-        { name: "TypeScript", percentage: 40 },
-        { name: "JavaScript", percentage: 30 },
-        { name: "Python", percentage: 20 },
-        { name: "C++", percentage: 10 },
-      ],
-    },
-    chess: {
-      rating: 775,
-      highestTactics: 1413,
-      winRate: 60,
-      totalGames: 372,
-    },
-    duolingo: {
-      streak: 316,
-      xp: 16559,
-      language: "Spanish",
-    },
-  };
+  const stats: Stats = structuredClone(DEFAULT_STATS);
+
+  const githubHeaders: Record<string, string> = { "User-Agent": "Portfolio-API" };
+  if (process.env.GITHUB_TOKEN) {
+    githubHeaders.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+  }
 
   // 1. Fetch GitHub Stats
   try {
     const userRes = await fetch("https://api.github.com/users/MeetThakur", {
       next: { revalidate: 3600 },
-      headers: {
-        "User-Agent": "Portfolio-API",
-      },
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+      headers: githubHeaders,
     });
     if (userRes.ok) {
       const userData = await userRes.json();
@@ -44,18 +28,17 @@ export async function GET() {
 
     const reposRes = await fetch("https://api.github.com/users/MeetThakur/repos?per_page=100", {
       next: { revalidate: 3600 },
-      headers: {
-        "User-Agent": "Portfolio-API",
-      },
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+      headers: githubHeaders,
     });
     if (reposRes.ok) {
       const reposData = await reposRes.json();
-      const totalStars = reposData.reduce((acc: number, repo: any) => acc + (repo.stargazers_count || 0), 0);
+      const totalStars = reposData.reduce((acc: number, repo: { stargazers_count?: number }) => acc + (repo.stargazers_count || 0), 0);
       stats.github.stars = totalStars || stats.github.stars;
 
       const languagesMap: { [key: string]: number } = {};
       let totalReposWithLanguage = 0;
-      reposData.forEach((repo: any) => {
+      reposData.forEach((repo: { language?: string }) => {
         if (repo.language) {
           languagesMap[repo.language] = (languagesMap[repo.language] || 0) + 1;
           totalReposWithLanguage++;
@@ -83,6 +66,7 @@ export async function GET() {
   try {
     const chessRes = await fetch("https://api.chess.com/pub/player/meet-11/stats", {
       next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
     });
     if (chessRes.ok) {
       const data = await chessRes.json();
@@ -107,6 +91,7 @@ export async function GET() {
   try {
     const duoRes = await fetch("https://www.duolingo.com/2017-06-30/users?username=Meet11_", {
       next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
     });
     if (duoRes.ok) {
       const data = await duoRes.json();

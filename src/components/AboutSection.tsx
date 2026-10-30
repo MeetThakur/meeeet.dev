@@ -2,33 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { resumeData } from "../data/resumeData";
+import { DEFAULT_STATS, type Stats } from "../data/defaultStats";
 import { motion } from "framer-motion";
 import { Briefcase, MapPin } from "lucide-react";
 
 export const AboutSection = () => {
-  const [stats, setStats] = useState({
-    github: {
-      stars: 52,
-      repos: 24,
-      followers: 15,
-      languages: [
-        { name: "TypeScript", percentage: 40 },
-        { name: "JavaScript", percentage: 30 },
-        { name: "Python", percentage: 20 },
-        { name: "C++", percentage: 10 },
-      ],
-    },
-    chess: {
-      rating: 775,
-      highestTactics: 1413,
-      winRate: 60,
-      totalGames: 372,
-    },
-    duolingo: {
-      streak: 316,
-      xp: 16559,
-      language: "Spanish",
-    },
+  const [stats, setStats] = useState<Stats & { loading: boolean }>({
+    ...DEFAULT_STATS,
     loading: true,
   });
 
@@ -37,30 +17,11 @@ export const AboutSection = () => {
       try {
         const res = await fetch("/api/stats");
         if (!res.ok) throw new Error("Failed to fetch consolidated stats");
-        const data = await res.json();
+        const data: Partial<Stats> = await res.json();
         setStats({
-          github: {
-            stars: data.github?.stars ?? 52,
-            repos: data.github?.repos ?? 24,
-            followers: data.github?.followers ?? 15,
-            languages: data.github?.languages ?? [
-              { name: "TypeScript", percentage: 40 },
-              { name: "JavaScript", percentage: 30 },
-              { name: "Python", percentage: 20 },
-              { name: "C++", percentage: 10 },
-            ],
-          },
-          chess: {
-            rating: data.chess?.rating ?? 775,
-            highestTactics: data.chess?.highestTactics ?? 1413,
-            winRate: data.chess?.winRate ?? 60,
-            totalGames: data.chess?.totalGames ?? 372,
-          },
-          duolingo: {
-            streak: data.duolingo?.streak ?? 316,
-            xp: data.duolingo?.xp ?? 16559,
-            language: data.duolingo?.language ?? "Spanish",
-          },
+          github: { ...DEFAULT_STATS.github, ...data.github },
+          chess: { ...DEFAULT_STATS.chess, ...data.chess },
+          duolingo: { ...DEFAULT_STATS.duolingo, ...data.duolingo },
           loading: false,
         });
       } catch (err) {
@@ -73,7 +34,7 @@ export const AboutSection = () => {
   }, []);
 
   return (
-    <section id="about" className="py-32 px-4 md:px-20 max-w-6xl mx-auto relative overflow-hidden">
+    <section id="about" className="py-16 md:py-32 px-4 md:px-20 max-w-6xl mx-auto relative overflow-hidden">
       
       <div className="flex flex-col items-center relative z-10">
         
@@ -91,19 +52,19 @@ export const AboutSection = () => {
           
           <div className="relative">
             {/* Hand-drawn quote marker */}
-            <span className="absolute -left-8 -top-4 font-sketch text-6xl text-highlighter-pink/50">"</span>
+            <span className="absolute -left-8 -top-4 font-sketch text-6xl text-highlighter-pink/50">&quot;</span>
             
             <div className="font-sans text-xl md:text-2xl text-slate-700 dark:text-slate-300 leading-relaxed font-light space-y-6">
               <p>
-                I'm Meet, a CS undergrad currently interning at{" "}
+                I&apos;m Meet, a CS undergrad currently interning at{" "}
                 <span className="font-sketch text-2xl text-ink-dark dark:text-ink-light">Eightfold AI</span>{" "}
-                where I'm building a Salesforce backup-and-restore pipeline on Databricks from the ground up.
+                where I&apos;m building a Salesforce backup-and-restore pipeline on Databricks from the ground up.
               </p>
               <p>
                 Outside of work I ship solo projects — a chat analytics tool used by 2,000+ people, a cross-platform competitive programming tracker, and an AI advisory platform for farmers. I care about writing clean, production-ready code.
               </p>
               <p>
-                I'm also a{" "}
+                I&apos;m also a{" "}
                 <span className="font-sketch text-3xl mx-1 text-ink-dark dark:text-ink-light">competitive programmer</span>{" "}
                 — Codeforces Expert, LeetCode Knight (top 4%), 4-star on CodeChef — which keeps my problem-solving sharp.
               </p>
@@ -290,7 +251,7 @@ export const AboutSection = () => {
                     </div>
                     {/* Stars count */}
                     <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/30">
-                      ⭐ {stats.loading ? "..." : `${stats.github.stars} Stars`}
+                      ⭐ {stats.loading ? <span className="inline-block w-8 h-3 rounded bg-slate-300/60 dark:bg-white/10 animate-pulse align-middle" aria-label="Loading" /> : `${stats.github.stars} Stars`}
                     </span>
                   </div>
 
@@ -348,8 +309,8 @@ export const AboutSection = () => {
 
                 <div className="pt-3 border-t border-blue-500/10 flex justify-between items-center text-xs text-slate-500 dark:text-slate-400">
                   <div className="flex gap-4">
-                    <span>Repos: <strong className="text-slate-800 dark:text-slate-200">{stats.loading ? "..." : stats.github.repos}</strong></span>
-                    <span>Followers: <strong className="text-slate-800 dark:text-slate-200">{stats.loading ? "..." : stats.github.followers}</strong></span>
+                    <span>Repos: <strong className="text-slate-800 dark:text-slate-200">{stats.loading ? <span className="inline-block w-8 h-3 rounded bg-slate-300/60 dark:bg-white/10 animate-pulse align-middle" aria-label="Loading" /> : stats.github.repos}</strong></span>
+                    <span>Followers: <strong className="text-slate-800 dark:text-slate-200">{stats.loading ? <span className="inline-block w-8 h-3 rounded bg-slate-300/60 dark:bg-white/10 animate-pulse align-middle" aria-label="Loading" /> : stats.github.followers}</strong></span>
                   </div>
                   <span className="flex items-center gap-0.5 text-blue-600 dark:text-blue-400 font-medium">
                     View Activity <span className="text-[10px]">↗</span>
@@ -409,7 +370,7 @@ export const AboutSection = () => {
                         />
                       </svg>
                       <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                        <span className="text-sm font-bold leading-none text-slate-800 dark:text-slate-100">{stats.loading ? "..." : stats.chess.highestTactics}</span>
+                        <span className="text-sm font-bold leading-none text-slate-800 dark:text-slate-100">{stats.loading ? <span className="inline-block w-8 h-3 rounded bg-slate-300/60 dark:bg-white/10 animate-pulse align-middle" aria-label="Loading" /> : stats.chess.highestTactics}</span>
                         <span className="text-[9px] text-slate-500 dark:text-slate-400">Tactics</span>
                       </div>
                     </div>
@@ -418,15 +379,15 @@ export const AboutSection = () => {
                     <div className="flex-1 space-y-1.5 text-sm">
                       <div className="flex justify-between items-center">
                         <span className="text-slate-600 dark:text-slate-400">Rapid Rating</span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.loading ? "..." : stats.chess.rating}</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.loading ? <span className="inline-block w-8 h-3 rounded bg-slate-300/60 dark:bg-white/10 animate-pulse align-middle" aria-label="Loading" /> : stats.chess.rating}</span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-slate-600 dark:text-slate-400">Win Rate</span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.loading ? "..." : `${stats.chess.winRate}%`}</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.loading ? <span className="inline-block w-8 h-3 rounded bg-slate-300/60 dark:bg-white/10 animate-pulse align-middle" aria-label="Loading" /> : `${stats.chess.winRate}%`}</span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-slate-600 dark:text-slate-400">Games Played</span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.loading ? "..." : stats.chess.totalGames}</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.loading ? <span className="inline-block w-8 h-3 rounded bg-slate-300/60 dark:bg-white/10 animate-pulse align-middle" aria-label="Loading" /> : stats.chess.totalGames}</span>
                       </div>
                     </div>
                   </div>
@@ -492,7 +453,7 @@ export const AboutSection = () => {
                         />
                       </svg>
                       <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                        <span className="text-sm font-bold leading-none text-slate-800 dark:text-slate-100">{stats.loading ? "..." : stats.duolingo.streak}</span>
+                        <span className="text-sm font-bold leading-none text-slate-800 dark:text-slate-100">{stats.loading ? <span className="inline-block w-8 h-3 rounded bg-slate-300/60 dark:bg-white/10 animate-pulse align-middle" aria-label="Loading" /> : stats.duolingo.streak}</span>
                         <span className="text-[9px] text-slate-500 dark:text-slate-400">Streak</span>
                       </div>
                     </div>
@@ -501,11 +462,11 @@ export const AboutSection = () => {
                     <div className="flex-1 space-y-1.5 text-sm">
                       <div className="flex justify-between items-center">
                         <span className="text-slate-600 dark:text-slate-400">Total XP</span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.loading ? "..." : stats.duolingo.xp.toLocaleString()}</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.loading ? <span className="inline-block w-8 h-3 rounded bg-slate-300/60 dark:bg-white/10 animate-pulse align-middle" aria-label="Loading" /> : stats.duolingo.xp.toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-slate-600 dark:text-slate-400">Learning</span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.loading ? "..." : stats.duolingo.language}</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.loading ? <span className="inline-block w-8 h-3 rounded bg-slate-300/60 dark:bg-white/10 animate-pulse align-middle" aria-label="Loading" /> : stats.duolingo.language}</span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-slate-600 dark:text-slate-400">Active Since</span>

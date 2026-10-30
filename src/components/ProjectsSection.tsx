@@ -1,11 +1,41 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import { resumeData } from "../data/resumeData";
 import { motion, AnimatePresence } from "framer-motion";
 
 export const ProjectsSection = () => {
   const [selectedProject, setSelectedProject] = useState<typeof resumeData.projects[0] | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const lastTriggerRef = useRef<HTMLElement | null>(null);
+  // Portal target only exists in the browser; false on the server and during hydration
+  const canPortal = useSyncExternalStore(() => () => {}, () => true, () => false);
+
+  useEffect(() => {
+    if (!selectedProject) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    closeButtonRef.current?.focus();
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedProject(null);
+    };
+    window.addEventListener("keydown", onKeyDown);
+
+    const trigger = lastTriggerRef.current;
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+      trigger?.focus();
+    };
+  }, [selectedProject]);
+
+  const openProject = (project: typeof resumeData.projects[0], trigger: HTMLElement) => {
+    lastTriggerRef.current = trigger;
+    setSelectedProject(project);
+  };
 
   const stickyColors = [
     { 
@@ -36,7 +66,7 @@ export const ProjectsSection = () => {
   ];
 
   return (
-    <section id="projects" className="py-32 px-4 md:px-20 max-w-7xl mx-auto relative overflow-hidden">
+    <section id="projects" className="py-16 md:py-32 px-4 md:px-20 max-w-7xl mx-auto relative overflow-hidden">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -47,11 +77,11 @@ export const ProjectsSection = () => {
         <h2 className="font-serif font-medium italic text-5xl md:text-7xl mb-4 text-ink-dark dark:text-ink-light">
           Projects.
         </h2>
-        <p className="font-sketch text-2xl text-slate-500 dark:text-slate-400">Stuff I've built recently</p>
+        <p className="font-sketch text-2xl text-slate-500 dark:text-slate-400">Stuff I&apos;ve built recently</p>
       </motion.div>
 
       {/* Grid of Colorful Premium Sticky Notes */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-x-12 md:gap-y-16 relative z-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12 md:gap-x-12 md:gap-y-16 relative z-10">
         {resumeData.projects.map((project, i) => {
           const rotations = ["rotate-[-2deg]", "rotate-[1deg]", "rotate-[-1deg]", "rotate-[2deg]"];
           const rotClass = rotations[i % rotations.length];
@@ -64,8 +94,18 @@ export const ProjectsSection = () => {
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.4, delay: i * 0.1, ease: "easeOut" }}
-              onClick={() => setSelectedProject(project)}
-              className={`premium-sticky cursor-pointer ${rotClass} ${colorClass.border} bg-gradient-to-br ${colorClass.bg} hover:scale-[1.02] hover:z-30 hover:shadow-xl transition-all duration-300 z-20 group`}
+              role="button"
+              tabIndex={0}
+              aria-haspopup="dialog"
+              aria-label={`${project.title}: view details`}
+              onClick={(e) => openProject(project, e.currentTarget)}
+              onKeyDown={(e) => {
+                if (e.target === e.currentTarget && (e.key === "Enter" || e.key === " ")) {
+                  e.preventDefault();
+                  openProject(project, e.currentTarget);
+                }
+              }}
+              className={`premium-sticky flex flex-col focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink-blue dark:focus-visible:outline-neon-pink cursor-pointer ${rotClass} ${colorClass.border} bg-gradient-to-br ${colorClass.bg} hover:scale-[1.02] hover:z-30 hover:shadow-xl transition-all duration-300 z-20 group`}
             >
               {/* Washi Tape */}
               <div className={`masking-tape ${colorClass.tape}`}></div>
@@ -75,12 +115,11 @@ export const ProjectsSection = () => {
                 {project.subtitle}
               </div>
               
-              <div className="font-sans text-sm leading-relaxed mb-6 font-medium text-slate-700 dark:text-slate-200 h-24 overflow-hidden relative">
+              <p className="font-sans text-sm leading-relaxed mb-5 font-medium text-slate-700 dark:text-slate-200 line-clamp-4">
                 {project.description}
-                <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/80 dark:from-black/80 to-transparent"></div>
-              </div>
+              </p>
 
-              <div className="flex flex-wrap gap-2 mb-8 pointer-events-none">
+              <div className="flex flex-wrap gap-2 mb-6 pointer-events-none">
                 {project.techStack.map((tech, j) => (
                   <span 
                     key={j} 
@@ -91,7 +130,7 @@ export const ProjectsSection = () => {
                 ))}
               </div>
 
-              <div className="absolute bottom-4 right-6 flex items-center gap-3">
+              <div className="mt-auto flex items-center justify-end gap-3">
                 <a
                   href={project.github}
                   target="_blank"
@@ -111,14 +150,15 @@ export const ProjectsSection = () => {
         })}
       </div>
 
-      {/* Deep Dive Modal */}
+      {/* Deep Dive Modal — portalled so it stacks above the navbar */}
+      {canPortal && createPortal(
       <AnimatePresence>
         {selectedProject && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+            className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
             onClick={() => setSelectedProject(null)}
           >
             <motion.div
@@ -126,18 +166,23 @@ export const ProjectsSection = () => {
               animate={{ scale: 1, y: 0, rotate: 0 }}
               exit={{ scale: 0.9, y: 50, rotate: 2 }}
               transition={{ type: "spring", bounce: 0.3 }}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="project-dialog-title"
               onClick={(e) => e.stopPropagation()}
               className="relative w-full max-w-2xl bg-paper-light dark:bg-paper-dark p-8 md:p-12 shadow-2xl border border-black/10 dark:border-white/10 max-h-[90vh] overflow-y-auto custom-scrollbar"
             >
               {/* Close Button */}
               <button 
+                ref={closeButtonRef}
+                aria-label="Close project details"
                 onClick={() => setSelectedProject(null)}
                 className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors text-ink-dark dark:text-ink-light font-sketch text-2xl"
               >
                 ✕
               </button>
 
-              <h3 className="font-serif font-black italic text-3xl md:text-5xl mb-2 text-ink-dark dark:text-ink-light">
+              <h3 id="project-dialog-title" className="font-serif font-black italic text-3xl md:text-5xl mb-2 text-ink-dark dark:text-ink-light">
                 {selectedProject.title}
               </h3>
               <p className="font-sketch text-xl text-slate-500 mb-6 border-b border-black/10 dark:border-white/10 pb-4">
@@ -177,7 +222,9 @@ export const ProjectsSection = () => {
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>,
+      document.body
+      )}
     </section>
   );
 };

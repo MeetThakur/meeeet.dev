@@ -7,10 +7,17 @@ export const LoadingScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Hide loading screen after 2.5 seconds to allow animations to play
+    // Play the full intro once per session; skip it almost instantly on later loads
+    let seen = false;
+    try {
+      seen = sessionStorage.getItem("intro-seen") === "1";
+      sessionStorage.setItem("intro-seen", "1");
+    } catch {
+      // Storage can be unavailable (private mode); fall back to showing the intro
+    }
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2500);
+    }, seen ? 0 : 2200);
 
     return () => clearTimeout(timer);
   }, []);
@@ -22,7 +29,7 @@ export const LoadingScreen = () => {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, y: -50 }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-desk-light dark:bg-desk-dark"
+          className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-desk-light dark:bg-desk-dark"
         >
           {/* Animated SVG Signature/Logo */}
           <div className="relative flex items-center justify-center w-32 h-32 rounded-full bg-ink-blue/10 dark:bg-neon-pink/10 border border-ink-blue/30 dark:border-neon-pink/30 shadow-sm overflow-hidden mb-8">

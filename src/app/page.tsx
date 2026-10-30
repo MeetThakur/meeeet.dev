@@ -74,7 +74,7 @@ export default function Home() {
         {/* Custom Marker Cursor — GPU-accelerated, no React re-renders */}
         <div 
           ref={cursorRef}
-          className="hidden md:block fixed pointer-events-none z-[100] will-change-transform"
+          className="hidden md:block fixed pointer-events-none z-[120] will-change-transform"
           style={{ 
             left: '-100px', 
             top: '-100px',
@@ -90,7 +90,7 @@ export default function Home() {
 
         <Navbar />
         
-        <main className="pl-4 pr-4 md:pl-20 md:pr-12 pt-16 flex flex-col gap-12 sm:gap-24 relative z-10 pb-20">
+        <main id="main" tabIndex={-1} className="focus:outline-none pl-4 pr-4 md:pl-20 md:pr-12 pt-16 flex flex-col gap-12 sm:gap-24 relative z-10 pb-20">
           <HeroSection />
           
           <div className="w-full flex justify-center py-8">

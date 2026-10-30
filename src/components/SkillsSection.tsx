@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 export const SkillsSection = () => {
   return (
-    <section id="skills" className="py-32 px-4 md:px-20 max-w-4xl mx-auto overflow-hidden">
+    <section id="skills" className="py-16 md:py-32 px-4 md:px-20 max-w-4xl mx-auto overflow-hidden">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
