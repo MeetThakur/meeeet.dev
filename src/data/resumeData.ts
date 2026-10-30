@@ -6,7 +6,9 @@ export const resumeData = {
   email: "meet11india@gmail.com",
   linkedin: "https://linkedin.com/in/MeetThakur",
   github: "https://github.com/MeetThakur",
-  leetcode: "https://leetcode.com/u/MeetThakur",
+  leetcode: "https://leetcode.com/u/Meet11_",
+  // Must match the handle in the profile URL above; used by /api/stats to sync live numbers
+  leetcodeUsername: "Meet11_",
   chesscom: "https://www.chess.com/member/Meet-11",
   duolingo: "https://www.duolingo.com/profile/Meet11_",
   summary:

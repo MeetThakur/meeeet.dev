@@ -11,6 +11,15 @@ export const DEFAULT_STATS = {
       { name: "C++", percentage: 10 },
     ],
   },
+  leetcode: {
+    solved: 883,
+    easy: 320,
+    medium: 487,
+    hard: 76,
+    totalQuestions: 3800,
+    rating: 1902,
+    badge: "Knight",
+  },
   chess: {
     rating: 775,
     highestTactics: 1413,

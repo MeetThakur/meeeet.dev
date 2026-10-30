@@ -26,8 +26,9 @@ export const CursorTrail = () => {
     // Size the canvas for the device pixel ratio so the stroke stays crisp
     const resize = () => {
       const dpr = window.devicePixelRatio || 1;
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = window.innerHeight * dpr;
+      // Use the element's own CSS size (excludes the scrollbar) so buffer and display match 1:1
+      canvas.width = canvas.clientWidth * dpr;
+      canvas.height = canvas.clientHeight * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
@@ -41,7 +42,7 @@ export const CursorTrail = () => {
     let lastY = -1;
 
     const render = () => {
-      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
 
       ctx.beginPath();
       for (let i = 0; i < points.length; i++) {
@@ -108,7 +109,7 @@ export const CursorTrail = () => {
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      className="fixed inset-0 pointer-events-none z-[130] hidden md:block"
+      className="fixed inset-0 w-full h-full pointer-events-none z-[130] hidden md:block"
     />
   );
 };

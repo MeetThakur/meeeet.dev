@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { DEFAULT_STATS, type Stats } from "../../../data/defaultStats";
+import { resumeData } from "../../../data/resumeData";
 
 export const revalidate = 3600; // Cache the whole API route response for 1 hour
 
@@ -62,7 +63,55 @@ export async function GET() {
     console.error("Error fetching GitHub stats in API route:", err);
   }
 
-  // 2. Fetch Chess.com Stats
+  // 2. Fetch LeetCode Stats (public GraphQL endpoint)
+  try {
+    const lcRes = await fetch("https://leetcode.com/graphql", {
+      method: "POST",
+      next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+      headers: {
+        "Content-Type": "application/json",
+        Referer: "https://leetcode.com",
+        "User-Agent": "Portfolio-API",
+      },
+      body: JSON.stringify({
+        query: `query stats($u: String!) {
+          allQuestionsCount { difficulty count }
+          matchedUser(username: $u) { submitStatsGlobal { acSubmissionNum { difficulty count } } }
+          userContestRanking(username: $u) { rating badge { name } }
+        }`,
+        variables: { u: resumeData.leetcodeUsername },
+      }),
+    });
+    if (lcRes.ok) {
+      const { data } = await lcRes.json();
+      const solved: { difficulty: string; count: number }[] =
+        data?.matchedUser?.submitStatsGlobal?.acSubmissionNum ?? [];
+      const countFor = (d: string) => solved.find((x) => x.difficulty === d)?.count;
+      const all = countFor("All");
+      // Skip when the user isn't found so the fallback numbers stay in place
+      if (all !== undefined) {
+        const total = data.allQuestionsCount?.find((x: { difficulty: string }) => x.difficulty === "All")?.count;
+        stats.leetcode = {
+          solved: all,
+          easy: countFor("Easy") ?? 0,
+          medium: countFor("Medium") ?? 0,
+          hard: countFor("Hard") ?? 0,
+          totalQuestions: total || stats.leetcode.totalQuestions,
+          rating: data.userContestRanking?.rating
+            ? Math.round(data.userContestRanking.rating)
+            : stats.leetcode.rating,
+          badge: data.userContestRanking?.badge?.name || stats.leetcode.badge,
+        };
+      } else {
+        console.warn(`LeetCode user "${resumeData.leetcodeUsername}" not found; using fallback stats`);
+      }
+    }
+  } catch (err) {
+    console.error("Error fetching LeetCode stats in API route:", err);
+  }
+
+  // 3. Fetch Chess.com Stats
   try {
     const chessRes = await fetch("https://api.chess.com/pub/player/meet-11/stats", {
       next: { revalidate: 3600 },
@@ -87,7 +136,7 @@ export async function GET() {
     console.error("Error fetching Chess.com stats in API route:", err);
   }
 
-  // 3. Fetch Duolingo Stats
+  // 4. Fetch Duolingo Stats
   try {
     const duoRes = await fetch("https://www.duolingo.com/2017-06-30/users?username=Meet11_", {
       next: { revalidate: 3600 },

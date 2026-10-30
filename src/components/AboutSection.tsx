@@ -20,6 +20,7 @@ export const AboutSection = () => {
         const data: Partial<Stats> = await res.json();
         setStats({
           github: { ...DEFAULT_STATS.github, ...data.github },
+          leetcode: { ...DEFAULT_STATS.leetcode, ...data.leetcode },
           chess: { ...DEFAULT_STATS.chess, ...data.chess },
           duolingo: { ...DEFAULT_STATS.duolingo, ...data.duolingo },
           loading: false,
@@ -162,7 +163,7 @@ export const AboutSection = () => {
                     </div>
                     {/* Knight Badge */}
                     <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30">
-                      ⚔️ Knight
+                      ⚔️ {stats.leetcode.badge}
                     </span>
                   </div>
 
@@ -180,19 +181,18 @@ export const AboutSection = () => {
                         <motion.path
                           className="text-amber-500"
                           strokeWidth="3.5"
-                          strokeDasharray="68, 100"
                           strokeLinecap="round"
                           stroke="currentColor"
                           fill="none"
                           initial={{ pathLength: 0 }}
-                          whileInView={{ pathLength: 1 }}
+                          whileInView={{ pathLength: Math.min(1, stats.leetcode.solved / stats.leetcode.totalQuestions) }}
                           viewport={{ once: true }}
                           transition={{ duration: 1, ease: "easeOut" }}
                           d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                         />
                       </svg>
                       <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                        <span className="text-lg font-bold leading-none text-slate-800 dark:text-slate-100">812</span>
+                        <span className="text-lg font-bold leading-none text-slate-800 dark:text-slate-100">{stats.leetcode.solved}</span>
                         <span className="text-[9px] text-slate-500 dark:text-slate-400">Solved</span>
                       </div>
                     </div>
@@ -203,26 +203,26 @@ export const AboutSection = () => {
                         <span className="text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
                           <span className="w-2 h-2 rounded-full bg-emerald-500" /> Easy
                         </span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">245</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.leetcode.easy}</span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
                           <span className="w-2 h-2 rounded-full bg-amber-500" /> Medium
                         </span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">470</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.leetcode.medium}</span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
                           <span className="w-2 h-2 rounded-full bg-rose-500" /> Hard
                         </span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">97</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.leetcode.hard}</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 <div className="mt-4 pt-3 border-t border-amber-500/10 flex justify-between items-center text-xs text-slate-500 dark:text-slate-400">
-                  <span>Rating: <strong className="text-slate-800 dark:text-slate-200">1920+</strong></span>
+                  <span>Contest rating: <strong className="text-slate-800 dark:text-slate-200">{stats.leetcode.rating}</strong></span>
                   <span className="flex items-center gap-0.5 text-amber-600 dark:text-amber-400 font-medium">
                     Solve Problems <span className="text-[10px]">↗</span>
                   </span>
