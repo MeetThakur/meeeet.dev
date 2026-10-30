@@ -2,7 +2,9 @@ import { NextResponse } from "next/server";
 import { DEFAULT_STATS, type Stats } from "../../../data/defaultStats";
 import { resumeData } from "../../../data/resumeData";
 
-export const revalidate = 3600; // Cache the whole API route response for 1 hour
+// Compute at request time so a build never bakes in fallback numbers; the upstream
+// fetches below are cached for 1 hour, and the CDN header caches the response too.
+export const dynamic = "force-dynamic";
 
 const FETCH_TIMEOUT_MS = 5000;
 
@@ -161,5 +163,7 @@ export async function GET() {
     console.error("Error fetching Duolingo stats in API route:", err);
   }
 
-  return NextResponse.json(stats);
+  return NextResponse.json(stats, {
+    headers: { "Cache-Control": "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400" },
+  });
 }
