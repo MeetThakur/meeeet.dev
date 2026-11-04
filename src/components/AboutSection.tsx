@@ -1,10 +1,71 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { motion } from "framer-motion";
+import { ArrowUpRight, Flame, Trophy } from "lucide-react";
 import { resumeData } from "../data/resumeData";
 import { DEFAULT_STATS, type Stats } from "../data/defaultStats";
-import { motion } from "framer-motion";
-import { Briefcase, MapPin } from "lucide-react";
+import { BrandIcon, type Brand } from "./Icons";
+import { CountUp, Reveal, ScrollText, SectionLabel, SplitReveal, ease, useSpotlight } from "./ui/motion";
+
+// Words prefixed with * render in the accent serif
+const statement =
+  "I'm a CS undergrad who likes turning messy problems into *calm, *reliable software. At Eightfold AI I build LLM-powered systems — ticket routing across 42 engineering teams, a secure Slack HR assistant — and the data pipelines underneath them. Off the clock I ship my own products, and I train on *algorithms because sharp problem solving makes everything else easier.";
+
+const langColors = ["bg-accent", "bg-fg", "bg-muted", "bg-line-strong", "bg-fg-soft"];
+
+const StatCard = ({
+  href,
+  icon,
+  label,
+  badge,
+  className,
+  delay = 0,
+  children,
+}: {
+  href?: string;
+  icon: Brand | "trophy";
+  label: string;
+  badge?: ReactNode;
+  className?: string;
+  delay?: number;
+  children: ReactNode;
+}) => {
+  const onMove = useSpotlight();
+  return (
+    <motion.a
+      {...(href ? { href, target: "_blank", rel: "noreferrer" } : {})}
+      onMouseMove={onMove}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.8, delay, ease }}
+      className={`spotlight group rounded-3xl p-6 md:p-7 flex flex-col ${className ?? ""}`}
+    >
+      <div className="flex items-center justify-between gap-3 mb-6">
+        <span className="flex items-center gap-2.5 text-sm font-medium text-fg-soft">
+          {icon === "trophy" ? <Trophy className="w-[18px] h-[18px]" /> : <BrandIcon name={icon} className="w-[18px] h-[18px]" />}
+          {label}
+        </span>
+        <span className="flex items-center gap-2">
+          {badge}
+          {href && <span className="w-7 h-7 rounded-full border border-line flex items-center justify-center text-muted group-hover:text-accent group-hover:border-accent group-hover:rotate-45 transition-all duration-500">
+            <ArrowUpRight className="w-3.5 h-3.5" />
+          </span>}
+        </span>
+      </div>
+      {children}
+    </motion.a>
+  );
+};
+
+const Badge = ({ children }: { children: ReactNode }) => (
+  <span className="px-2.5 py-1 rounded-full text-[11px] font-mono uppercase tracking-wider bg-accent-soft text-accent">
+    {children}
+  </span>
+);
+
+const Skeleton = () => <span className="inline-block w-10 h-[0.8em] rounded bg-line-strong animate-pulse align-middle" aria-label="Loading" />;
 
 export const AboutSection = () => {
   const [stats, setStats] = useState<Stats & { loading: boolean }>({
@@ -27,470 +88,206 @@ export const AboutSection = () => {
         });
       } catch (err) {
         console.error("Error fetching consolidated stats:", err);
-        setStats(prev => ({ ...prev, loading: false }));
+        setStats((prev) => ({ ...prev, loading: false }));
       }
     };
 
     fetchStats();
   }, []);
 
+  const lc = stats.leetcode;
+  const difficulty = [
+    { name: "Easy", value: lc.easy, color: "bg-emerald-500" },
+    { name: "Medium", value: lc.medium, color: "bg-amber-500" },
+    { name: "Hard", value: lc.hard, color: "bg-rose-500" },
+  ];
+  const maxDifficulty = Math.max(...difficulty.map((d) => d.value), 1);
+
   return (
-    <section id="about" className="py-16 md:py-32 px-4 md:px-20 max-w-6xl mx-auto relative overflow-hidden">
-      
-      <div className="flex flex-col items-center relative z-10">
-        
-        {/* Bio Text & Cards */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="w-full max-w-3xl relative"
+    <section id="about" className="relative py-28 md:py-40 px-5 md:px-10 max-w-7xl mx-auto">
+      <SectionLabel index="01">About</SectionLabel>
+
+      <div className="mt-10 grid lg:grid-cols-[1fr_2fr] gap-10 lg:gap-20">
+        <h2 className="text-4xl md:text-5xl font-semibold tracking-tight leading-[1.05]">
+          <SplitReveal text="A little" />
+          <br />
+          <SplitReveal text="about me" delay={0.12} className="font-serif italic font-normal" />
+        </h2>
+        <ScrollText
+          text={statement}
+          className="text-2xl md:text-[2.1rem] leading-[1.3] tracking-tight font-medium"
+        />
+      </div>
+
+      {/* Live stats bento */}
+      <div className="mt-24 md:mt-32 flex items-end justify-between gap-6 mb-8">
+        <Reveal>
+          <h3 className="text-2xl md:text-3xl font-semibold tracking-tight">
+            By the <span className="font-serif italic font-normal">numbers</span>
+          </h3>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-muted">
+            <span className={`w-1.5 h-1.5 rounded-full ${stats.loading ? "bg-amber-500 animate-pulse" : "bg-emerald-500"}`} />
+            {stats.loading ? "Syncing" : "Live"}
+          </span>
+        </Reveal>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+        {/* LeetCode — the hero tile */}
+        <StatCard
+          href={resumeData.leetcode}
+          icon="leetcode"
+          label="LeetCode"
+          badge={<Badge>{lc.badge}</Badge>}
+          className="md:col-span-3 md:row-span-2 justify-between"
         >
-          <h2 className="font-serif font-medium italic text-5xl md:text-7xl mb-8 tracking-tight text-ink-dark dark:text-ink-light">
-            About Me.
-          </h2>
-          
-          <div className="relative">
-            {/* Hand-drawn quote marker */}
-            <span className="absolute -left-8 -top-4 font-sketch text-6xl text-highlighter-pink/50">&quot;</span>
-            
-            <div className="font-sans text-xl md:text-2xl text-slate-700 dark:text-slate-300 leading-relaxed font-light space-y-6">
-              <p>
-                I&apos;m Meet, a CS undergrad currently interning at{" "}
-                <span className="font-sketch text-2xl text-ink-dark dark:text-ink-light">Eightfold AI</span>{" "}
-                where I&apos;m building a Salesforce backup-and-restore pipeline on Databricks from the ground up.
-              </p>
-              <p>
-                Outside of work I ship solo projects — a chat analytics tool used by 2,000+ people, a cross-platform competitive programming tracker, and an AI advisory platform for farmers. I care about writing clean, production-ready code.
-              </p>
-              <p>
-                I&apos;m also a{" "}
-                <span className="font-sketch text-3xl mx-1 text-ink-dark dark:text-ink-light">competitive programmer</span>{" "}
-                — Codeforces Expert, LeetCode Knight (top 4%), 4-star on CodeChef — which keeps my problem-solving sharp.
-              </p>
+          <div>
+            <div className="flex items-baseline gap-3">
+              <span className="text-7xl md:text-8xl font-semibold tracking-tighter tabular-nums">
+                <CountUp value={lc.solved} />
+              </span>
+              <span className="text-muted">problems solved</span>
+            </div>
+            <div className="mt-2 text-muted text-sm">
+              Contest rating <span className="text-fg font-medium tabular-nums"><CountUp value={lc.rating} /></span>
             </div>
           </div>
 
-          {/* Experience Timeline */}
-          <div className="mt-16">
-            <h3 className="font-serif italic text-3xl md:text-4xl text-ink-dark dark:text-ink-light mb-8">
-              Experience.
-            </h3>
-            <div className="relative space-y-6">
-              {/* Vertical line */}
-              <div className="absolute left-5 top-3 bottom-3 w-px bg-black/10 dark:bg-white/10" />
+          <div className="mt-10 space-y-4">
+            {difficulty.map((d, i) => (
+              <div key={d.name}>
+                <div className="flex justify-between text-sm mb-1.5">
+                  <span className="text-fg-soft">{d.name}</span>
+                  <span className="tabular-nums font-medium"><CountUp value={d.value} /></span>
+                </div>
+                <div className="h-1.5 rounded-full bg-line overflow-hidden">
+                  <motion.div
+                    className={`h-full rounded-full ${d.color}`}
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${(d.value / maxDifficulty) * 100}%` }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1.2, delay: 0.2 + i * 0.12, ease }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </StatCard>
 
-              {resumeData.experience.map((exp, i) => (
+        {/* GitHub */}
+        <StatCard
+          href={resumeData.github}
+          icon="github"
+          label="GitHub"
+          delay={0.08}
+          className="md:col-span-3"
+        >
+          <div className="grid grid-cols-3 gap-4">
+            {[
+              { label: "Stars", value: stats.github.stars },
+              { label: "Repos", value: stats.github.repos },
+              { label: "Followers", value: stats.github.followers },
+            ].map((s) => (
+              <div key={s.label}>
+                <div className="text-3xl md:text-4xl font-semibold tracking-tight tabular-nums">
+                  {stats.loading ? <Skeleton /> : <CountUp value={s.value} />}
+                </div>
+                <div className="text-xs text-muted mt-1">{s.label}</div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6">
+            <div className="h-1.5 w-full rounded-full flex overflow-hidden bg-line gap-0.5">
+              {stats.github.languages.map((lang, idx) => (
                 <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.4, delay: i * 0.1, ease: "easeOut" }}
-                  className="flex gap-6 relative"
-                >
-                  {/* Timeline dot */}
-                  <div className={`relative z-10 flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-sm border-2 ${
-                    exp.isCurrent
-                      ? "bg-ink-blue/10 dark:bg-neon-pink/10 border-ink-blue/40 dark:border-neon-pink/40"
-                      : "bg-white dark:bg-[#161618] border-black/15 dark:border-white/15"
-                  }`}>
-                    <Briefcase className={`w-4 h-4 ${exp.isCurrent ? "text-ink-blue dark:text-neon-pink" : "text-slate-400"}`} />
-                  </div>
-
-                  {/* Card */}
-                  <div className="flex-1 pb-2">
-                    <div className="flex flex-wrap items-center gap-2 mb-1">
-                      <span className="font-sans font-bold text-lg text-ink-dark dark:text-ink-light">
-                        {exp.role}
-                      </span>
-                      {exp.isCurrent && (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-ink-blue/10 dark:bg-neon-pink/10 text-ink-blue dark:text-neon-pink border border-ink-blue/20 dark:border-neon-pink/20">
-                          <span className="w-1.5 h-1.5 rounded-full bg-ink-blue dark:bg-neon-pink animate-pulse" />
-                          Current
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-3 text-sm text-slate-500 dark:text-slate-400">
-                      <span className="font-sketch text-base text-slate-700 dark:text-slate-300">{exp.company}</span>
-                      <span>·</span>
-                      <span>{exp.duration}</span>
-                      {exp.location && (
-                        <>
-                          <span>·</span>
-                          <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{exp.location}</span>
-                        </>
-                      )}
-                    </div>
-                    <p className="font-sans text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-                      {exp.description}
-                    </p>
-                    {exp.techStack && (
-                      <div className="flex flex-wrap gap-1.5 mt-3">
-                        {exp.techStack.map((tech, j) => (
-                          <span key={j} className="text-xs font-medium px-2 py-0.5 bg-black/5 dark:bg-white/5 rounded-md text-slate-600 dark:text-slate-300 border border-black/5 dark:border-white/5">
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </motion.div>
+                  key={lang.name}
+                  className={langColors[idx % langColors.length]}
+                  initial={{ width: 0 }}
+                  whileInView={{ width: `${lang.percentage}%` }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1, delay: idx * 0.12, ease }}
+                  title={`${lang.name}: ${lang.percentage}%`}
+                />
+              ))}
+            </div>
+            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted">
+              {stats.github.languages.map((lang, idx) => (
+                <span key={lang.name} className="flex items-center gap-1.5">
+                  <span className={`w-1.5 h-1.5 rounded-full ${langColors[idx % langColors.length]}`} />
+                  {lang.name} <span className="tabular-nums">{lang.percentage}%</span>
+                </span>
               ))}
             </div>
           </div>
+        </StatCard>
 
-          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-8 w-full">
-            {/* Custom LeetCode Card */}
-            <motion.div
-              whileHover={{ scale: 1.03, rotate: 1 }}
-              transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              className="relative p-6 bg-amber-50/80 dark:bg-amber-950/10 border-2 border-amber-500/20 rounded-2xl shadow-md backdrop-blur-xs flex flex-col justify-between min-h-[220px]"
-            >
-              {/* Card Tape Detail */}
-              <div className="absolute -top-3 left-1/4 -translate-x-1/2 w-16 h-6 bg-highlighter-yellow/30 dark:bg-yellow-500/10 rotate-[-4deg] clip-path-polygon(0% 10%, 100% 0%, 95% 90%, 5% 100%) pointer-events-none" style={{ clipPath: "polygon(0% 15%, 100% 0%, 95% 85%, 3% 100%)" }} />
+        {/* Competitive programming ranks */}
+        <StatCard
+          icon="trophy"
+          label="Competitive programming"
+          delay={0.12}
+          className="md:col-span-3"
+        >
+          <ul className="grid grid-cols-3 gap-4">
+            {[
+              { title: "Expert", sub: "Codeforces" },
+              { title: "Knight", sub: "LeetCode · top 4%" },
+              { title: "4★", sub: "CodeChef" },
+            ].map((r) => (
+              <li key={r.sub}>
+                <div className="text-2xl md:text-3xl font-serif italic">{r.title}</div>
+                <div className="text-xs text-muted mt-1">{r.sub}</div>
+              </li>
+            ))}
+          </ul>
+        </StatCard>
 
-              <a href={resumeData.leetcode} target="_blank" rel="noreferrer" className="flex flex-col h-full justify-between">
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      {/* LeetCode Icon Logo */}
-                      <svg className="w-6 h-6 text-amber-500 fill-current" viewBox="0 0 24 24">
-                        <path d="M13.483 0a1.374 1.374 0 0 0-.961.414l-9.75 9.75a1.375 1.375 0 0 0 0 1.943l1.156 1.157a1.375 1.375 0 0 0 1.943 0L14.75 4.382a1.375 1.375 0 0 0 0-1.943L13.628.562A1.36 1.36 0 0 0 12.83 0zm4.188 5.625a1.37 1.37 0 0 0-.973.402L8.532 14.195a1.375 1.375 0 0 0 0 1.943l1.156 1.156a1.375 1.375 0 0 0 1.943 0l8.167-8.168a1.375 1.375 0 0 0 0-1.943l-1.156-1.156a1.375 1.375 0 0 0-.973-.402zm-6.188 6a1.37 1.37 0 0 0-.973.402L2.35 20.195a1.375 1.375 0 0 0 0 1.943l1.156 1.156a1.375 1.375 0 0 0 1.943 0l8.167-8.168a1.375 1.375 0 0 0 0-1.943l-1.156-1.156a1.375 1.375 0 0 0-.973-.402z" />
-                      </svg>
-                      <span className="font-sketch text-2xl text-slate-800 dark:text-slate-200">LeetCode Profile</span>
-                    </div>
-                    {/* Knight Badge */}
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30">
-                      ⚔️ {stats.leetcode.badge}
-                    </span>
-                  </div>
-
-                  <div className="flex gap-4 items-center">
-                    {/* SVG Circular Progress */}
-                    <div className="relative w-20 h-20 flex-shrink-0">
-                      <svg className="w-full h-full transform -rotate-95" viewBox="0 0 36 36">
-                        <path
-                          className="text-slate-200 dark:text-slate-800"
-                          strokeWidth="3.5"
-                          stroke="currentColor"
-                          fill="none"
-                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                        />
-                        <motion.path
-                          className="text-amber-500"
-                          strokeWidth="3.5"
-                          strokeLinecap="round"
-                          stroke="currentColor"
-                          fill="none"
-                          initial={{ pathLength: 0 }}
-                          whileInView={{ pathLength: Math.min(1, stats.leetcode.solved / stats.leetcode.totalQuestions) }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 1, ease: "easeOut" }}
-                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                        />
-                      </svg>
-                      <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                        <span className="text-lg font-bold leading-none text-slate-800 dark:text-slate-100">{stats.leetcode.solved}</span>
-                        <span className="text-[9px] text-slate-500 dark:text-slate-400">Solved</span>
-                      </div>
-                    </div>
-
-                    {/* Breakdown */}
-                    <div className="flex-1 space-y-1.5 text-sm">
-                      <div className="flex justify-between items-center">
-                        <span className="text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full bg-emerald-500" /> Easy
-                        </span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.leetcode.easy}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full bg-amber-500" /> Medium
-                        </span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.leetcode.medium}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full bg-rose-500" /> Hard
-                        </span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.leetcode.hard}</span>
-                      </div>
-                    </div>
-                  </div>
+        {/* Chess */}
+        <StatCard href={resumeData.chesscom} icon="chess" label="Chess.com" delay={0.05} className="md:col-span-3">
+          <div className="grid grid-cols-3 gap-4">
+            {[
+              { label: "Rapid", value: stats.chess.rating },
+              { label: "Peak tactics", value: stats.chess.highestTactics },
+              { label: "Games", value: stats.chess.totalGames },
+            ].map((s) => (
+              <div key={s.label}>
+                <div className="text-3xl md:text-4xl font-semibold tracking-tight tabular-nums">
+                  {stats.loading ? <Skeleton /> : <CountUp value={s.value} />}
                 </div>
-
-                <div className="mt-4 pt-3 border-t border-amber-500/10 flex justify-between items-center text-xs text-slate-500 dark:text-slate-400">
-                  <span>Contest rating: <strong className="text-slate-800 dark:text-slate-200">{stats.leetcode.rating}</strong></span>
-                  <span className="flex items-center gap-0.5 text-amber-600 dark:text-amber-400 font-medium">
-                    Solve Problems <span className="text-[10px]">↗</span>
-                  </span>
-                </div>
-              </a>
-            </motion.div>
-
-            {/* Custom GitHub Card */}
-            <motion.div
-              whileHover={{ scale: 1.03, rotate: -1 }}
-              transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              className="relative p-6 bg-blue-50/80 dark:bg-blue-950/10 border-2 border-blue-500/20 rounded-2xl shadow-md backdrop-blur-xs flex flex-col justify-between min-h-[220px]"
-            >
-              {/* Card Tape Detail */}
-              <div className="absolute -top-3 left-3/4 -translate-x-1/2 w-16 h-6 bg-highlighter-blue/30 dark:bg-blue-500/10 rotate-[3deg] clip-path-polygon(0% 10%, 100% 0%, 95% 90%, 5% 100%) pointer-events-none" style={{ clipPath: "polygon(0% 15%, 100% 0%, 95% 85%, 3% 100%)" }} />
-
-              <a href={resumeData.github} target="_blank" rel="noreferrer" className="flex flex-col h-full justify-between">
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      {/* GitHub Icon Logo */}
-                      <svg className="w-6 h-6 text-blue-500 fill-current" viewBox="0 0 24 24">
-                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                      </svg>
-                      <span className="font-sketch text-2xl text-slate-800 dark:text-slate-200">GitHub Activity</span>
-                    </div>
-                    {/* Stars count */}
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/30">
-                      ⭐ {stats.loading ? <span className="inline-block w-8 h-3 rounded bg-slate-300/60 dark:bg-white/10 animate-pulse align-middle" aria-label="Loading" /> : `${stats.github.stars} Stars`}
-                    </span>
-                  </div>
-
-                  {/* Top Languages Segmented Bar & Grid */}
-                  <div className="mb-4">
-                    <p className="text-[10px] text-slate-400 dark:text-slate-500 mb-1.5 uppercase tracking-wider font-semibold">Top Languages</p>
-                    
-                    {/* Segmented Horizontal Bar — animated on scroll */}
-                    <div className="h-2 w-full rounded-full flex overflow-hidden bg-slate-100 dark:bg-slate-800 mb-3">
-                      {stats.github.languages.map((lang, idx) => {
-                        const colors = [
-                          "bg-blue-500",      // TS
-                          "bg-yellow-500",    // JS
-                          "bg-sky-400",       // Python
-                          "bg-rose-500",      // C++
-                          "bg-emerald-500",   // Fallback
-                        ];
-                        const colorClass = colors[idx % colors.length];
-                        return (
-                          <motion.div 
-                            key={lang.name} 
-                            className={colorClass}
-                            initial={{ width: 0 }}
-                            whileInView={{ width: `${lang.percentage}%` }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8, delay: idx * 0.15, ease: "easeOut" }}
-                            title={`${lang.name}: ${lang.percentage}%`}
-                          />
-                        );
-                      })}
-                    </div>
-
-                    {/* Grid list of languages with color dots */}
-                    <div className="grid grid-cols-2 gap-2 text-xs">
-                      {stats.github.languages.map((lang, idx) => {
-                        const colors = [
-                          "bg-blue-500",
-                          "bg-yellow-500",
-                          "bg-sky-400",
-                          "bg-rose-500",
-                          "bg-emerald-500",
-                        ];
-                        const dotColorClass = colors[idx % colors.length];
-                        return (
-                          <div key={lang.name} className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400">
-                            <span className={`w-2 h-2 rounded-full ${dotColorClass}`} />
-                            <span className="font-medium text-slate-700 dark:text-slate-300">{lang.name}</span>
-                            <span className="text-[10px] text-slate-400">({lang.percentage}%)</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-3 border-t border-blue-500/10 flex justify-between items-center text-xs text-slate-500 dark:text-slate-400">
-                  <div className="flex gap-4">
-                    <span>Repos: <strong className="text-slate-800 dark:text-slate-200">{stats.loading ? <span className="inline-block w-8 h-3 rounded bg-slate-300/60 dark:bg-white/10 animate-pulse align-middle" aria-label="Loading" /> : stats.github.repos}</strong></span>
-                    <span>Followers: <strong className="text-slate-800 dark:text-slate-200">{stats.loading ? <span className="inline-block w-8 h-3 rounded bg-slate-300/60 dark:bg-white/10 animate-pulse align-middle" aria-label="Loading" /> : stats.github.followers}</strong></span>
-                  </div>
-                  <span className="flex items-center gap-0.5 text-blue-600 dark:text-blue-400 font-medium">
-                    View Activity <span className="text-[10px]">↗</span>
-                  </span>
-                </div>
-              </a>
-            </motion.div>
-
-            {/* Custom Chess.com Card */}
-            <motion.div
-              whileHover={{ scale: 1.03, rotate: 1 }}
-              transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              className="relative p-6 bg-emerald-50/80 dark:bg-emerald-950/10 border-2 border-emerald-500/20 rounded-2xl shadow-md backdrop-blur-xs flex flex-col justify-between min-h-[220px]"
-            >
-              {/* Card Tape Detail */}
-              <div className="absolute -top-3 left-1/4 -translate-x-1/2 w-16 h-6 bg-highlighter-green/30 dark:bg-emerald-500/10 rotate-[-2deg] clip-path-polygon(0% 10%, 100% 0%, 95% 90%, 5% 100%) pointer-events-none" style={{ clipPath: "polygon(0% 15%, 100% 0%, 95% 85%, 3% 100%)" }} />
-
-              <a href={resumeData.chesscom} target="_blank" rel="noreferrer" className="flex flex-col h-full justify-between">
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      {/* Chess.com Icon Logo */}
-                      <svg className="w-6 h-6 text-emerald-500 fill-current" viewBox="0 0 24 24">
-                        <path d="M12 2C10.34 2 9 3.34 9 5c0 1.25.77 2.32 1.85 2.78C10.31 8.8 10 9.87 10 11c0 1.76 1.15 3.26 2.75 3.82C11.53 15.65 10 17.65 10 20v2h4v-2c0-2.35-1.53-4.35-2.75-5.18C12.85 14.26 14 12.76 14 11c0-1.13-.31-2.2-.85-3.22C14.23 7.32 15 6.25 15 5c0-1.66-1.34-3-3-3zM12 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm0 6c1.1 0 2 1.34 2 3s-.9 3-2 3-2-1.34-2-3 .9-3 2-3z" />
-                      </svg>
-                      <span className="font-sketch text-2xl text-slate-800 dark:text-slate-200">Chess.com Profile</span>
-                    </div>
-                    {/* Player Badge */}
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
-                      ♟️ Player
-                    </span>
-                  </div>
-
-                  <div className="flex gap-4 items-center">
-                    {/* SVG Circular Progress showing Tactics rating ratio */}
-                    <div className="relative w-20 h-20 flex-shrink-0">
-                      <svg className="w-full h-full transform -rotate-95" viewBox="0 0 36 36">
-                        <path
-                          className="text-slate-200 dark:text-slate-800"
-                          strokeWidth="3.5"
-                          stroke="currentColor"
-                          fill="none"
-                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                        />
-                        <motion.path
-                          className="text-emerald-500"
-                          strokeWidth="3.5"
-                          strokeDasharray={`${(stats.chess.highestTactics / 2000) * 100}, 100`}
-                          strokeLinecap="round"
-                          stroke="currentColor"
-                          fill="none"
-                          initial={{ pathLength: 0 }}
-                          whileInView={{ pathLength: 1 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 1, ease: "easeOut" }}
-                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                        />
-                      </svg>
-                      <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                        <span className="text-sm font-bold leading-none text-slate-800 dark:text-slate-100">{stats.loading ? <span className="inline-block w-8 h-3 rounded bg-slate-300/60 dark:bg-white/10 animate-pulse align-middle" aria-label="Loading" /> : stats.chess.highestTactics}</span>
-                        <span className="text-[9px] text-slate-500 dark:text-slate-400">Tactics</span>
-                      </div>
-                    </div>
-
-                    {/* Breakdown of Ratings/Win-rate */}
-                    <div className="flex-1 space-y-1.5 text-sm">
-                      <div className="flex justify-between items-center">
-                        <span className="text-slate-600 dark:text-slate-400">Rapid Rating</span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.loading ? <span className="inline-block w-8 h-3 rounded bg-slate-300/60 dark:bg-white/10 animate-pulse align-middle" aria-label="Loading" /> : stats.chess.rating}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-slate-600 dark:text-slate-400">Win Rate</span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.loading ? <span className="inline-block w-8 h-3 rounded bg-slate-300/60 dark:bg-white/10 animate-pulse align-middle" aria-label="Loading" /> : `${stats.chess.winRate}%`}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-slate-600 dark:text-slate-400">Games Played</span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.loading ? <span className="inline-block w-8 h-3 rounded bg-slate-300/60 dark:bg-white/10 animate-pulse align-middle" aria-label="Loading" /> : stats.chess.totalGames}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-4 pt-3 border-t border-emerald-500/10 flex justify-between items-center text-xs text-slate-500 dark:text-slate-400">
-                  <span>Username: <strong className="text-slate-800 dark:text-slate-200">Meet-11</strong></span>
-                  <span className="flex items-center gap-0.5 text-emerald-600 dark:text-emerald-400 font-medium">
-                    Play Chess <span className="text-[10px]">↗</span>
-                  </span>
-                </div>
-              </a>
-            </motion.div>
-
-            {/* Custom Duolingo Card */}
-            <motion.div
-              whileHover={{ scale: 1.03, rotate: 1 }}
-              transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              className="relative p-6 bg-lime-50/80 dark:bg-lime-950/10 border-2 border-lime-500/20 rounded-2xl shadow-md backdrop-blur-xs flex flex-col justify-between min-h-[220px]"
-            >
-              {/* Card Tape Detail */}
-              <div className="absolute -top-3 left-1/4 -translate-x-1/2 w-16 h-6 bg-highlighter-green/30 dark:bg-lime-500/10 rotate-[-2deg] clip-path-polygon(0% 10%, 100% 0%, 95% 90%, 5% 100%) pointer-events-none" style={{ clipPath: "polygon(0% 15%, 100% 0%, 95% 85%, 3% 100%)" }} />
-
-              <a href={resumeData.duolingo} target="_blank" rel="noreferrer" className="flex flex-col h-full justify-between">
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      {/* Duolingo Owl SVG Logo */}
-                      <svg className="w-6 h-6 text-lime-600 fill-current" viewBox="0 0 24 24">
-                        <path d="M14.484 18.213c1.142 1.033 2.657 1.662 4.316 1.662l.294-.001c1.985-.038 3.749-.976 4.905-2.422v1.98c0 2.522-2.043 4.568-4.567 4.568H4.569C2.045 23.998.002 21.954.002 19.43v-1.92c1.181 1.443 2.976 2.365 4.985 2.365l.35-.001c1.61-.027 3.076-.646 4.191-1.648.555.764 1.456 1.26 2.473 1.26 1.023 0 1.928-.502 2.483-1.273zm-5.349-.996c-.989 1.022-2.375 1.658-3.909 1.658h-.239c-2.229 0-4.146-1.343-4.987-3.262v-7.16c.281-.64.68-1.216 1.169-1.699-.035-.731.132-1.469.511-2.128.256-.44.867-.504 1.21-.124l.766.851c.007-.003.014-.003.021-.005-.098-.78.037-1.587.419-2.308.24-.45.757-.53 1.114-.164 0 0 3.939 3.979 4.035 4.084 1.542 1.348 4.066 1.287 5.686-.18.002-.003.007-.005.009-.007.042-.042 3.855-3.9 3.855-3.9.3361-.3451.8619-.3101 1.113.164.385.724.518 1.535.417 2.32.002.001.003.001.004.002l.007.002c.001 0 .002 0 .003.001l.776-.86c.342-.38.954-.316 1.207.124.387.673.553 1.427.509 2.173.496.501.897 1.099 1.169 1.762v6.941c-.816 1.978-2.761 3.373-5.032 3.373H18.8c-1.547 0-2.945-.648-3.936-1.686a.8386.8386 0 0 0-.009-.067c.313-.017.528-.162.688-.33.152-.16.299-.397.299-.776 0 0-.022-.312-.024-.324.693.767 1.696 1.249 2.811 1.249 2.092 0 3.787-1.696 3.787-3.787v-2.243c0-2.092-1.697-3.787-3.787-3.787-2.093 0-3.787 1.695-3.787 3.787v2.243c0 .266.027.526.079.776-.712-.784-1.744-1.278-2.842-1.278-1.239 0-2.339.523-3.064 1.355.063-.274.097-.56.097-.853v-2.243c0-2.092-1.697-3.787-3.788-3.787-2.09 0-3.787 1.695-3.787 3.787v2.243c0 2.093 1.697 3.787 3.787 3.787 1.151 0 2.182-.513 2.876-1.322-.008.035-.039.395-.039.395 0 .378.147.616.298.775.16.168.374.312.688.331a.7783.7783 0 0 0-.012.097zm.997.073c.729.131 1.733.305 1.792.305h.157c.059 0 1.789-.303 1.789-.303-.327.705-1.041 1.194-1.869 1.194-.829 0-1.543-.49-1.869-1.196zm-.971-1.379c.246-1.313 1.462-2.259 2.918-2.259 1.324 0 2.521.97 2.763 2.259v.105c0 .082-.029.115-.103.106l-2.658.473h-.157l-2.66-.476c-.075.01-.103-.023-.103-.105Zm8.023-6.392c.255-.14.549-.22.861-.22.992 0 1.798.804 1.798 1.798v1.919c0 .991-.804 1.797-1.798 1.797-.991 0-1.797-.803-1.797-1.797v-1.542c.034.003.068.005.103.005.64 0 1.16-.518 1.16-1.156 0-.312-.125-.596-.327-.804zM5.162 9.461c.227-.104.48-.162.746-.162.991 0 1.798.804 1.798 1.798v1.919c0 .991-.804 1.797-1.798 1.797-.991 0-1.797-.803-1.797-1.797v-1.571c.089.022.182.034.278.034.641 0 1.16-.518 1.16-1.156 0-.342-.149-.65-.387-.862ZM.002 6.554V4.568C.002 2.044 2.045 0 4.569 0h14.865c2.522 0 4.565 2.044 4.565 4.568v2.041a5.1847 5.1847 0 0 0-.164-.197 4.8592 4.8592 0 0 0-.646-2.284c-.433-.754-1.315-1.037-2.07-.786a4.785 4.785 0 0 0-.327-.774h-.001c-.287-.54-.758-.835-1.248-.908-.493-.073-1.033.072-1.464.515l-3.82 3.864c-1.226 1.11-3.127 1.199-4.313.205-.103-.109-4.025-4.071-4.025-4.071-.427-.438-.966-.584-1.46-.51-.489.073-.961.367-1.248.907v.002c-.133.25-.241.508-.327.771-.753-.252-1.635.029-2.071.782 0 0-.001.001-.001.002-.4.694-.613 1.459-.645 2.23-.057.065-.113.13-.167.197z" />
-                      </svg>
-                      <span className="font-sketch text-2xl text-slate-800 dark:text-slate-200">Duolingo Profile</span>
-                    </div>
-                    {/* Polyglot Badge */}
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-lime-500/10 text-lime-600 dark:text-lime-400 border border-lime-500/30">
-                      🦉 Polyglot
-                    </span>
-                  </div>
-
-                  <div className="flex gap-4 items-center">
-                    {/* SVG Circular Progress showing Streak progress (316 out of 365) */}
-                    <div className="relative w-20 h-20 flex-shrink-0">
-                      <svg className="w-full h-full transform -rotate-95" viewBox="0 0 36 36">
-                        <path
-                          className="text-slate-200 dark:text-slate-800"
-                          strokeWidth="3.5"
-                          stroke="currentColor"
-                          fill="none"
-                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                        />
-                        <motion.path
-                          className="text-lime-500"
-                          strokeWidth="3.5"
-                          strokeDasharray={`${(stats.duolingo.streak / 365) * 100}, 100`}
-                          strokeLinecap="round"
-                          stroke="currentColor"
-                          fill="none"
-                          initial={{ pathLength: 0 }}
-                          whileInView={{ pathLength: 1 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 1, ease: "easeOut" }}
-                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                        />
-                      </svg>
-                      <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                        <span className="text-sm font-bold leading-none text-slate-800 dark:text-slate-100">{stats.loading ? <span className="inline-block w-8 h-3 rounded bg-slate-300/60 dark:bg-white/10 animate-pulse align-middle" aria-label="Loading" /> : stats.duolingo.streak}</span>
-                        <span className="text-[9px] text-slate-500 dark:text-slate-400">Streak</span>
-                      </div>
-                    </div>
-
-                    {/* Breakdown of Ratings/Win-rate */}
-                    <div className="flex-1 space-y-1.5 text-sm">
-                      <div className="flex justify-between items-center">
-                        <span className="text-slate-600 dark:text-slate-400">Total XP</span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.loading ? <span className="inline-block w-8 h-3 rounded bg-slate-300/60 dark:bg-white/10 animate-pulse align-middle" aria-label="Loading" /> : stats.duolingo.xp.toLocaleString()}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-slate-600 dark:text-slate-400">Learning</span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">{stats.loading ? <span className="inline-block w-8 h-3 rounded bg-slate-300/60 dark:bg-white/10 animate-pulse align-middle" aria-label="Loading" /> : stats.duolingo.language}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-slate-600 dark:text-slate-400">Active Since</span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">Jan 2021</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-4 pt-3 border-t border-lime-500/10 flex justify-between items-center text-xs text-slate-500 dark:text-slate-400">
-                  <span>Username: <strong className="text-slate-800 dark:text-slate-200">Meet11_</strong></span>
-                  <span className="flex items-center gap-0.5 text-lime-600 dark:text-lime-400 font-medium">
-                    Learn Language <span className="text-[10px]">↗</span>
-                  </span>
-                </div>
-              </a>
-            </motion.div>
+                <div className="text-xs text-muted mt-1">{s.label}</div>
+              </div>
+            ))}
           </div>
+          <div className="mt-5 text-sm text-muted">
+            Win rate <span className="text-fg font-medium tabular-nums">{stats.loading ? <Skeleton /> : `${stats.chess.winRate}%`}</span>
+          </div>
+        </StatCard>
 
-        </motion.div>
-
+        {/* Duolingo */}
+        <StatCard href={resumeData.duolingo} icon="duolingo" label="Duolingo" delay={0.1} className="md:col-span-3">
+          <div className="flex items-center gap-5">
+            <motion.div
+              className="w-14 h-14 rounded-2xl bg-accent-soft text-accent flex items-center justify-center"
+              animate={{ scale: [1, 1.08, 1] }}
+              transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Flame className="w-7 h-7" />
+            </motion.div>
+            <div>
+              <div className="text-4xl font-semibold tracking-tight tabular-nums">
+                {stats.loading ? <Skeleton /> : <CountUp value={stats.duolingo.streak} />}
+                <span className="text-lg text-muted font-normal ml-2">day streak</span>
+              </div>
+              <div className="text-sm text-muted mt-1">
+                Learning {stats.duolingo.language} ·{" "}
+                <span className="tabular-nums">{stats.loading ? <Skeleton /> : <CountUp value={stats.duolingo.xp} />}</span> XP
+              </div>
+            </div>
+          </div>
+        </StatCard>
       </div>
-
     </section>
   );
 };
-

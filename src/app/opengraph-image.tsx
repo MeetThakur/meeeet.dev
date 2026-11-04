@@ -13,28 +13,28 @@ export default function OpenGraphImage() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
-          padding: "0 96px",
-          background: "#fcfbfa",
-          color: "#1b263b",
+          justifyContent: "space-between",
+          padding: "72px 88px",
+          background: "#0a0a09",
+          color: "#eeece6",
         }}
       >
-        <div style={{ fontSize: 40, color: "#f43f5e" }}>Hello, I&apos;m</div>
-        <div style={{ fontSize: 132, fontWeight: 900, letterSpacing: -4, lineHeight: 1.05 }}>
-          Meet Thakur
+        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 24, color: "#85837c", letterSpacing: 4 }}>
+          <span>MEEEET.DEV</span>
+          <span style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <span style={{ width: 12, height: 12, borderRadius: 12, background: "#10b981" }} />
+            ENGINEERING INTERN @ EIGHTFOLD AI
+          </span>
         </div>
-        <div
-          style={{
-            display: "flex",
-            marginTop: 32,
-            fontSize: 44,
-            background: "#faff00",
-            padding: "6px 20px",
-            alignSelf: "flex-start",
-          }}
-        >
-          Software Developer · Competitive Programmer
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ fontSize: 168, fontWeight: 700, letterSpacing: -8, lineHeight: 0.9, display: "flex" }}>
+            Meet Thakur<span style={{ color: "#ff6a33" }}>.</span>
+          </div>
+          <div style={{ marginTop: 32, fontSize: 40, color: "#c4c2bb" }}>
+            LLM systems · Data pipelines · Full-stack products
+          </div>
         </div>
+        <div style={{ display: "flex", height: 6, width: 160, background: "#ff6a33", borderRadius: 6 }} />
       </div>
     ),
     size

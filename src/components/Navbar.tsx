@@ -2,202 +2,230 @@
 
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { Moon, Sun, Menu, X } from "lucide-react";
-import { UnderlineDoodle } from "./DoodleSVGs";
-import { motion, AnimatePresence } from "framer-motion";
+import { flushSync } from "react-dom";
+import { Moon, Sun } from "lucide-react";
+import { motion, AnimatePresence, useScroll, useSpring, useMotionValueEvent } from "framer-motion";
+import { resumeData } from "../data/resumeData";
+import { ease } from "./ui/motion";
+
+const navLinks = [
+  { name: "About", id: "about" },
+  { name: "Experience", id: "experience" },
+  { name: "Work", id: "projects" },
+  { name: "Toolkit", id: "skills" },
+  { name: "Contact", id: "contact" },
+];
+
+type ViewTransitionDoc = Document & {
+  startViewTransition?: (cb: () => void) => { ready: Promise<void> };
+};
 
 export const Navbar = () => {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
   const [mobileOpen, setMobileOpen] = useState(false);
-  
-  // Theme animation state
-  const [isAnimatingTheme, setIsAnimatingTheme] = useState(false);
-  const [clickCoords, setClickCoords] = useState({ x: 0, y: 0 });
+  const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+
+  const { scrollY, scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
+
+  // Tuck the bar away while scrolling down, bring it back on any upward scroll
+  useMotionValueEvent(scrollY, "change", (y) => {
+    const prev = scrollY.getPrevious() ?? 0;
+    setScrolled(y > 24);
+    setHidden(y > 400 && y > prev && !mobileOpen);
+  });
 
   useEffect(() => {
     const id = requestAnimationFrame(() => setMounted(true));
-    const handleScroll = () => {
-      const sections = ["hero", "about", "projects", "skills", "contact"];
-      let current = "hero";
-      
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 150) {
-            current = section;
-          }
-        }
-      }
-      setActiveSection(current);
-    };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActiveSection(entry.target.id);
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px" }
+    );
+    ["hero", ...navLinks.map((l) => l.id)].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
     return () => {
       cancelAnimationFrame(id);
-      window.removeEventListener("scroll", handleScroll);
+      observer.disconnect();
     };
   }, []);
 
-  // Close mobile menu on resize to desktop
+  // Lock page scroll behind the full-screen mobile menu
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) setMobileOpen(false);
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
     };
-    window.addEventListener("resize", handleResize, { passive: true });
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [mobileOpen]);
 
+  // Circular reveal from the click point using the View Transitions API, with a plain swap as fallback
   const handleThemeToggle = (e: React.MouseEvent) => {
-    if (isAnimatingTheme) return;
-    
-    setClickCoords({ x: e.clientX, y: e.clientY });
-    setIsAnimatingTheme(true);
+    const next = resolvedTheme === "dark" ? "light" : "dark";
+    const doc = document as ViewTransitionDoc;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    const nextTheme = theme === "dark" ? "light" : "dark";
+    if (!doc.startViewTransition || reduce) {
+      setTheme(next);
+      return;
+    }
 
-    setTimeout(() => {
-      setTheme(nextTheme);
-    }, 400);
+    const { clientX: x, clientY: y } = e;
+    const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
 
-    setTimeout(() => {
-      setIsAnimatingTheme(false);
-    }, 800);
-  };
+    const transition = doc.startViewTransition(() => {
+      document.documentElement.classList.toggle("dark", next === "dark");
+      flushSync(() => setTheme(next));
+    });
 
-  const navLinks = [
-    { name: "Me", href: "#hero", id: "hero" },
-    { name: "About", href: "#about", id: "about" },
-    { name: "Projects", href: "#projects", id: "projects" },
-    { name: "Skills", href: "#skills", id: "skills" },
-    { name: "Contact", href: "#contact", id: "contact" },
-  ];
-
-  const handleNavClick = () => {
-    setMobileOpen(false);
+    transition.ready.then(() => {
+      document.documentElement.animate(
+        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+        { duration: 700, easing: "cubic-bezier(0.22, 1, 0.36, 1)", pseudoElement: "::view-transition-new(root)" }
+      );
+    });
   };
 
   return (
     <>
-      <AnimatePresence>
-        {isAnimatingTheme && (
-          <motion.div
-            initial={{ 
-              clipPath: `circle(0px at ${clickCoords.x}px ${clickCoords.y}px)`,
-              backgroundColor: theme === "dark" ? "var(--color-desk-light)" : "var(--color-desk-dark)"
-            }}
-            animate={{ 
-              clipPath: `circle(150vmax at ${clickCoords.x}px ${clickCoords.y}px)` 
-            }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
-            className="fixed inset-0 z-[60] pointer-events-none"
-          />
-        )}
-      </AnimatePresence>
+      <motion.header
+        initial={{ y: -100 }}
+        animate={{ y: hidden ? -100 : 0 }}
+        transition={{ duration: 0.5, ease }}
+        className="fixed top-0 inset-x-0 z-50"
+      >
+        <div
+          className={`transition-[background-color,border-color,backdrop-filter] duration-500 border-b ${
+            scrolled || mobileOpen ? "bg-bg/70 backdrop-blur-xl border-line" : "bg-transparent border-transparent"
+          }`}
+        >
+          <nav className="max-w-7xl mx-auto px-5 md:px-10 h-16 flex items-center justify-between">
+            <a href="#hero" className="group flex items-center gap-2.5" onClick={() => setMobileOpen(false)}>
+              <span className="relative w-8 h-8 rounded-full bg-fg text-bg flex items-center justify-center font-serif italic text-lg leading-none overflow-hidden">
+                <span className="transition-transform duration-500 group-hover:-translate-y-8">m</span>
+                <span className="absolute translate-y-8 transition-transform duration-500 group-hover:translate-y-0 text-accent">t</span>
+              </span>
+              <span className="hidden sm:block font-medium tracking-tight">{resumeData.name}</span>
+            </a>
 
-      <nav className="fixed top-0 inset-x-0 z-50 flex justify-center py-4 pointer-events-none">
-        <div className="flex items-center gap-1.5 md:gap-4 bg-white/70 dark:bg-black/70 backdrop-blur-md px-3.5 md:px-6 py-2 rounded-full border border-black/10 dark:border-white/10 shadow-sm pointer-events-auto transition-colors">
-          
-          {/* Stylized M Logo */}
-          <div className="flex items-center justify-center w-7 h-7 md:w-9 md:h-9 rounded-full bg-ink-blue/10 dark:bg-neon-pink/10 border border-ink-blue/30 dark:border-neon-pink/30 shadow-sm">
-            <span className="font-sketch font-bold text-lg md:text-xl text-ink-blue dark:text-neon-pink transform -rotate-6 ml-0.5 mt-0.5">M</span>
-          </div>
-          
-          <div className="h-4 w-[1px] bg-black/20 dark:bg-white/20 mx-0.5 md:mx-1 hidden md:block" />
-          
-          {/* Desktop Links */}
-          <div className="hidden md:flex items-center gap-1.5 md:gap-4">
-            {navLinks.map((link) => {
-              const isActive = activeSection === link.id;
-              return (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  className={`relative font-sketch text-sm sm:text-base md:text-lg px-2 py-1 transition-all ${
-                    isActive 
-                      ? "text-ink-blue dark:text-neon-pink scale-110" 
-                      : "text-ink-dark dark:text-ink-light hover:text-ink-blue dark:hover:text-neon-blue hover:-translate-y-0.5"
-                  }`}
-                >
-                  <span className="relative z-10">{link.name}</span>
-                  {isActive && (
-                    <div className="absolute -bottom-1 left-0 w-full h-full pointer-events-none opacity-60">
-                      <UnderlineDoodle className="w-full h-full text-highlighter-yellow dark:text-neon-yellow" />
-                    </div>
-                  )}
-                </a>
-              );
-            })}
-          </div>
-
-          <div className="h-4 w-[1px] bg-black/20 dark:bg-white/20 mx-0.5 md:mx-1 hidden md:block" />
-
-          {/* Theme Toggle */}
-          <button
-            onClick={handleThemeToggle}
-            className="p-1 md:p-1.5 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors relative z-[70]"
-            aria-label="Toggle Dark Mode"
-          >
-            {mounted ? (
-              theme === "dark" ? (
-                <Sun className="w-5 h-5 text-neon-yellow" />
-              ) : (
-                <Moon className="w-5 h-5 text-ink-blue" />
-              )
-            ) : (
-              <div className="w-5 h-5" />
-            )}
-          </button>
-
-          {/* Mobile Hamburger */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-1 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
-            aria-label="Toggle menu"
-          >
-            {mobileOpen ? (
-              <X className="w-5 h-5 text-ink-dark dark:text-ink-light" />
-            ) : (
-              <Menu className="w-5 h-5 text-ink-dark dark:text-ink-light" />
-            )}
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile Dropdown Menu */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-            className="fixed top-16 inset-x-0 z-50 flex justify-center pointer-events-none px-4"
-          >
-            <div className="bg-white/90 dark:bg-black/90 backdrop-blur-lg rounded-2xl border border-black/10 dark:border-white/10 shadow-lg py-4 px-6 flex flex-col gap-1 pointer-events-auto w-full max-w-xs">
+            {/* Desktop links with a sliding active pill */}
+            <ul className="hidden md:flex items-center gap-1 p-1 rounded-full border border-line bg-elev/50 backdrop-blur-md">
               {navLinks.map((link) => {
                 const isActive = activeSection === link.id;
                 return (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    onClick={handleNavClick}
-                    className={`font-sketch text-xl py-2.5 px-3 rounded-xl transition-all ${
-                      isActive
-                        ? "text-ink-blue dark:text-neon-pink bg-ink-blue/5 dark:bg-neon-pink/5"
-                        : "text-ink-dark dark:text-ink-light hover:bg-black/5 dark:hover:bg-white/5"
-                    }`}
-                  >
-                    {link.name}
-                  </a>
+                  <li key={link.id}>
+                    <a
+                      href={`#${link.id}`}
+                      className={`relative block px-4 py-1.5 text-sm rounded-full transition-colors ${
+                        isActive ? "text-bg" : "text-muted hover:text-fg"
+                      }`}
+                    >
+                      {isActive && (
+                        <motion.span
+                          layoutId="nav-pill"
+                          className="absolute inset-0 rounded-full bg-fg"
+                          transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                        />
+                      )}
+                      <span className="relative">{link.name}</span>
+                    </a>
+                  </li>
                 );
               })}
+            </ul>
+
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleThemeToggle}
+                className="w-9 h-9 rounded-full border border-line flex items-center justify-center text-fg hover:border-line-strong transition-colors overflow-hidden"
+                aria-label={mounted ? `Switch to ${resolvedTheme === "dark" ? "light" : "dark"} mode` : "Toggle theme"}
+              >
+                <AnimatePresence mode="wait" initial={false}>
+                  {mounted && (
+                    <motion.span
+                      key={resolvedTheme}
+                      initial={{ y: 20, rotate: -90, opacity: 0 }}
+                      animate={{ y: 0, rotate: 0, opacity: 1 }}
+                      exit={{ y: -20, rotate: 90, opacity: 0 }}
+                      transition={{ duration: 0.35, ease }}
+                    >
+                      {resolvedTheme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </button>
+
+              <a
+                href="#contact"
+                className="hidden md:inline-flex items-center gap-2 h-9 px-4 rounded-full bg-accent text-white text-sm font-medium hover:brightness-110 transition"
+              >
+                Let&apos;s talk
+              </a>
+
+              <button
+                onClick={() => setMobileOpen((o) => !o)}
+                className="md:hidden w-9 h-9 rounded-full border border-line flex flex-col items-center justify-center gap-1.5"
+                aria-label={mobileOpen ? "Close menu" : "Open menu"}
+                aria-expanded={mobileOpen}
+              >
+                <motion.span animate={mobileOpen ? { rotate: 45, y: 3.5 } : { rotate: 0, y: 0 }} className="block w-4 h-px bg-fg" />
+                <motion.span animate={mobileOpen ? { rotate: -45, y: -3.5 } : { rotate: 0, y: 0 }} className="block w-4 h-px bg-fg" />
+              </button>
             </div>
+          </nav>
+        </div>
+
+        {/* Reading progress */}
+        <motion.div className="h-px bg-accent origin-left" style={{ scaleX: progress }} />
+      </motion.header>
+
+      {/* Full-screen mobile menu */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ clipPath: "inset(0 0 100% 0)" }}
+            animate={{ clipPath: "inset(0 0 0% 0)" }}
+            exit={{ clipPath: "inset(0 0 100% 0)" }}
+            transition={{ duration: 0.6, ease }}
+            className="fixed inset-0 z-40 bg-bg pt-24 px-6 flex flex-col md:hidden"
+          >
+            <ul className="flex flex-col gap-2">
+              {navLinks.map((link, i) => (
+                <li key={link.id} className="overflow-hidden border-b border-line">
+                  <motion.a
+                    href={`#${link.id}`}
+                    onClick={() => setMobileOpen(false)}
+                    initial={{ y: "100%" }}
+                    animate={{ y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.15 + i * 0.06, ease }}
+                    className="flex items-baseline justify-between py-4"
+                  >
+                    <span className={`text-4xl font-medium tracking-tight ${activeSection === link.id ? "text-accent" : ""}`}>
+                      {link.name}
+                    </span>
+                    <span className="font-mono text-xs text-muted">0{i + 1}</span>
+                  </motion.a>
+                </li>
+              ))}
+            </ul>
+            <motion.a
+              href={`mailto:${resumeData.email}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="mt-auto mb-10 font-mono text-sm text-muted"
+            >
+              {resumeData.email}
+            </motion.a>
           </motion.div>
         )}
       </AnimatePresence>

@@ -1,58 +1,46 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { ArrowUp } from "lucide-react";
 
+// Floating button whose outer ring fills as you scroll down the page
 export const BackToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
-
-  // Show button when page is scrolled down
-  const toggleVisibility = () => {
-    if (window.scrollY > 300) {
-      setIsVisible(true);
-    } else {
-      setIsVisible(false);
-    }
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
+  const { scrollYProgress } = useScroll();
 
   useEffect(() => {
-    window.addEventListener("scroll", toggleVisibility, { passive: true });
-    return () => window.removeEventListener("scroll", toggleVisibility);
+    const onScroll = () => setIsVisible(window.scrollY > 600);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
     <AnimatePresence>
       {isVisible && (
-        <motion.div
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
-          transition={{ type: "spring", stiffness: 200, damping: 20 }}
-          className="fixed bottom-0 right-2 md:right-8 z-40 scale-75 origin-bottom md:scale-100"
+        <motion.button
+          initial={{ opacity: 0, scale: 0.6 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.6 }}
+          transition={{ type: "spring", stiffness: 260, damping: 20 }}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="group fixed bottom-5 right-5 md:bottom-8 md:right-8 z-40 w-12 h-12 rounded-full bg-elev/80 backdrop-blur-md border border-line flex items-center justify-center text-fg hover:text-accent transition-colors"
+          aria-label="Back to top"
         >
-          <button
-            onClick={scrollToTop}
-            className="group relative pb-8 pt-4 px-3 bg-[#e84118] hover:bg-[#c23616] transition-colors shadow-lg cursor-pointer flex flex-col items-center justify-center border-x-2 border-black/10 dark:border-white/10"
-            aria-label="Back to top"
-            style={{ 
-              clipPath: "polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%)" 
-            }}
-          >
-            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMSIvPgo8L3N2Zz4=')] opacity-30 mix-blend-overlay"></div>
-            <ArrowUp className="w-5 h-5 text-white/90 group-hover:-translate-y-1 transition-transform relative z-10" />
-            <span className="font-sketch text-xs text-white/90 mt-1 relative z-10 [writing-mode:vertical-rl] rotate-180 tracking-widest">
-              TOP
-            </span>
-          </button>
-        </motion.div>
+          <svg className="absolute inset-0 -rotate-90" viewBox="0 0 48 48" aria-hidden="true">
+            <motion.circle
+              cx="24"
+              cy="24"
+              r="23"
+              fill="none"
+              stroke="var(--accent)"
+              strokeWidth="1.5"
+              style={{ pathLength: scrollYProgress }}
+            />
+          </svg>
+          <ArrowUp className="w-4 h-4 transition-transform group-hover:-translate-y-0.5" />
+        </motion.button>
       )}
     </AnimatePresence>
   );

@@ -1,40 +1,37 @@
-import type { Metadata } from "next";
-import { Inter, Caveat, Patrick_Hand, Playfair_Display } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import { ThemeProvider } from "../components/ThemeProvider";
 import { BackToTop } from "../components/BackToTop";
 import { LoadingScreen } from "../components/LoadingScreen";
+import { Cursor } from "../components/Cursor";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const geist = Geist({
+  variable: "--font-geist",
   subsets: ["latin"],
 });
 
-const caveat = Caveat({
-  variable: "--font-caveat",
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
-const patrickHand = Patrick_Hand({
+const instrument = Instrument_Serif({
   weight: "400",
-  variable: "--font-patrick-hand",
-  subsets: ["latin"],
-});
-
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+  variable: "--font-instrument",
   subsets: ["latin"],
   style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://meetthakur.dev"),
+  metadataBase: new URL("https://meeeet.dev"),
   title: "Meet Thakur | Software Developer Portfolio",
-  description: "Interactive handcrafted notebook portfolio of Meet Thakur, a Software Developer and Competitive Programmer.",
+  description:
+    "Meet Thakur — software engineer and competitive programmer building LLM-powered systems, data pipelines and full-stack products.",
   openGraph: {
     title: "Meet Thakur | Software Developer",
-    description: "Explore my handcrafted notebook portfolio, projects, and skills.",
-    url: "https://meetthakur.dev",
+    description: "LLM-powered systems, data pipelines and full-stack products. Projects, experience and contact.",
+    url: "https://meeeet.dev",
     siteName: "Meet Thakur Portfolio",
     locale: "en_US",
     type: "website",
@@ -42,8 +39,15 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Meet Thakur | Software Developer",
-    description: "Explore my handcrafted notebook portfolio, projects, and skills.",
+    description: "LLM-powered systems, data pipelines and full-stack products. Projects, experience and contact.",
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f3f1ec" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a09" },
+  ],
 };
 
 export default function RootLayout({
@@ -54,20 +58,19 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${caveat.variable} ${patrickHand.variable} ${playfair.variable} antialiased`}
+      className={`${geist.variable} ${geistMono.variable} ${instrument.variable} antialiased`}
       suppressHydrationWarning
     >
-      <head>
-      </head>
-      <body className="font-sans min-h-screen text-ink-dark dark:text-ink-light selection:bg-highlighter-yellow/30 dark:selection:bg-neon-pink/30">
+      <body className="grain font-sans min-h-screen bg-bg text-fg">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <a
             href="#main"
-            className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[210] focus:px-4 focus:py-2 focus:rounded-full focus:bg-ink-dark focus:text-white dark:focus:bg-ink-light dark:focus:text-black font-sans font-bold"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[210] focus:px-4 focus:py-2 focus:rounded-full focus:bg-fg focus:text-bg font-medium"
           >
             Skip to content
           </a>
           <LoadingScreen />
+          <Cursor />
           {children}
           <BackToTop />
         </ThemeProvider>
