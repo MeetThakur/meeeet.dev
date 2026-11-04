@@ -7,7 +7,7 @@ import { SectionLabel, SplitReveal, ease } from "./ui/motion";
 export const SkillsSection = () => {
   return (
     <section id="skills" className="relative py-28 md:py-40 px-5 md:px-10 max-w-7xl mx-auto">
-      <SectionLabel index="04">Toolkit</SectionLabel>
+      <SectionLabel index="05">Toolkit</SectionLabel>
 
       <h2 className="mt-10 text-5xl md:text-7xl font-semibold tracking-[-0.04em] leading-[0.95]">
         <SplitReveal text="What I" />

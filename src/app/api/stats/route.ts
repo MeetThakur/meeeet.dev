@@ -113,7 +113,28 @@ export async function GET() {
     console.error("Error fetching LeetCode stats in API route:", err);
   }
 
-  // 3. Fetch Chess.com Stats
+  // 3. Fetch Codeforces rating (public API)
+  try {
+    const cfRes = await fetch(`https://codeforces.com/api/user.info?handles=${resumeData.codeforcesHandle}`, {
+      next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+    });
+    if (cfRes.ok) {
+      const data = await cfRes.json();
+      const user = data.status === "OK" ? data.result?.[0] : undefined;
+      if (user?.rating) {
+        stats.codeforces = {
+          rating: user.rating,
+          maxRating: user.maxRating || user.rating,
+          rank: user.rank || stats.codeforces.rank,
+        };
+      }
+    }
+  } catch (err) {
+    console.error("Error fetching Codeforces stats in API route:", err);
+  }
+
+  // 4. Fetch Chess.com Stats
   try {
     const chessRes = await fetch("https://api.chess.com/pub/player/meet-11/stats", {
       next: { revalidate: 3600 },
@@ -138,7 +159,7 @@ export async function GET() {
     console.error("Error fetching Chess.com stats in API route:", err);
   }
 
-  // 4. Fetch Duolingo Stats
+  // 5. Fetch Duolingo Stats
   try {
     const duoRes = await fetch("https://www.duolingo.com/2017-06-30/users?username=Meet11_", {
       next: { revalidate: 3600 },

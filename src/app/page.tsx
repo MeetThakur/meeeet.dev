@@ -3,6 +3,7 @@ import { HeroSection } from "../components/HeroSection";
 import { Marquee } from "../components/Marquee";
 import { AboutSection } from "../components/AboutSection";
 import { ExperienceSection } from "../components/ExperienceSection";
+import { StatsSection } from "../components/StatsSection";
 import { ProjectsSection } from "../components/ProjectsSection";
 import { SkillsSection } from "../components/SkillsSection";
 import { ContactSection } from "../components/ContactSection";
@@ -17,6 +18,7 @@ export default function Home() {
         <Marquee />
         <AboutSection />
         <ExperienceSection />
+        <StatsSection />
         <ProjectsSection />
         <SkillsSection />
         <ContactSection />

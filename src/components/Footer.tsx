@@ -10,6 +10,8 @@ const socials: { name: string; href: string; icon: Brand }[] = [
   { name: "GitHub", href: resumeData.github, icon: "github" },
   { name: "LinkedIn", href: resumeData.linkedin, icon: "linkedin" },
   { name: "LeetCode", href: resumeData.leetcode, icon: "leetcode" },
+  { name: "Codeforces", href: resumeData.codeforces, icon: "codeforces" },
+  { name: "CodeChef", href: resumeData.codechef, icon: "codechef" },
   { name: "Chess.com", href: resumeData.chesscom, icon: "chess" },
   { name: "Duolingo", href: resumeData.duolingo, icon: "duolingo" },
 ];

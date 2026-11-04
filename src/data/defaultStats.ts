@@ -20,6 +20,11 @@ export const DEFAULT_STATS = {
     rating: 1902,
     badge: "Knight",
   },
+  codeforces: {
+    rating: 1850,
+    maxRating: 1858,
+    rank: "expert",
+  },
   chess: {
     rating: 775,
     highestTactics: 1413,

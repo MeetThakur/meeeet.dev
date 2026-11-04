@@ -180,7 +180,7 @@ export const ProjectsSection = () => {
     <section id="projects" className="relative py-28 md:py-40 px-5 md:px-10 max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-16 md:mb-20">
         <div>
-          <SectionLabel index="03">Selected work</SectionLabel>
+          <SectionLabel index="04">Selected work</SectionLabel>
           <h2 className="mt-10 text-5xl md:text-7xl font-semibold tracking-[-0.04em] leading-[0.95]">
             <SplitReveal text="Things I've" />
             <br />

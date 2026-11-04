@@ -18,8 +18,8 @@ const roles = ["LLM-powered systems", "data pipelines", "full-stack products", "
 
 const highlights = [
   { value: "2,000+", label: "people use ConvoMetrics" },
-  { value: "93%", label: "top-3 accuracy, LLM ticket routing" },
   { value: "Expert", label: "on Codeforces" },
+  { value: "Top 4%", label: "LeetCode Knight" },
   { value: "9.12", label: "CGPA / 10" },
 ];
 

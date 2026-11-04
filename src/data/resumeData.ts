@@ -10,6 +10,10 @@ export const resumeData = {
   leetcode: "https://leetcode.com/u/Meet11_",
   // Must match the handle in the profile URL above; used by /api/stats to sync live numbers
   leetcodeUsername: "Meet11_",
+  codeforces: "https://codeforces.com/profile/meet_11",
+  // Must match the handle in the profile URL above; used by /api/stats for the live rating
+  codeforcesHandle: "meet_11",
+  codechef: "https://www.codechef.com/users/meetrix",
   chesscom: "https://www.chess.com/member/Meet-11",
   duolingo: "https://www.duolingo.com/profile/Meet11_",
   summary:

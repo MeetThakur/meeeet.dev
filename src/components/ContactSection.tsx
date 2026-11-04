@@ -84,7 +84,7 @@ export const ContactSection = () => {
 
   return (
     <section id="contact" className="relative py-28 md:py-40 px-5 md:px-10 max-w-7xl mx-auto">
-      <SectionLabel index="05">Contact</SectionLabel>
+      <SectionLabel index="06">Contact</SectionLabel>
 
       <div className="mt-10 grid lg:grid-cols-[1.1fr_1fr] gap-14 lg:gap-20">
         <div>
