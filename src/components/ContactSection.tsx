@@ -21,7 +21,7 @@ const Field = ({
 }: { id: string; label: string; textarea?: boolean } & React.InputHTMLAttributes<HTMLInputElement> &
   React.TextareaHTMLAttributes<HTMLTextAreaElement>) => {
   const base =
-    "peer w-full bg-transparent border-0 border-b border-line-strong pt-6 pb-2 text-lg outline-none focus:border-accent transition-colors placeholder-transparent disabled:opacity-50";
+    "contact-field peer w-full text-fg caret-accent bg-transparent border-0 border-b border-line-strong pt-6 pb-2 text-lg outline-none focus:border-accent transition-colors placeholder-transparent disabled:opacity-50";
   return (
     <div className="relative">
       {textarea ? (
@@ -182,7 +182,7 @@ export const ContactSection = () => {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ type: "spring", stiffness: 260, damping: 15, delay: 0.1 }}
-                  className="mx-auto w-16 h-16 rounded-full bg-accent text-white flex items-center justify-center"
+                  className="mx-auto w-16 h-16 rounded-full bg-accent text-on-accent flex items-center justify-center"
                 >
                   <Check className="w-7 h-7" />
                 </motion.div>
@@ -226,7 +226,7 @@ export const ContactSection = () => {
                   className="group relative self-start inline-flex items-center gap-3 h-12 pl-6 pr-2 rounded-full bg-fg text-bg font-medium overflow-hidden disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   <span className="absolute inset-0 bg-accent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]" />
-                  <span className="relative">{sending ? "Sending…" : "Send message"}</span>
+                  <span className="relative group-hover:text-on-accent transition-colors">{sending ? "Sending…" : "Send message"}</span>
                   <span className="relative w-8 h-8 rounded-full bg-bg text-fg flex items-center justify-center">
                     <Send className={`w-3.5 h-3.5 transition-transform duration-500 ${sending ? "translate-x-6 -translate-y-6" : "group-hover:rotate-12"}`} />
                   </span>

@@ -33,7 +33,7 @@ const hues: Record<string, string> = {
 
 // Abstract cover art per project: a slow-turning colour field with a tilt that follows the pointer
 const ProjectVisual = ({ project, index }: { project: Project; index: number }) => {
-  const hue = hues[project.color] ?? "#ff6a33";
+  const hue = hues[project.color] ?? "#ff3030";
   const Glyph = glyphs[project.title] ?? ChartNoAxesColumn;
   const rx = useMotionValue(0);
   const ry = useMotionValue(0);

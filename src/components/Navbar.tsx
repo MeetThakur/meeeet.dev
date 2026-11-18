@@ -166,7 +166,7 @@ export const Navbar = () => {
 
               <a
                 href="#contact"
-                className="hidden md:inline-flex items-center gap-2 h-9 px-4 rounded-full bg-accent text-white text-sm font-medium hover:brightness-110 transition"
+                className="hidden md:inline-flex items-center gap-2 h-9 px-4 rounded-full bg-accent text-on-accent text-sm font-medium hover:brightness-110 transition"
               >
                 Let&apos;s talk
               </a>

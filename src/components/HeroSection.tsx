@@ -172,7 +172,7 @@ export const HeroSection = () => {
                   className="group inline-flex items-center gap-2 h-12 pl-6 pr-2 rounded-full bg-fg text-bg font-medium"
                 >
                   View my work
-                  <span className="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center transition-transform duration-500 group-hover:rotate-45">
+                  <span className="w-8 h-8 rounded-full bg-accent text-on-accent flex items-center justify-center transition-transform duration-500 group-hover:rotate-45">
                     <ArrowUpRight className="w-4 h-4" />
                   </span>
                 </a>

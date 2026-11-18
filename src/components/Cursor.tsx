@@ -62,7 +62,7 @@ export const Cursor = () => {
         height: hovering ? 56 : 28,
         opacity: visible ? 1 : 0,
         scale: pressed ? 0.8 : 1,
-        backgroundColor: hovering ? "rgba(255,106,51,0.15)" : "rgba(255,106,51,0)",
+        backgroundColor: hovering ? "var(--accent-soft)" : "rgba(0, 0, 0, 0)",
       }}
       transition={{ type: "spring", stiffness: 300, damping: 25 }}
     />
